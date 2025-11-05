@@ -1,4 +1,4 @@
-!bin/roslyn/
+!bin/roslyn/*
 bin/*
 obj/
 packages/
