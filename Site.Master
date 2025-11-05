@@ -1,0 +1,149 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="WAPP_Assignment.SiteMaster" %>
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%: Page.Title %></title>
+
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/bundles/modernizr") %>
+    </asp:PlaceHolder>
+
+    <webopt:bundlereference runat="server" path="~/Content/css" />
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link rel="stylesheet" href="<%= ResolveUrl("~/Content/loginSignupModal.css") %>">
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server"></asp:ContentPlaceHolder>
+
+</head>
+<body>
+    <form runat="server">
+        <asp:ScriptManager runat="server">
+            <Scripts>
+                <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
+                <%--Framework Scripts--%>
+                <asp:ScriptReference Name="MsAjaxBundle" />
+                <asp:ScriptReference Name="jquery" />
+                <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
+                <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
+                <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
+                <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
+                <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
+                <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
+                <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
+                <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
+                <asp:ScriptReference Name="WebFormsBundle" />
+                <%--Site Scripts--%>
+            </Scripts>
+        </asp:ScriptManager>
+
+        <%-- Navigation Bar START --%>
+        <nav class="navbar">
+            <div class="nav-container">
+            <div class="brand">
+                <a href="<%= ResolveUrl("~/Base/Landing.aspx") %>">
+                <img src="<%= ResolveUrl("~/Content/images/pages.svg") %>" alt="Geography Pages Logo" class="brand-img" />
+                </a>
+            </div>
+
+            <div class="nav-links">
+                <div class="nav-item-dropdown">
+                <a class="nav-link" href="<%= ResolveUrl("~/Base/CourseDashboard.aspx") %>">Learn <span class="chevron"></span></a>
+                <div class="dropdown-menu">
+                    <div class="dropdown-grid">
+                    <div class="dropdown-column">
+                        <h4 class="dropdown-heading">Recommended</h4>
+                        <a href="#" class="dropdown-link">World Geography</a>
+                        <a href="#" class="dropdown-link">Climate & Weather</a>
+                    </div>
+                    <div class="dropdown-column">
+                        <h4 class="dropdown-heading">Physical Geography</h4>
+                        <a href="#" class="dropdown-link">Geology & Landforms</a>
+                        <a href="#" class="dropdown-link">Oceans & Tides</a>
+                        <a href="#" class="dropdown-link">Ecosystems</a>
+                    </div>
+                    <div class="dropdown-column">
+                        <h4 class="dropdown-heading">Human Geography</h4>
+                        <a href="#" class="dropdown-link">Cultural Geography</a>
+                        <a href="#" class="dropdown-link">Population Studies</a>
+                        <a href="#" class="dropdown-link">Political Geography</a>
+                    </div>
+                    </div>
+                </div>
+                </div>
+                <a class="nav-link" href="#">Practice</a>
+                <a class="nav-link" href="#">Build</a>
+                <a class="nav-link" href="#">Community</a>
+                <a class="nav-link" href="#">Pricing</a>
+            </div>
+
+            <div class="nav-actions">
+                <asp:LinkButton runat="server" CssClass="primary-btn" OnClick="showLoginSignupModal">Sign up</asp:LinkButton>
+            </div>
+            </div>
+        </nav>
+        <%-- Navigation Bar END --%>
+
+        <asp:Panel ID="loginSignupModal" runat="server" Visible="false">
+        <!-- Click outside to close (server-side backdrop) -->
+        <asp:LinkButton ID="lnkBackdrop" runat="server" CssClass="backdrop"
+            OnClick="hideLoginSignupModal" CausesValidation="false" />
+
+        <div id="loginModal" class="pages-modal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+          <div class="sheet">
+            <div class="modal-header">
+              <h3 id="loginTitle" class="modal-title">Login</h3>
+              <!-- “X” close -->
+              <asp:LinkButton ID="lnkCloseLogin" runat="server" CssClass="close"
+                  OnClick="hideLoginSignupModal" CausesValidation="false">×</asp:LinkButton>
+            </div>
+
+            <asp:ValidationSummary ID="valSummary" runat="server" CssClass="error-banner" ValidationGroup="Login" />
+
+            <!-- fields -->
+            <div class="field">
+              <label class="label">Username</label>
+              <asp:TextBox ID="txtUsername" runat="server" CssClass="input" MaxLength="50" />
+              <asp:RequiredFieldValidator runat="server" ControlToValidate="txtUsername"
+                  ErrorMessage="Username is required." ValidationGroup="Login" CssClass="field-error" />
+            </div>
+            <div class="field">
+              <label class="label">Password</label>
+              <asp:TextBox ID="txtPassword" runat="server" CssClass="input" TextMode="Password" MaxLength="100" />
+              <asp:RequiredFieldValidator runat="server" ControlToValidate="txtPassword"
+                  ErrorMessage="Password is required." ValidationGroup="Login" CssClass="field-error" />
+            </div>
+
+            <div class="actions">
+              <!-- Cancel close -->
+              <asp:LinkButton ID="lnkCancelLogin" runat="server" CssClass="btn"
+                  OnClick="hideLoginSignupModal" CausesValidation="false">Cancel</asp:LinkButton>
+
+              <!-- Login -->
+              <asp:Button ID="btnLogin" runat="server" CssClass="btn primary" Text="Login"
+                  OnClick="login" ValidationGroup="Login" />
+            </div>
+          </div>
+        </div>
+        </asp:Panel>
+
+        <div class="">
+            <%-- Main content goes into here --%>
+            <asp:ContentPlaceHolder ID="MainContent" runat="server">
+            </asp:ContentPlaceHolder>
+            <hr />
+
+            <%-- Footer START --%>
+            <footer class="footer">
+            <p>© Geography Pages</p>
+            </footer>
+            <%-- Footer END --%>
+        </div>
+    </form>
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/Scripts/bootstrap.js") %>
+    </asp:PlaceHolder>
+</body>
+</html>

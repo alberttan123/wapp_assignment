@@ -1,0 +1,123 @@
+﻿:root {
+    --bg: #ffd24a;
+    --fg: #fff;
+    --muted: #bdbdbd;
+    --accent: #4f8cff;
+    --danger: #e5484d;
+}
+
+.btn {
+    appearance: none;
+    border: 1px solid rgba(255,255,255,.18);
+    background: transparent;
+    color: var(--fg);
+    padding: 8px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+    .btn.primary {
+        background: var(--accent);
+        border-color: transparent;
+        color: #fff;
+    }
+
+    .btn.danger {
+        background: var(--danger);
+        border-color: transparent;
+        color: #fff;
+    }
+
+/* Backdrop */
+.backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.55);
+    z-index: 1000;
+}
+
+/* Modal */
+.pages-modal {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    z-index: 1001;
+    pointer-events: none;
+}
+
+    .pages-modal .sheet {
+        pointer-events: auto;
+    }
+
+
+/* Sheet */
+.sheet {
+    width: 100%;
+    max-width: 420px;
+    background: #1e1e1e;
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 10px 32px rgba(0,0,0,.45);
+    transform: translateY(8px);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.modal-title {
+    font-size: 18px;
+    margin: 0;
+    color: #fff;
+}
+
+.close {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    color: #ccc;
+    font-size: 22px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.field {
+    margin: 10px 0 14px;
+}
+
+.label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: var(--muted);
+}
+
+.input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: #141414;
+    color: var(--fg);
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.val-summary {
+    color: #ffb4b4;
+    background: #3a1616;
+    border: 1px solid #6b2a2a;
+    padding: 8px 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
