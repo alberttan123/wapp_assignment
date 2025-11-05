@@ -14,28 +14,28 @@
         <section class="welcome-section">
           <h2 class="section-heading">Quick Actions</h2>
           <div class="actions-grid">
-            <a href="#" class="action-card">
+            <a href="<%= ResolveUrl("~/Student/Bookmarks.aspx") %>" class="action-card">
               <span class="action-card-icon">📚</span>
               <div class="action-card-content">
                 <h3 class="action-card-title">Bookmarked Lessons</h3>
               </div>
               <span class="action-card-badge">3</span>
             </a>
-            <a href="#" class="action-card">
+            <a href="<%= ResolveUrl("~/Student/Flashcards.aspx") %>" class="action-card">
               <span class="action-card-icon">🃏</span>
               <div class="action-card-content">
                 <h3 class="action-card-title">Saved Flashcards</h3>
               </div>
               <span class="action-card-badge">12</span>
             </a>
-            <a href="#" class="action-card">
+            <a href="<%= ResolveUrl("~/Student/Notes.aspx") %>" class="action-card">
               <span class="action-card-icon">📝</span>
               <div class="action-card-content">
                 <h3 class="action-card-title">My Notes</h3>
               </div>
               <span class="action-card-badge">8</span>
             </a>
-            <a href="#" class="action-card">
+            <a href="<%= ResolveUrl("~/Student/Certificates.aspx") %>" class="action-card">
               <span class="action-card-icon">🎓</span>
               <div class="action-card-content">
                 <h3 class="action-card-title">Certificates</h3>
@@ -45,37 +45,44 @@
           </div>
         </section>
 
-        <!-- Jump Back In Section - REDESIGNED -->
-        <section class="jump-back">
-          <h2 class="section-heading">Jump back in</h2>
-          <div class="continue-card-new">
-            <!-- Background Image Container -->
-            <div class="card-bg-image">
-              <img src="https://cdnb.artstation.com/p/assets/images/images/074/518/589/large/jmw327-mountain-bridge-1.jpg" alt="Mountain landscape" />
-            </div>
-            
-            <!-- Content Overlay -->
-            <div class="card-content-overlay">
-              <div class="progress-section">
-                <div class="progress-bar-modern">
-                  <div class="progress-fill-modern" style="width: 35%"></div>
-                </div>
-                <span class="progress-percent-modern">35%</span>
-              </div>
-              
-              <div class="course-info-modern">
-                <span class="course-badge-modern">COURSE</span>
-                <h3 class="course-name-modern">World Geography</h3>
-                <p class="next-lesson-modern">Next exercise: Continents and Oceans</p>
-              </div>
-              
-              <div class="course-actions-modern">
-                <button class="btn-continue-modern">Continue Learning</button>
-                <a href="#" class="link-view-modern">View course</a>
-              </div>
-            </div>
-          </div>
-        </section>
+       <section class="jump-back">
+  <h2 class="section-heading">Jump back in</h2>
+
+  <div class="continue-card-new"
+       role="link"
+       tabindex="0"
+       onclick="window.location.href='<%= ResolveUrl("~/Base/CourseDashboard.aspx") %>'"
+       onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); this.click();}">
+    
+    <div class="card-bg-image"></div>
+
+    <div class="card-content-overlay">
+      <div class="progress-section">
+        <div class="progress-bar-modern">
+          <div class="progress-fill-modern" style="width: 35%"></div>
+        </div>
+        <span class="progress-percent-modern">35%</span>
+      </div>
+
+      <div class="course-info-modern">
+        <span class="course-badge-modern">COURSE</span>
+        <h3 class="course-name-modern">World Geography</h3>
+        <p class="next-lesson-modern">Next exercise: Continents and Oceans</p>
+      </div>
+
+      <div class="course-actions-modern">
+        <a class="btn-continue-modern"
+           href="<%= ResolveUrl("~/Base/CourseDashboard.aspx") %>"
+           onclick="event.stopPropagation();">Continue Learning</a>
+
+        <a class="link-view-modern"
+           href="<%= ResolveUrl("~/Base/CourseDashboard.aspx") %>"
+           onclick="event.stopPropagation();">View course</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 
         <!-- Progress Overview Section -->
         <section class="progress-overview">
@@ -186,37 +193,37 @@
         <section class="explore-section">
           <h2 class="section-heading">Explore more</h2>
           <div class="explore-grid">
-            <div class="explore-card">
+            <a href="<%= ResolveUrl("~/Student/Challenges.aspx") %>" class="explore-card" style="text-decoration: none;">
               <div class="explore-icon">🏆</div>
               <div class="explore-content">
                 <h3 class="explore-title">Challenge Packs</h3>
                 <p class="explore-desc">Practice what you learned with bite-sized geography challenges.</p>
               </div>
-            </div>
+            </a>
 
-            <div class="explore-card">
+            <a href="<%= ResolveUrl("~/Student/Projects.aspx") %>" class="explore-card" style="text-decoration: none;">
               <div class="explore-icon">🚀</div>
               <div class="explore-content">
                 <h3 class="explore-title">Project Tutorials</h3>
                 <p class="explore-desc">Explore fun, step-by-step projects from beginner to advanced.</p>
               </div>
-            </div>
+            </a>
 
-            <div class="explore-card">
+            <a href="<%= ResolveUrl("~/Student/30DaysChallenge.aspx") %>" class="explore-card" style="text-decoration: none;">
               <div class="explore-icon">🥚</div>
               <div class="explore-content">
                 <h3 class="explore-title">#30DaysOfLearning</h3>
                 <p class="explore-desc">Commit to 30 days of learning and building–while raising a virtual pet!</p>
               </div>
-            </div>
+            </a>
 
-            <div class="explore-card">
+            <a href="<%= ResolveUrl("~/Student/PracticeTests.aspx") %>" class="explore-card" style="text-decoration: none;">
               <div class="explore-icon">💻</div>
               <div class="explore-content">
                 <h3 class="explore-title">Practice Tests</h3>
                 <p class="explore-desc">Test your knowledge with interactive quizzes.</p>
               </div>
-            </div>
+            </a>
           </div>
         </section>
       </div>
@@ -262,7 +269,7 @@
               </div>
             </div>
           </div>
-          <button class="btn-view-profile">View profile</button>
+          <button class="btn-view-profile" onclick="window.location.href='<%= ResolveUrl("~/Student/Profile.aspx") %>';">View profile</button>
         </div>
 
         <!-- Study Streak Calendar -->
