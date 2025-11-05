@@ -1,0 +1,83 @@
+﻿/* ===== Lecturer layout (namespaced to avoid collisions) ===== */
+:root {
+    --lect-bg: #0f0f10;
+    --lect-panel: #151515;
+    --lect-text: #eaeaea;
+    --lect-muted: #bdbdbd;
+    --lect-line: #2a2a2a;
+    --lect-accent: #ffd24a;
+    --lect-sb-w: 14rem; /* ~224px */
+    --lect-gap: 1rem; /* 16px */
+}
+
+/* Shell: sidebar + main; we don't assume a fixed navbar here */
+.lect-shell {
+    display: flex;
+    min-height: 100vh;
+    background: var(--lect-bg);
+    color: var(--lect-text);
+}
+
+/* Sidebar */
+.lect-sidebar {
+    width: var(--lect-sb-w);
+    background: var(--lect-panel);
+    border-right: 1px solid var(--lect-line);
+    padding: 0.75rem;
+    box-sizing: border-box;
+}
+
+.lect-sidebar-title {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.lect-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.lect-btn {
+    display: block;
+    text-decoration: none;
+    color: var(--lect-text);
+    background: #1b1b1b;
+    border: 1px solid var(--lect-line);
+    border-radius: 0.5rem;
+    padding: 0.625rem 0.75rem; /* 10px 12px */
+}
+
+    .lect-btn:hover {
+        background: #222;
+        border-color: #333;
+    }
+
+/* Main */
+.lect-main {
+    flex: 1;
+    padding: var(--lect-gap);
+    box-sizing: border-box;
+    background: #101010;
+}
+
+.lect-footer {
+    margin-top: 2rem;
+    color: var(--lect-muted);
+    text-align: center;
+    border-top: 1px solid var(--lect-line);
+    padding-top: 1rem;
+}
+
+/* Responsive: stack at <= 768px */
+@media (max-width: 48rem) {
+    .lect-shell {
+        flex-direction: column;
+    }
+
+    .lect-sidebar {
+        width: 100%;
+        border-right: 0;
+        border-bottom: 1px solid var(--lect-line);
+    }
+}
