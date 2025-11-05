@@ -10,11 +10,38 @@
     <div class="dashboard-container">
       <!-- Left Content Area -->
       <div class="dashboard-content">
-        <!-- Welcome Message -->
+        <!-- Quick Actions Section -->
         <section class="welcome-section">
-          <div class="mascot-icon">🌍</div>
-          <div class="welcome-message">
-            <p class="greeting">Beep beep boop. How are you @Student?</p>
+          <h2 class="section-heading">Quick Actions</h2>
+          <div class="actions-grid">
+            <a href="#" class="action-card">
+              <span class="action-card-icon">📚</span>
+              <div class="action-card-content">
+                <h3 class="action-card-title">Bookmarked Lessons</h3>
+              </div>
+              <span class="action-card-badge">3</span>
+            </a>
+            <a href="#" class="action-card">
+              <span class="action-card-icon">🃏</span>
+              <div class="action-card-content">
+                <h3 class="action-card-title">Saved Flashcards</h3>
+              </div>
+              <span class="action-card-badge">12</span>
+            </a>
+            <a href="#" class="action-card">
+              <span class="action-card-icon">📝</span>
+              <div class="action-card-content">
+                <h3 class="action-card-title">My Notes</h3>
+              </div>
+              <span class="action-card-badge">8</span>
+            </a>
+            <a href="#" class="action-card">
+              <span class="action-card-icon">🎓</span>
+              <div class="action-card-content">
+                <h3 class="action-card-title">Certificates</h3>
+              </div>
+              <span class="action-card-badge">2</span>
+            </a>
           </div>
         </section>
 
@@ -272,79 +299,6 @@
               <span class="milestone-text">14-day streak</span>
             </div>
           </div>
-        </div>
-
-        <!-- Quick Actions Panel -->
-        <div class="quick-actions-card">
-          <h3 class="card-title">Quick Actions</h3>
-          <div class="actions-list">
-            <a href="#" class="action-item">
-              <span class="action-icon">📚</span>
-              <span class="action-text">Bookmarked Lessons</span>
-              <span class="action-badge">3</span>
-            </a>
-            <a href="#" class="action-item">
-              <span class="action-icon">🃏</span>
-              <span class="action-text">Saved Flashcards</span>
-              <span class="action-badge">12</span>
-            </a>
-            <a href="#" class="action-item">
-              <span class="action-icon">📝</span>
-              <span class="action-text">My Notes</span>
-              <span class="action-badge">8</span>
-            </a>
-            <a href="#" class="action-item">
-              <span class="action-icon">🎓</span>
-              <span class="action-text">Certificates</span>
-              <span class="action-badge">2</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Upcoming Events -->
-        <div class="events-card">
-          <h3 class="card-title">Upcoming Events</h3>
-          <div class="events-list">
-            <div class="event-item">
-              <div class="event-date">
-                <span class="event-month">NOV</span>
-                <span class="event-day">8</span>
-              </div>
-              <div class="event-details">
-                <h4 class="event-name">Geography Quiz Competition</h4>
-                <p class="event-time">Sat Nov 8th @ 9:00pm ET</p>
-              </div>
-            </div>
-
-            <div class="event-item">
-              <div class="event-date">
-                <span class="event-month">NOV</span>
-                <span class="event-day">12</span>
-              </div>
-              <div class="event-details">
-                <h4 class="event-name">Map Reading Workshop</h4>
-                <p class="event-time">Wed Nov 12th @ 3:00pm ET</p>
-              </div>
-            </div>
-
-            <div class="event-item">
-              <div class="event-date">
-                <span class="event-month">NOV</span>
-                <span class="event-day">25</span>
-              </div>
-              <div class="event-details">
-                <h4 class="event-name">World Capitals Challenge</h4>
-                <p class="event-time">Tue Nov 25th @ 3:00pm ET</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Club Promo -->
-        <div class="club-card">
-          <h3 class="club-title">CLUB</h3>
-          <h4 class="club-headline">Get unlimited access to learning</h4>
-          <p class="club-desc">Join Club to unlock all courses, get help from geography experts, and more.</p>
         </div>
       </aside>
     </div>

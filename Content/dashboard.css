@@ -17,13 +17,6 @@
 
 /* Welcome Section */
 .welcome-section {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    padding: 1.5rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--stroke);
-    border-radius: 16px;
     margin-bottom: 2rem;
 }
 
@@ -39,10 +32,73 @@
 
 /* Section Headings */
 .section-heading {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     font-weight: 700;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     color: var(--text);
+}
+
+/* Quick Actions Grid - Compact and Consistent */
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+
+.action-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: var(--card);
+    border: 1px solid var(--card-stroke);
+    border-radius: 12px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+    .action-card:hover {
+        transform: translateY(-2px);
+        border-color: #2b3e62;
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+.action-card-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.action-card-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.action-card-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.action-card-badge {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+    background: rgba(255, 210, 74, 0.2);
+    color: var(--brand);
+    padding: 0 0.5rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
 }
 
 /* Jump Back In Section */
@@ -59,15 +115,13 @@
     background: #1a1d2e;
     border: 2px solid rgba(70, 80, 120, 0.4);
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.continue-card-new:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
-}
+    .continue-card-new:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+    }
 
 .card-bg-image {
     position: absolute;
@@ -81,22 +135,17 @@
     filter: brightness(0.7) saturate(1.1);
 }
 
-.card-bg-image::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        to bottom,
-        rgba(26, 29, 46, 0.3) 0%,
-        rgba(26, 29, 46, 0.6) 50%,
-        rgba(26, 29, 46, 0.85) 100%
-    );
-    z-index: 1;
-}
+    .card-bg-image::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient( to bottom, rgba(26, 29, 46, 0.3) 0%, rgba(26, 29, 46, 0.6) 50%, rgba(26, 29, 46, 0.85) 100% );
+        z-index: 1;
+    }
 
-.card-bg-image img {
-    display: none; /* Hide the img tag, use background instead */
-}
+    .card-bg-image img {
+        display: none; /* Hide the img tag, use background instead */
+    }
 
 .card-content-overlay {
     position: relative;
@@ -198,15 +247,15 @@
     text-transform: none;
 }
 
-.btn-continue-modern:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 30px rgba(255, 210, 74, 0.6);
-    background: #ffdc6a;
-}
+    .btn-continue-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 30px rgba(255, 210, 74, 0.6);
+        background: #ffdc6a;
+    }
 
-.btn-continue-modern:active {
-    transform: translateY(0);
-}
+    .btn-continue-modern:active {
+        transform: translateY(0);
+    }
 
 .link-view-modern {
     color: white;
@@ -217,10 +266,10 @@
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
 }
 
-.link-view-modern:hover {
-    color: #ffd24a;
-    text-decoration: none;
-}
+    .link-view-modern:hover {
+        color: #ffd24a;
+        text-decoration: none;
+    }
 
 /* Progress Overview Section */
 .progress-overview {
@@ -277,13 +326,13 @@
     min-height: 10px;
 }
 
-.bar-item.active {
-    background: var(--brand);
-}
+    .bar-item.active {
+        background: var(--brand);
+    }
 
-.bar-item:hover {
-    background: var(--brand);
-}
+    .bar-item:hover {
+        background: var(--brand);
+    }
 
 .bar-label {
     position: absolute;
@@ -407,10 +456,10 @@
     transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
-.activity-item:hover {
-    transform: translateY(-2px);
-    border-color: #2b3e62;
-}
+    .activity-item:hover {
+        transform: translateY(-2px);
+        border-color: #2b3e62;
+    }
 
 .activity-icon {
     width: 40px;
@@ -423,18 +472,18 @@
     flex-shrink: 0;
 }
 
-.activity-icon.completed {
-    background: rgba(102, 255, 102, 0.2);
-    color: #66ff66;
-}
+    .activity-icon.completed {
+        background: rgba(102, 255, 102, 0.2);
+        color: #66ff66;
+    }
 
-.activity-icon.unlocked {
-    background: rgba(255, 210, 74, 0.2);
-}
+    .activity-icon.unlocked {
+        background: rgba(255, 210, 74, 0.2);
+    }
 
-.activity-icon.time {
-    background: rgba(102, 126, 234, 0.2);
-}
+    .activity-icon.time {
+        background: rgba(102, 126, 234, 0.2);
+    }
 
 .activity-content {
     flex: 1;
@@ -464,10 +513,10 @@
     font-weight: 700;
 }
 
-.score-badge.success {
-    background: rgba(102, 255, 102, 0.2);
-    color: #66ff66;
-}
+    .score-badge.success {
+        background: rgba(102, 255, 102, 0.2);
+        color: #66ff66;
+    }
 
 /* Explore Section */
 .explore-section {
@@ -489,10 +538,10 @@
     cursor: pointer;
 }
 
-.explore-card:hover {
-    transform: translateY(-4px);
-    border-color: #2b3e62;
-}
+    .explore-card:hover {
+        transform: translateY(-4px);
+        border-color: #2b3e62;
+    }
 
 .explore-icon {
     font-size: 2.5rem;
@@ -539,11 +588,11 @@
     justify-content: center;
 }
 
-.profile-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+    .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 
 .avatar-placeholder {
     width: 100%;
@@ -617,9 +666,9 @@
     transition: border-color 0.2s ease;
 }
 
-.btn-view-profile:hover {
-    border-color: #2b3e62;
-}
+    .btn-view-profile:hover {
+        border-color: #2b3e62;
+    }
 
 /* Study Streak Calendar */
 .streak-calendar-card {
@@ -683,18 +732,18 @@
     transition: all 0.2s ease;
 }
 
-.calendar-day.completed {
-    background: rgba(255, 210, 74, 0.2);
-    border-color: var(--brand);
-    color: var(--brand);
-}
+    .calendar-day.completed {
+        background: rgba(255, 210, 74, 0.2);
+        border-color: var(--brand);
+        color: var(--brand);
+    }
 
-.calendar-day.today {
-    background: var(--brand);
-    border-color: var(--brand);
-    color: #101212;
-    box-shadow: 0 0 0 3px rgba(255, 210, 74, 0.3);
-}
+    .calendar-day.today {
+        background: var(--brand);
+        border-color: var(--brand);
+        color: #101212;
+        box-shadow: 0 0 0 3px rgba(255, 210, 74, 0.3);
+    }
 
 .streak-milestones {
     display: flex;
@@ -739,207 +788,9 @@
     color: var(--muted);
 }
 
-/* Quick Actions Panel */
-.quick-actions-card {
-    background: var(--card);
-    border: 1px solid var(--card-stroke);
-    border-radius: 14px;
-    padding: 1.5rem;
-}
-
 .card-title {
     font-size: 1.1rem;
     font-weight: 700;
     color: var(--text);
     margin-bottom: 1rem;
-}
-
-.actions-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.action-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.75rem;
-    border-radius: 10px;
-    text-decoration: none;
-    transition: background 0.2s ease;
-}
-
-.action-item:hover {
-    background: rgba(255, 255, 255, 0.05);
-}
-
-.action-icon {
-    font-size: 1.5rem;
-    flex-shrink: 0;
-}
-
-.action-text {
-    flex: 1;
-    color: var(--text);
-    font-weight: 600;
-    font-size: 0.95rem;
-}
-
-.action-badge {
-    background: rgba(255, 210, 74, 0.2);
-    color: var(--brand);
-    padding: 0.25rem 0.6rem;
-    border-radius: 999px;
-    font-size: 0.8rem;
-    font-weight: 700;
-}
-
-/* Events Card */
-.events-card {
-    background: var(--card);
-    border: 1px solid var(--card-stroke);
-    border-radius: 14px;
-    padding: 1.5rem;
-}
-
-.events-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.event-item {
-    display: flex;
-    gap: 1rem;
-}
-
-.event-date {
-    background: var(--brand);
-    color: #101212;
-    border-radius: 8px;
-    padding: 0.5rem;
-    text-align: center;
-    min-width: 50px;
-    flex-shrink: 0;
-}
-
-.event-month {
-    display: block;
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-.event-day {
-    display: block;
-    font-size: 1.5rem;
-    font-weight: 800;
-}
-
-.event-details {
-    flex: 1;
-}
-
-.event-name {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 0.25rem;
-}
-
-.event-time {
-    font-size: 0.8rem;
-    color: var(--muted);
-}
-
-/* Club Card */
-.club-card {
-    background: linear-gradient(135deg, var(--brand) 0%, #ffb74a 100%);
-    border-radius: 14px;
-    padding: 1.5rem;
-    color: #101212;
-}
-
-.club-title {
-    font-size: 0.8rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    margin-bottom: 0.5rem;
-}
-
-.club-headline {
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin-bottom: 0.75rem;
-}
-
-.club-desc {
-    font-size: 0.9rem;
-    line-height: 1.5;
-    opacity: 0.9;
-}
-
-/* Responsive */
-@media (max-width: 1200px) {
-    .dashboard-container {
-        grid-template-columns: 1fr;
-    }
-    
-    .dashboard-sidebar {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    }
-    
-    .progress-cards {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 768px) {
-    .continue-card-new {
-        height: 350px;
-    }
-    
-    .card-content-overlay {
-        padding: 1.5rem;
-    }
-    
-    .course-name-modern {
-        font-size: 2rem;
-    }
-    
-    .progress-percent-modern {
-        font-size: 1.4rem;
-        min-width: 60px;
-    }
-    
-    .btn-continue-modern {
-        padding: 0.8rem 1.5rem;
-        font-size: 0.9rem;
-    }
-    
-    .explore-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .profile-stats {
-        grid-template-columns: 1fr;
-    }
-    
-    .calendar-grid {
-        gap: 0.25rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .course-actions-modern {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
-    }
-    
-    .btn-continue-modern {
-        width: 100%;
-    }
 }
