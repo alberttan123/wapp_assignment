@@ -59,7 +59,7 @@
             <div class="nav-container">
             <div class="brand">
                 <a href="<%= ResolveUrl("~/Base/Landing.aspx") %>">
-                <img src="<%= ResolveUrl("~/Content/images/pages.svg") %>" alt="Geography Pages Logo" class="brand-img" />
+                <img src="<%= ResolveUrl("~/Media/pages.png") %>" alt="Geography Pages Logo" class="brand-img" />
                 </a>
             </div>
 
