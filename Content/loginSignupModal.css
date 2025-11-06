@@ -1,4 +1,4 @@
-﻿:root {
+﻿﻿:root {
     --bg: #ffd24a;
     --fg: #fff;
     --muted: #bdbdbd;
@@ -17,16 +17,34 @@
 }
 
     .btn.primary {
-        background: var(--accent);
+        border-color: #ffd24a;
+        color: #fff;
+        transition: ease-in-out 0.2s;
+    }
+
+        .btn.primary:hover {
+            background: #ffd24a;
+            color: #101212;
+        }
+
+    .btn.danger {
+        background: #e5484d;
         border-color: transparent;
         color: #fff;
     }
 
-    .btn.danger {
-        background: var(--danger);
+    .btn.cancel {
+        background: transparent;
         border-color: transparent;
         color: #fff;
+        transition: ease-in-out 0.2s;
     }
+
+        .btn.cancel:hover {
+            background: #fff;
+            color: #101212;
+            border-color: #101212;
+        }
 
 /* Backdrop */
 .backdrop {
@@ -54,13 +72,14 @@
 /* Sheet */
 .sheet {
     width: 100%;
-    max-width: 420px;
+    max-width: 650px;
     background: #1e1e1e;
     border: 1px solid rgba(255,255,255,.1);
     border-radius: 14px;
-    padding: 18px;
     box-shadow: 0 10px 32px rgba(0,0,0,.45);
     transform: translateY(8px);
+    display: flex;
+    flex-direction: row;
 }
 
 .modal-header {
@@ -84,7 +103,12 @@
     font-size: 22px;
     cursor: pointer;
     line-height: 1;
+    transition: ease-in-out 0.2s;
 }
+
+    .close:hover {
+        color: #ffd24a
+    }
 
 .field {
     margin: 10px 0 14px;
@@ -108,7 +132,7 @@
 
 .actions {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-around;
     gap: 8px;
     margin-top: 8px;
 }
@@ -120,4 +144,27 @@
     padding: 8px 10px;
     border-radius: 8px;
     margin-bottom: 10px;
+}
+
+#loginModal--img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 14px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.loginModal--right {
+    padding: 18px;
+}
+
+.loginModal--register-container {
+    padding-top: 0.5em;
+    margin-bottom: -0.7em;
+}
+
+.loginModal--register-link {
+    font-size: 0.7rem;
+    cursor: pointer;
 }
