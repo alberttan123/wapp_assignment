@@ -100,6 +100,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="About.aspx" />
+    <Content Include="App_Data\users.mdf" />
+    <Content Include="App_Data\users_log.ldf">
+      <DependentUpon>users.mdf</DependentUpon>
+    </Content>
     <Content Include="Base\CourseDashboard.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
@@ -128,6 +132,7 @@
     <Content Include="Global.asax" />
     <Content Include="Base\Landing.aspx" />
     <Content Include="Lecturer\LecturerCourses.aspx" />
+    <Content Include="Media\pages.png" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -284,9 +289,7 @@
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.7.0.slim.min.map" />
