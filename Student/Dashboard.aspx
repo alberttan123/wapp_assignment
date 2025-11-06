@@ -10,45 +10,79 @@
     <div class="dashboard-container">
       <!-- Left Content Area -->
       <div class="dashboard-content">
-        <!-- Welcome Message -->
+        <!-- Quick Actions Section -->
         <section class="welcome-section">
-          <div class="mascot-icon">🌍</div>
-          <div class="welcome-message">
-            <p class="greeting">Beep beep boop. How are you @Student?</p>
+          <h2 class="section-heading">Quick Actions</h2>
+          <div class="actions-grid">
+            <a href="<%= ResolveUrl("~/Student/Bookmarks.aspx") %>" class="action-card">
+              <span class="action-card-icon">📚</span>
+              <div class="action-card-content">
+                <h3 class="action-card-title">Bookmarked Lessons</h3>
+              </div>
+              <span class="action-card-badge">3</span>
+            </a>
+            <a href="<%= ResolveUrl("~/Student/Flashcards.aspx") %>" class="action-card">
+              <span class="action-card-icon">🃏</span>
+              <div class="action-card-content">
+                <h3 class="action-card-title">Saved Flashcards</h3>
+              </div>
+              <span class="action-card-badge">12</span>
+            </a>
+            <a href="<%= ResolveUrl("~/Student/Notes.aspx") %>" class="action-card">
+              <span class="action-card-icon">📝</span>
+              <div class="action-card-content">
+                <h3 class="action-card-title">My Notes</h3>
+              </div>
+              <span class="action-card-badge">8</span>
+            </a>
+            <a href="<%= ResolveUrl("~/Student/Certificates.aspx") %>" class="action-card">
+              <span class="action-card-icon">🎓</span>
+              <div class="action-card-content">
+                <h3 class="action-card-title">Certificates</h3>
+              </div>
+              <span class="action-card-badge">2</span>
+            </a>
           </div>
         </section>
 
-        <!-- Jump Back In Section - REDESIGNED -->
-        <section class="jump-back">
-          <h2 class="section-heading">Jump back in</h2>
-          <div class="continue-card-new">
-            <!-- Background Image Container -->
-            <div class="card-bg-image">
-              <img src="https://cdnb.artstation.com/p/assets/images/images/074/518/589/large/jmw327-mountain-bridge-1.jpg" alt="Mountain landscape" />
-            </div>
-            
-            <!-- Content Overlay -->
-            <div class="card-content-overlay">
-              <div class="progress-section">
-                <div class="progress-bar-modern">
-                  <div class="progress-fill-modern" style="width: 35%"></div>
-                </div>
-                <span class="progress-percent-modern">35%</span>
-              </div>
-              
-              <div class="course-info-modern">
-                <span class="course-badge-modern">COURSE</span>
-                <h3 class="course-name-modern">World Geography</h3>
-                <p class="next-lesson-modern">Next exercise: Continents and Oceans</p>
-              </div>
-              
-              <div class="course-actions-modern">
-                <button class="btn-continue-modern">Continue Learning</button>
-                <a href="#" class="link-view-modern">View course</a>
-              </div>
-            </div>
-          </div>
-        </section>
+       <section class="jump-back">
+  <h2 class="section-heading">Jump back in</h2>
+
+  <div class="continue-card-new"
+       role="link"
+       tabindex="0"
+       onclick="window.location.href='<%= ResolveUrl("~/Base/CourseDashboard.aspx") %>'"
+       onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); this.click();}">
+    
+    <div class="card-bg-image"></div>
+
+    <div class="card-content-overlay">
+      <div class="progress-section">
+        <div class="progress-bar-modern">
+          <div class="progress-fill-modern" style="width: 35%"></div>
+        </div>
+        <span class="progress-percent-modern">35%</span>
+      </div>
+
+      <div class="course-info-modern">
+        <span class="course-badge-modern">COURSE</span>
+        <h3 class="course-name-modern">World Geography</h3>
+        <p class="next-lesson-modern">Next exercise: Continents and Oceans</p>
+      </div>
+
+      <div class="course-actions-modern">
+        <a class="btn-continue-modern"
+           href="<%= ResolveUrl("~/Base/CourseDashboard.aspx") %>"
+           onclick="event.stopPropagation();">Continue Learning</a>
+
+        <a class="link-view-modern"
+           href="<%= ResolveUrl("~/Base/CourseDashboard.aspx") %>"
+           onclick="event.stopPropagation();">View course</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 
         <!-- Progress Overview Section -->
         <section class="progress-overview">
@@ -159,37 +193,37 @@
         <section class="explore-section">
           <h2 class="section-heading">Explore more</h2>
           <div class="explore-grid">
-            <div class="explore-card">
+            <a href="<%= ResolveUrl("~/Student/Challenges.aspx") %>" class="explore-card" style="text-decoration: none;">
               <div class="explore-icon">🏆</div>
               <div class="explore-content">
                 <h3 class="explore-title">Challenge Packs</h3>
                 <p class="explore-desc">Practice what you learned with bite-sized geography challenges.</p>
               </div>
-            </div>
+            </a>
 
-            <div class="explore-card">
+            <a href="<%= ResolveUrl("~/Student/Projects.aspx") %>" class="explore-card" style="text-decoration: none;">
               <div class="explore-icon">🚀</div>
               <div class="explore-content">
                 <h3 class="explore-title">Project Tutorials</h3>
                 <p class="explore-desc">Explore fun, step-by-step projects from beginner to advanced.</p>
               </div>
-            </div>
+            </a>
 
-            <div class="explore-card">
+            <a href="<%= ResolveUrl("~/Student/30DaysChallenge.aspx") %>" class="explore-card" style="text-decoration: none;">
               <div class="explore-icon">🥚</div>
               <div class="explore-content">
                 <h3 class="explore-title">#30DaysOfLearning</h3>
                 <p class="explore-desc">Commit to 30 days of learning and building–while raising a virtual pet!</p>
               </div>
-            </div>
+            </a>
 
-            <div class="explore-card">
+            <a href="<%= ResolveUrl("~/Student/PracticeTests.aspx") %>" class="explore-card" style="text-decoration: none;">
               <div class="explore-icon">💻</div>
               <div class="explore-content">
                 <h3 class="explore-title">Practice Tests</h3>
                 <p class="explore-desc">Test your knowledge with interactive quizzes.</p>
               </div>
-            </div>
+            </a>
           </div>
         </section>
       </div>
@@ -202,7 +236,7 @@
             <div class="avatar-placeholder">👤</div>
           </div>
           <div class="profile-info">
-            <h3 class="profile-name">Student</h3>
+            <h3 class="profile-name"><%= StudentName %></h3>
             <p class="profile-level">Level 1</p>
           </div>
           <div class="profile-stats">
@@ -235,7 +269,7 @@
               </div>
             </div>
           </div>
-          <button class="btn-view-profile">View profile</button>
+          <button class="btn-view-profile" onclick="window.location.href='<%= ResolveUrl("~/Student/Profile.aspx") %>';">View profile</button>
         </div>
 
         <!-- Study Streak Calendar -->
@@ -272,79 +306,6 @@
               <span class="milestone-text">14-day streak</span>
             </div>
           </div>
-        </div>
-
-        <!-- Quick Actions Panel -->
-        <div class="quick-actions-card">
-          <h3 class="card-title">Quick Actions</h3>
-          <div class="actions-list">
-            <a href="#" class="action-item">
-              <span class="action-icon">📚</span>
-              <span class="action-text">Bookmarked Lessons</span>
-              <span class="action-badge">3</span>
-            </a>
-            <a href="#" class="action-item">
-              <span class="action-icon">🃏</span>
-              <span class="action-text">Saved Flashcards</span>
-              <span class="action-badge">12</span>
-            </a>
-            <a href="#" class="action-item">
-              <span class="action-icon">📝</span>
-              <span class="action-text">My Notes</span>
-              <span class="action-badge">8</span>
-            </a>
-            <a href="#" class="action-item">
-              <span class="action-icon">🎓</span>
-              <span class="action-text">Certificates</span>
-              <span class="action-badge">2</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Upcoming Events -->
-        <div class="events-card">
-          <h3 class="card-title">Upcoming Events</h3>
-          <div class="events-list">
-            <div class="event-item">
-              <div class="event-date">
-                <span class="event-month">NOV</span>
-                <span class="event-day">8</span>
-              </div>
-              <div class="event-details">
-                <h4 class="event-name">Geography Quiz Competition</h4>
-                <p class="event-time">Sat Nov 8th @ 9:00pm ET</p>
-              </div>
-            </div>
-
-            <div class="event-item">
-              <div class="event-date">
-                <span class="event-month">NOV</span>
-                <span class="event-day">12</span>
-              </div>
-              <div class="event-details">
-                <h4 class="event-name">Map Reading Workshop</h4>
-                <p class="event-time">Wed Nov 12th @ 3:00pm ET</p>
-              </div>
-            </div>
-
-            <div class="event-item">
-              <div class="event-date">
-                <span class="event-month">NOV</span>
-                <span class="event-day">25</span>
-              </div>
-              <div class="event-details">
-                <h4 class="event-name">World Capitals Challenge</h4>
-                <p class="event-time">Tue Nov 25th @ 3:00pm ET</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Club Promo -->
-        <div class="club-card">
-          <h3 class="club-title">CLUB</h3>
-          <h4 class="club-headline">Get unlimited access to learning</h4>
-          <p class="club-desc">Join Club to unlock all courses, get help from geography experts, and more.</p>
         </div>
       </aside>
     </div>

@@ -73,10 +73,8 @@
                     </div>
                 </div>
                 </div>
-                <a class="nav-link" href="#">Practice</a>
-                <a class="nav-link" href="#">Build</a>
+                <a class="nav-link" href="<%= ResolveUrl("~/Student/praticeDashboard.aspx") %>">Practice</a>               
                 <a class="nav-link" href="#">Community</a>
-                <a class="nav-link" href="#">Pricing</a>
             </div>
 
             <div class="nav-actions">
@@ -95,7 +93,7 @@
           <div class="sheet">
             <div class="modal-header">
               <h3 id="loginTitle" class="modal-title">Login</h3>
-              <!-- “X” close -->
+              <!-- "X" close -->
               <asp:LinkButton ID="lnkCloseLogin" runat="server" CssClass="close"
                   OnClick="hideLoginSignupModal" CausesValidation="false">×</asp:LinkButton>
             </div>
