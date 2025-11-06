@@ -1,11 +1,6 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="CourseDashboard.aspx.cs" Inherits="WAPP_Assignment.Base.CourseDashboard" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="CourseDashboard.aspx.cs" Inherits="WAPP_Assignment.Base.CourseDashboard" MasterPageFile="~/Site.Master" %>
 
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
-<head runat="server">
-  <meta charset="utf-8" />
-  <title>Courses — Geography Pages</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<asp:Content ContentPlaceHolderID="HeadContent" runat="server">
   <link href="<%= ResolveUrl("~/Content/waplanding.css") %>" rel="stylesheet" />
   <style>
     .a-bg {
@@ -36,9 +31,6 @@
         line-height: 1.6;
     }
 
-    /* ========================================
-       GARDEN-INSPIRED COURSE CARDS WITH LAYERED EFFECT
-       ======================================== */
 
     /* Course Cards Grid */
     .garden-grid {
@@ -51,7 +43,7 @@
     .garden-card-wrapper {
         position: relative;
         width: 100%;
-        margin-bottom: 0.5rem; /* Reduced from 1rem */
+        margin-bottom: 0.5rem;
     }
 
 .garden-card-wrapper::before {
@@ -62,7 +54,7 @@
     transform: translateX(-50%);
     width: calc(100% + 10px);
     height: 100%;
-    background: rgba(51, 65, 85, 0.8); /* Solid gray-blue background */
+    background: rgba(51, 65, 85, 0.8);
     clip-path: polygon(
         6px 0px, 6px 2px, 4px 2px, 4px 4px, 2px 4px, 2px 6px, 0px 6px, 0px calc(100% - 6px),
         2px calc(100% - 6px), 2px calc(100% - 4px), 4px calc(100% - 4px), 4px calc(100% - 2px),
@@ -77,7 +69,6 @@
     z-index: -1;
     transition: all 0.3s ease;
 }
-
 
 .garden-card-wrapper::after {
     content: '';
@@ -99,13 +90,13 @@
         calc(100% - 4px) 4px, calc(100% - 4px) 2px, calc(100% - 6px) 2px, 
         calc(100% - 6px) 0px
     );
-    box-shadow: inset 0 0 0 3px rgba(71, 85, 105, 0.5); /* Darker gray border */
+    box-shadow: inset 0 0 0 3px rgba(71, 85, 105, 0.5);
     z-index: -2;
     pointer-events: none;
 }
 
     .garden-card-wrapper:hover::before {
-        bottom: -4px; /* Slight expansion on hover */
+        bottom: -4px;
         width: calc(100% + 14px);
         background: rgba(71, 85, 105, 0.9);
     }
@@ -113,7 +104,7 @@
     .garden-card-wrapper:hover::after {
         bottom: -4px;
         width: calc(100% + 14px);
-        box-shadow: inset 0 0 0 3px rgba(100, 116, 139, 0.7); /* Stronger border on hover */
+        box-shadow: inset 0 0 0 3px rgba(100, 116, 139, 0.7);
     }
 
     /* Individual Garden-style Course Card with Pixelated Border */
@@ -139,7 +130,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(102, 126, 234, 0.6); /* Solid purple border */
+    background: rgba(102, 126, 234, 0.6);
     clip-path: polygon(
         6px 0px, 6px 2px, 4px 2px, 4px 4px, 2px 4px, 2px 6px, 0px 6px, 0px calc(100% - 6px),
         2px calc(100% - 6px), 2px calc(100% - 4px), 4px calc(100% - 4px), 4px calc(100% - 2px),
@@ -181,11 +172,12 @@
         transform: translateY(-6px);
         filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.4));
     }
+
 .garden-card:hover::before {
     background: linear-gradient(135deg, 
         rgba(102, 126, 234, 0.9) 0%, 
         rgba(168, 85, 247, 0.9) 50%,
-        rgba(236, 72, 153, 0.9) 100%); /* Colorful gradient on hover */
+        rgba(236, 72, 153, 0.9) 100%);
 }
 
     /* Image Container at Top */
@@ -231,7 +223,6 @@
 .garden-content {
     padding: 16px 24px 30px 24px;
     background: transparent;
-    /*height: calc(330px - 186px);*/ /* Changed back to fixed height */
     height:auto;
     flex: 1;
     display: flex;
@@ -241,7 +232,6 @@
     z-index: 2;
     margin: 0 3px 3px 3px;
     box-sizing: border-box;
-/*    padding-bottom: 24px; */
 }
 
 .garden-course-num {
@@ -257,7 +247,7 @@
 
 /* Course Title */
 .garden-title {
-    font-size: 18px; /* Changed from 1.4rem to match reference 18px */
+    font-size: 18px;
     font-weight: 800;
     color: white;
     margin: 0 0 0.5rem 0;
@@ -284,7 +274,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: auto; /* Push to bottom */
+    margin-top: auto;
     padding-top: 0.5rem;
     position: relative;
     z-index: 10;
@@ -305,7 +295,7 @@
     white-space: nowrap;
     position: relative;
     z-index: 10;
-     transition: all 0.3s ease;
+    transition: all 0.3s ease;
 }  
 
     .garden-level-icon {
@@ -321,8 +311,8 @@
         z-index: 10;
     }
 
-    /* Progress Overlay (for courses in progress) */
-/*    .garden-progress-bar {
+    /* Progress Bar */
+    .garden-progress-bar {
         position: absolute;
         bottom: 3px;
         left: 3px;
@@ -331,21 +321,14 @@
         background: rgba(255, 255, 255, 0.1);
         z-index: 1;
         pointer-events: none;
-    }*/
+    }
 
-/*    .garden-progress-fill {
+    .garden-progress-fill {
         height: 100%;
         background: linear-gradient(90deg, #667eea 0%, #a78bfa 100%);
         transition: width 0.3s ease;
-        box-shadow: 0 0 10px rgba(255, 210, 74, 0.5);
-    }*/
-
-/*    .garden-progress-fill {
-        height: 100%;
-        background: linear-gradient(90deg, #667eea 0%, #ffd24a 100%);
-        transition: width 0.3s ease;
-        box-shadow: 0 0 10px rgba(255, 210, 74, 0.5);
-    }*/
+        box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+    }
 
     @media (max-width: 768px) {
         .garden-grid {
@@ -358,55 +341,10 @@
         }
     }
   </style>
-</head>
+</asp:Content>
 
-<body>
-  <!-- NAV - Consistent with Landing.aspx -->
-  <nav class="navbar">
-    <div class="nav-container">
-      <div class="brand">
-        <a href="<%= ResolveUrl("~/Base/Landing.aspx") %>">
-          <img src="<%= ResolveUrl("~/Content/images/pages.svg") %>" alt="Geography Pages Logo" class="brand-img" />
-        </a>
-      </div>
-
-      <div class="nav-links">
-        <div class="nav-item-dropdown">
-          <a class="nav-link" href="<%= ResolveUrl("~/Base/CourseDashboard.aspx") %>">Learn <span class="chevron"></span></a>
-          <div class="dropdown-menu">
-            <div class="dropdown-grid">
-              <div class="dropdown-column">
-                <h4 class="dropdown-heading">Lorem Ipsum</h4>
-                <a href="#" class="dropdown-link">Dolor Sit Amet</a>
-                <a href="#" class="dropdown-link">Consectetur Adipiscing</a>
-              </div>
-              <div class="dropdown-column">
-                <h4 class="dropdown-heading">Sed Do Eiusmod</h4>
-                <a href="#" class="dropdown-link">Tempor Incididunt</a>
-                <a href="#" class="dropdown-link">Ut Labore Et</a>
-                <a href="#" class="dropdown-link">Dolore Magna</a>
-              </div>
-              <div class="dropdown-column">
-                <h4 class="dropdown-heading">Ut Enim Ad</h4>
-                <a href="#" class="dropdown-link">Minim Veniam</a>
-                <a href="#" class="dropdown-link">Quis Nostrud</a>
-                <a href="#" class="dropdown-link">Exercitation Ullamco</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <a class="nav-link" href="#">Practice</a>
-        <a class="nav-link" href="#">Build</a>
-        <a class="nav-link" href="#">Community</a>
-        <a class="nav-link" href="#">Pricing</a>
-      </div>
-
-      <div class="nav-actions">
-        <button class="primary-btn">Sign up</button>
-      </div>
-    </div>
-  </nav>
-
+<asp:Content ContentPlaceHolderID="MainContent" runat="server">
+  
   <header class="a">
     <div class="a-bg" role="img" aria-label="Pixel art world background"></div>
     <div class="a-scrim"></div>
@@ -606,5 +544,4 @@
       <p>© Geography Pages</p>
     </div>
   </footer>
-</body>
-</html>
+</asp:Content>
