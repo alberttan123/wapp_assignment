@@ -59,7 +59,7 @@
             <div class="nav-container">
             <div class="brand">
                 <a href="<%= ResolveUrl("~/Base/Landing.aspx") %>">
-                <img src="<%= ResolveUrl("~/Content/images/pages.svg") %>" alt="Geography Pages Logo" class="brand-img" />
+                <img src="<%= ResolveUrl("~/Media/pages.png") %>" alt="Geography Pages Logo" class="brand-img" />
                 </a>
             </div>
 
@@ -88,10 +88,8 @@
                     </div>
                 </div>
                 </div>
-                <a class="nav-link" href="#">Practice</a>
-                <a class="nav-link" href="#">Build</a>
+                <a class="nav-link" href="<%= ResolveUrl("~/Student/praticeDashboard.aspx") %>">Practice</a>               
                 <a class="nav-link" href="#">Community</a>
-                <a class="nav-link" href="#">Pricing</a>
             </div>
 
             <div class="nav-actions">

@@ -1,0 +1,198 @@
+﻿/* ===== Lecturer-only layout (isolated from Site.Master) ===== */
+:root {
+    /* If your global CSS already defines --nav-h, this will use it; otherwise 4.5rem */
+    --nav-h: 5.5rem;
+    --sb-w: 14rem; /* ~224px */
+    --bg: #0b0f1a;
+    --panel: #121417;
+    --panel-2: #0f1114;
+    --line: #232a33;
+    --text: #e8eefc;
+    --muted: #9fb0d1;
+    --accent: #ffd24a;
+}
+
+/* Everything below the fixed header lives inside this wrapper */
+.lect-wrap {
+    padding-top: var(--nav-h); /* clear the fixed header from Site.Master */
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+.lect-sb {
+    position: fixed;
+    top: var(--nav-h); /* start right under the header */
+    left: 0;
+    width: var(--sb-w);
+    height: 100vh;
+    background: var(--panel-2);
+    border-right: 1px solid var(--line);
+    padding-top: 1rem; /* keep inner content a little padded below the nav */
+    padding-right: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 1rem;
+    box-sizing: border-box;
+    overflow-y: auto;
+    z-index: 100; /* under the header, above page body */
+}
+
+.lect-sb-title {
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+}
+
+.lect-links {
+    display: grid;
+    gap: 0.6rem;
+}
+
+.lect-link {
+    display: block;
+    text-decoration: none;
+    color: var(--text);
+    background: #161a1f;
+    border: 1px solid var(--line);
+    border-radius: 0.5rem;
+    padding: 0.65rem 0.8rem;
+}
+
+    .lect-link:hover {
+        background: #1b2127;
+    }
+
+/* Main content sits to the right of the fixed sidebar and can scroll */
+.lect-main {
+    margin-left: var(--sb-w);
+    padding: 1rem;
+    min-height: calc(100vh - var(--nav-h));
+    background: var(--bg);
+    box-sizing: border-box;
+}
+
+/* --- Optional helpers for the Courses page mock --- */
+.lc-header {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.lc-controls {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.lc-view {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.lc-icon {
+    border: 1px solid var(--line);
+    background: #161a1f;
+    color: var(--text);
+    padding: 0.5rem 0.75rem;
+    border-radius: 999rem;
+}
+
+.lc-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.lc-add {
+    display: inline-block;
+    background: var(--accent);
+    color: #101212;
+    font-weight: 800;
+    padding: 0.6rem 1rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+}
+
+.lc-sort select {
+    background: #161a1f;
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+}
+
+.lc-search {
+    display: flex;
+    justify-content: center;
+    margin: 0 0 1.25rem 0;
+}
+
+    .lc-search input {
+        width: min(44rem, 100%);
+        border: 1px solid var(--line);
+        background: #151a20;
+        color: var(--text);
+        padding: 0.6rem 1rem;
+        border-radius: 999rem;
+    }
+
+.lc-grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 64rem) {
+    .lc-grid {
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+@media (max-width: 40rem) {
+    .lc-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.lc-card {
+    background: #101316;
+    border: 1px solid var(--line);
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.lc-banner {
+    height: 3.5rem;
+    display: grid;
+    place-items: center;
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+}
+
+.lc-card-body {
+    padding: 0.75rem;
+}
+
+    .lc-card-body h3 {
+        margin: 0 0 0.4rem 0;
+        font-size: 1.05rem;
+    }
+
+.lc-date {
+    margin: 0 0 0.4rem 0;
+    color: var(--muted);
+}
+
+/* Local footer for lecturer pages */
+.lect-footer {
+    margin-top: 2rem;
+    color: var(--muted);
+    text-align: center;
+    border-top: 1px solid var(--line);
+    padding-top: 1rem;
+}
