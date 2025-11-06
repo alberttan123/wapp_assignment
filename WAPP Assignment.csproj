@@ -113,6 +113,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="About.aspx" />
+    <Content Include="App_Data\users.mdf" />
+    <Content Include="App_Data\users_log.ldf">
+      <DependentUpon>users.mdf</DependentUpon>
     <Content Include="App_Data\login_credentials.mdf" />
     <Content Include="App_Data\login_credentials_log.ldf">
       <DependentUpon>login_credentials.mdf</DependentUpon>
@@ -148,6 +151,7 @@
     <Content Include="Global.asax" />
     <Content Include="Base\Landing.aspx" />
     <Content Include="Lecturer\LecturerCourses.aspx" />
+    <Content Include="Media\pages.png" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
