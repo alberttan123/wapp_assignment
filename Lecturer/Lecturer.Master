@@ -1,0 +1,33 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true"
+    CodeBehind="Lecturer.Master.cs"
+    Inherits="WAPP_Assignment.Lecturer.LecturerMaster"
+    MasterPageFile="~/Site.Master" %>
+
+<%-- Put lecturer CSS into Site.Master's <head> via its HeadContent placeholder --%>
+<asp:Content ID="LectHead" ContentPlaceHolderID="HeadContent" runat="server">
+  <link rel="stylesheet" href="<%= ResolveUrl("~/Content/LecturerPages.css") %>" />
+  <link rel="stylesheet" href="<%= ResolveUrl("~/Content/waplanding.css") %>" />
+  <%-- Per-page <head> items (optional) --%>
+  <asp:ContentPlaceHolder ID="HeadLecturer" runat="server" />
+</asp:Content>
+
+<%-- Put the lecturer shell into Site.Master's MainContent --%>
+<asp:Content ID="LectBody" ContentPlaceHolderID="MainContent" runat="server">
+  <div class="lect-wrap">
+    <%-- Fixed sidebar (stays visible while scrolling) --%>
+    <nav class="lect-sb" aria-label="Lecturer sidebar">
+      <div class="lect-sb-title">Menu</div>
+      <div class="lect-links">
+        <a class="lect-link" href="<%= ResolveUrl("~/Lecturer/Dashboard.aspx") %>">Dashboard</a>
+        <a class="lect-link" href="<%= ResolveUrl("~/Lecturer/LecturerCourses.aspx") %>">Courses</a>
+        <a class="lect-link" href="<%= ResolveUrl("~/Lecturer/Questions.aspx") %>">Questions</a>
+        <a class="lect-link" href="<%= ResolveUrl("~/Lecturer/Assessments.aspx") %>">Assessments</a>
+      </div>
+    </nav>
+
+    <%-- Scrollable content to the right of the fixed sidebar --%>
+    <main class="lect-main">
+      <asp:ContentPlaceHolder ID="LecturerMain" runat="server" />
+    </main>
+  </div>
+</asp:Content>
