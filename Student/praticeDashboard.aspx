@@ -446,7 +446,6 @@
           </div>
         </div>
 
-        <!-- Chapter 2: Structure -->
         <div class="chapter-section">
           <div class="chapter-header">
             <div class="chapter-info">
@@ -482,7 +481,6 @@
         </div>
       </div>
 
-      <!-- Sidebar -->
       <aside class="sidebar-profile">
         <div class="profile-card">
           <div class="profile-avatar">👤</div>
