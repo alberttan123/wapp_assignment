@@ -15,21 +15,21 @@ namespace WAPP_Assignment.Lecturer
     {
 
         /// <summary>
-        /// HeadContent control.
+        /// HeadLecturer control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder HeadContent;
+        protected global::System.Web.UI.WebControls.ContentPlaceHolder HeadLecturer;
 
         /// <summary>
-        /// MainContent control.
+        /// LecturerMain control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder MainContent;
+        protected global::System.Web.UI.WebControls.ContentPlaceHolder LecturerMain;
     }
 }
