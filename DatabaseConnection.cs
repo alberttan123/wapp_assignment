@@ -8,7 +8,7 @@ namespace WAPP_Assignment
     public class DataAccess
     {
         private static readonly string ConnStr =
-        ConfigurationManager.ConnectionStrings["main"].ConnectionString;
+        ConfigurationManager.ConnectionStrings["DatabaseConnection"].ConnectionString;
 
         public static SqlConnection GetOpenConnection()
         {
