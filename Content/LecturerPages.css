@@ -20,19 +20,21 @@
     min-height: 100vh;
 }
 
-/* Fixed sidebar that never scrolls out of view */
 .lect-sb {
     position: fixed;
     top: var(--nav-h); /* start right under the header */
     left: 0;
     width: var(--sb-w);
-    height: calc(100vh - var(--nav-h));
+    height: 100vh;
     background: var(--panel-2);
     border-right: 1px solid var(--line);
-    padding: 0.75rem;
+    padding-top: 1rem; /* keep inner content a little padded below the nav */
+    padding-right: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 1rem;
     box-sizing: border-box;
     overflow-y: auto;
-    z-index: 80; /* under the header, above page body */
+    z-index: 100; /* under the header, above page body */
 }
 
 .lect-sb-title {

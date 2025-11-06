@@ -30,8 +30,8 @@
             </label>
         </div>
     </div>
-
-    <div class="lc-search">
+     
+    <div class="lc-search">   
         <input type="text" placeholder="SEARCH" />
     </div>
 
