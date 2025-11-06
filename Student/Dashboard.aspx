@@ -236,7 +236,7 @@
             <div class="avatar-placeholder">👤</div>
           </div>
           <div class="profile-info">
-            <h3 class="profile-name">Student</h3>
+            <h3 class="profile-name"><%= StudentName %></h3>
             <p class="profile-level">Level 1</p>
           </div>
           <div class="profile-stats">

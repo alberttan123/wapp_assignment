@@ -302,44 +302,6 @@
         font-size: 0.85rem;
     }
 
-    /* Progress Info */
-    .garden-progress-text {
-        font-size: 0.75rem;
-        color: rgba(255, 255, 255, 0.6);
-        font-weight: 600;
-        position: relative;
-        z-index: 10;
-    }
-
-    /* Progress Bar */
-    .garden-progress-bar {
-        position: absolute;
-        bottom: 3px;
-        left: 3px;
-        right: 3px;
-        height: 4px;
-        background: rgba(255, 255, 255, 0.1);
-        z-index: 1;
-        pointer-events: none;
-    }
-
-    .garden-progress-fill {
-        height: 100%;
-        background: linear-gradient(90deg, #667eea 0%, #a78bfa 100%);
-        transition: width 0.3s ease;
-        box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
-    }
-
-    @media (max-width: 768px) {
-        .garden-grid {
-            grid-template-columns: 1fr;
-        }
-        
-        .trilogy-header {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-    }
   </style>
 </asp:Content>
 
