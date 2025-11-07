@@ -14,12 +14,12 @@
         <section class="welcome-section">
           <h2 class="section-heading">Quick Actions</h2>
           <div class="actions-grid">
-            <a href="<%= ResolveUrl("~/Student/Bookmarks.aspx") %>" class="action-card">
-              <span class="action-card-icon">📚</span>
-              <div class="action-card-content">
-                <h3 class="action-card-title">Bookmarked Lessons</h3>
+            <a class="qa-card" href="#my-courses">
+              <div class="qa-left">
+                <span class="qa-icon">🎓</span>
+                <span class="qa-title">Enrolled Classes</span>
               </div>
-              <span class="action-card-badge">3</span>
+              <span class="qa-badge"><asp:Label ID="lblQuickEnrolled" runat="server" Text="0" /></span>
             </a>
             <a href="<%= ResolveUrl("~/Student/Flashcards.aspx") %>" class="action-card">
               <span class="action-card-icon">🃏</span>
@@ -81,6 +81,53 @@
       </div>
     </div>
   </div>
+</section>
+
+          <section id="my-courses" class="enrollments">
+  <h2 class="section-heading">My Courses</h2>
+
+  <!-- Summary cards -->
+  <div class="metrics-grid">
+    <div class="metric">
+      <h4>Total Enrolled</h4>
+      <asp:Label ID="lblTotalEnrolled" runat="server" Text="0" />
+    </div>
+    <div class="metric">
+      <h4>In Progress</h4>
+      <asp:Label ID="lblInProgress" runat="server" Text="0" />
+    </div>
+    <div class="metric">
+      <h4>Completed</h4>
+      <asp:Label ID="lblCompleted" runat="server" Text="0" />
+    </div>
+  </div>
+
+  <!-- List -->
+  <asp:Panel ID="pnlEmpty" runat="server" Visible="false" CssClass="empty-state">
+    <p>You haven’t enrolled in any courses yet.</p>
+  </asp:Panel>
+
+  <asp:Repeater ID="rptEnrollments" runat="server">
+    <ItemTemplate>
+      <article class="course-card">
+        <div class="thumb">
+          <img src='<%# Eval("CourseImgUrl") ?? "/Content/placeholder.png" %>' alt="Course image" />
+        </div>
+        <div class="body">
+          <h3 class="title"><%# Eval("CourseTitle") %></h3>
+          <p class="meta">
+            Last accessed: <%# Eval("LastAccessedAt", "{0:yyyy-MM-dd HH:mm}") ?? "—" %>
+          </p>
+          <div class="progress-wrap">
+            <div class="progress-bar">
+              <div class="progress-fill" style='width:<%# Eval("ProgressPercent", "{0:0}") %>%'></div>
+            </div>
+            <span class="progress-label"><%# Eval("ProgressPercent", "{0:0}%") %></span>
+          </div>
+        </div>
+      </article>
+    </ItemTemplate>
+  </asp:Repeater>
 </section>
 
 
@@ -188,6 +235,46 @@
             </div>
           </div>
         </section>
+
+        <section class="my-courses">
+  <h2 class="section-heading">My Courses</h2>
+
+  <div class="my-courses-grid">
+    <asp:Repeater ID="rptMyCourses" runat="server">
+      <ItemTemplate>
+        <!-- card -->
+        <a class="course-hero" href='<%# "Course.aspx?id=" + Eval("CourseId") %>'>
+          <!-- background (animated) -->
+          <div class="course-hero-bg" style='--bg:url("<%# Eval("BgUrl") %>")'></div>
+
+          <!-- content overlay (reuses your Jump-back patterns) -->
+          <div class="course-hero-content">
+            <div class="progress-section">
+              <div class="progress-bar-modern">
+                <div class="progress-fill-modern" style='width:<%# Eval("ProgressPercent","{0:0}%}") %>'></div>
+              </div>
+              <div class="progress-percent-modern"><%# Eval("ProgressPercent","{0:0}%}") %></div>
+            </div>
+
+            <div class="course-info-modern">
+              <span class="course-badge-modern">COURSE</span>
+              <h3 class="course-name-modern"><%# Eval("CourseTitle") %></h3>
+              <p class="next-lesson-modern">Continue learning</p>
+            </div>
+
+            <div class="course-actions-modern">
+              <span></span>
+              <span>
+                <button type="button" class="btn-continue-modern">Continue</button>
+                <a class="link-view-modern" href='<%# "Course.aspx?id=" + Eval("CourseId") %>'>View course</a>
+              </span>
+            </div>
+          </div>
+        </a>
+      </ItemTemplate>
+    </asp:Repeater>
+  </div>
+</section>
 
         <!-- Explore More Section -->
         <section class="explore-section">
