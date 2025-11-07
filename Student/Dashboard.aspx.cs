@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -19,10 +20,60 @@ namespace WAPP_Assignment.Student
             if (!IsPostBack)
             {
                 StudentName = LoadStudentName();
+                BindEnrollmentData();
             }
         }
+        private int ResolveUserId()
+        {
+            if (int.TryParse(Request.QueryString["userId"], out var uid))
+                return uid;
 
+            return Convert.ToInt32(Session["UserId"]);
+        }
+        private void BindEnrollmentData()
+        {
+            int userId = ResolveUserId();
 
+            using (var conn = DataAccess.GetOpenConnection())
+            using (var cmd = new SqlCommand(@"
+                SELECT  e.EnrollmentId, e.UserId, e.CourseId, e.ProgressPercent,
+                        e.StartedAt, e.LastAccessedAt, e.CompletedAt,
+                        c.CourseTitle, c.CourseImgUrl, c.TotalLessons
+                FROM dbo.Enrollments e
+                JOIN dbo.Courses c ON c.CourseId = e.CourseId
+                WHERE e.UserId = @UserId
+                ORDER BY ISNULL(e.LastAccessedAt, e.StartedAt) DESC, e.EnrollmentId DESC;", conn))
+            {
+                cmd.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+
+                using (var da = new SqlDataAdapter(cmd))
+                using (var table = new DataTable())
+                {
+                    da.Fill(table);
+
+                    // list
+                    rptEnrollments.DataSource = table;
+                    rptEnrollments.DataBind();
+
+                    // empty state
+                    pnlEmpty.Visible = table.Rows.Count == 0;
+
+                    // summary counters + quick action
+                    int total = table.Rows.Count, completed = 0, inProg = 0;
+                    foreach (DataRow r in table.Rows)
+                    {
+                        var pct = r.Field<decimal>("ProgressPercent");
+                        bool done = r["CompletedAt"] != DBNull.Value || pct >= 100m;
+                        if (done) completed++; else inProg++;
+                    }
+
+                    lblTotalEnrolled.Text = total.ToString();
+                    lblInProgress.Text = inProg.ToString();
+                    lblCompleted.Text = completed.ToString();
+                    lblQuickEnrolled.Text = total.ToString(); // quick-action badge
+                }
+            }
+        }
         private string LoadStudentName()
         {
             try
@@ -83,4 +134,4 @@ namespace WAPP_Assignment.Student
             }
         }
     }
-}
+} 
