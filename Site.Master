@@ -15,7 +15,22 @@
     <webopt:bundlereference runat="server" path="~/Content/css" />
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <link rel="stylesheet" href="<%= ResolveUrl("~/Content/loginSignupModal.css") %>">
+    <link rel="stylesheet" href="<%= ResolveUrl("~/Content/header.css") %>">
     <asp:ContentPlaceHolder ID="HeadContent" runat="server"></asp:ContentPlaceHolder>
+
+    <style>
+        .register--radio-button-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+        }
+
+        input#student_radio:checked + lable::after,
+        input#lecturer_radio:checked + lable::after{
+            font-weight: bold;
+            background-color: #ffd24a;
+        }
+    </style>
 
 </head>
 <body>
@@ -44,7 +59,7 @@
             <div class="nav-container">
             <div class="brand">
                 <a href="<%= ResolveUrl("~/Base/Landing.aspx") %>">
-                <img src="<%= ResolveUrl("~/Content/images/pages.svg") %>" alt="Geography Pages Logo" class="brand-img" />
+                <img src="<%= ResolveUrl("~/Media/pages.png") %>" alt="Geography Pages Logo" class="brand-img" />
                 </a>
             </div>
 
@@ -78,54 +93,163 @@
             </div>
 
             <div class="nav-actions">
-                <asp:LinkButton runat="server" CssClass="primary-btn" OnClick="showLoginSignupModal">Sign up</asp:LinkButton>
+                <asp:LinkButton runat="server" CssClass="primary-btn" OnClick="showLoginSignupModal">Login/Register</asp:LinkButton>
             </div>
             </div>
         </nav>
         <%-- Navigation Bar END --%>
 
-        <asp:Panel ID="loginSignupModal" runat="server" Visible="false">
+        <%-- Login Modal START --%>
+        <asp:Panel ID="loginModal" runat="server" Visible="false">
         <!-- Click outside to close (server-side backdrop) -->
         <asp:LinkButton ID="lnkBackdrop" runat="server" CssClass="backdrop"
-            OnClick="hideLoginSignupModal" CausesValidation="false" />
+            OnClick="hideModals" CausesValidation="false" />
 
-        <div id="loginModal" class="pages-modal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+        <div id="loginModalDiv" class="pages-modal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
           <div class="sheet">
-            <div class="modal-header">
-              <h3 id="loginTitle" class="modal-title">Login</h3>
-              <!-- "X" close -->
-              <asp:LinkButton ID="lnkCloseLogin" runat="server" CssClass="close"
-                  OnClick="hideLoginSignupModal" CausesValidation="false">×</asp:LinkButton>
+            <div class="loginModal--left">
+                <img src="https://storage.ko-fi.com/cdn/useruploads/display/e62ec1f1-eb2a-48e0-be8a-fcf3bf015a4c_forestfamilybyshaperka.gif" id="loginModal--img">
             </div>
 
-            <asp:ValidationSummary ID="valSummary" runat="server" CssClass="error-banner" ValidationGroup="Login" />
+            <div class="loginModal--right">
+                <div class="modal-header">
+                  <h3 id="loginTitle" class="modal-title">Login</h3>
+                  <!-- “X” close -->
+                  <asp:LinkButton ID="lnkCloseLogin" runat="server" CssClass="close"
+                      OnClick="hideModals" CausesValidation="false">×</asp:LinkButton>
+                </div>
 
-            <!-- fields -->
-            <div class="field">
-              <label class="label">Username</label>
-              <asp:TextBox ID="txtUsername" runat="server" CssClass="input" MaxLength="50" />
-              <asp:RequiredFieldValidator runat="server" ControlToValidate="txtUsername"
-                  ErrorMessage="Username is required." ValidationGroup="Login" CssClass="field-error" />
-            </div>
-            <div class="field">
-              <label class="label">Password</label>
-              <asp:TextBox ID="txtPassword" runat="server" CssClass="input" TextMode="Password" MaxLength="100" />
-              <asp:RequiredFieldValidator runat="server" ControlToValidate="txtPassword"
-                  ErrorMessage="Password is required." ValidationGroup="Login" CssClass="field-error" />
+                <!-- fields -->
+                <div class="field">
+                  <label class="label">Username</label>
+                  <asp:TextBox ID="LOGINusername" runat="server" CssClass="input" MaxLength="50" />
+                  <asp:RequiredFieldValidator runat="server" ControlToValidate="LOGINusername"
+                      ErrorMessage="Username is required." ValidationGroup="Login" CssClass="field-error" />
+                </div>
+
+                <div class="field">
+                  <label class="label">Password</label>
+                  <asp:TextBox ID="LOGINpassword" runat="server" CssClass="input" TextMode="Password" MaxLength="100" />
+                  <asp:RequiredFieldValidator runat="server" ControlToValidate="LOGINpassword"
+                      ErrorMessage="Password is required." ValidationGroup="Login" CssClass="field-error" />
+                </div>
+
+                <asp:Label runat="server" ID="login_error_message"></asp:Label>
+
+                <div class="actions">
+                  <!-- Cancel close -->
+                  <asp:LinkButton ID="lnkCancelLogin" runat="server" CssClass="btn cancel"
+                      OnClick="hideModals" CausesValidation="false">Cancel</asp:LinkButton>
+
+                  <!-- Login -->
+                  <asp:Button ID="btnLogin" runat="server" CssClass="btn primary" Text="Login"
+                      OnClick="login" ValidationGroup="Login" />
+                </div>
+
+                <div class="loginModal--register-container">
+                    <asp:LinkButton CssClass="loginModal--register-link" runat="server" OnClick="swapToRegister">Don't have an account?</asp:LinkButton>
+                </div>
             </div>
 
-            <div class="actions">
-              <!-- Cancel close -->
-              <asp:LinkButton ID="lnkCancelLogin" runat="server" CssClass="btn"
-                  OnClick="hideLoginSignupModal" CausesValidation="false">Cancel</asp:LinkButton>
-
-              <!-- Login -->
-              <asp:Button ID="btnLogin" runat="server" CssClass="btn primary" Text="Login"
-                  OnClick="login" ValidationGroup="Login" />
-            </div>
           </div>
         </div>
         </asp:Panel>
+        <%-- Login Modal END --%>
+
+        <%-- Register Modal START --%>
+        <asp:Panel ID="registerModal" runat="server" Visible="false">
+        <!-- Click outside to close (server-side backdrop) -->
+        <asp:LinkButton ID="LinkButton1" runat="server" CssClass="backdrop"
+            OnClick="hideModals" CausesValidation="false" />
+
+        <div id="loginModalDiv" class="pages-modal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+          <div class="sheet">
+            <div class="loginModal--left">
+                <img src="https://i.pinimg.com/originals/58/b3/4a/58b34a2e973ac4ae69cbfcf60845ebb7.gif" id="loginModal--img">
+            </div>
+
+            <div class="loginModal--right">
+                <div class="modal-header">
+                  <h3 id="registerTitle" class="modal-title">Register</h3>
+                  <!-- “X” close -->
+                  <asp:LinkButton ID="LinkButton2" runat="server" CssClass="close"
+                      OnClick="hideModals" CausesValidation="false">×</asp:LinkButton>
+                </div>
+
+                <asp:Panel ID="register_field_1" runat="server">
+                <!-- fields -->
+                <div class="field">
+                  <label class="label">Username</label>
+                  <asp:TextBox ID="REGISTERusername" runat="server" CssClass="input" MaxLength="50" />
+                    <asp:Label runat="server" ID="register__error_username" Visible="true"></asp:Label>
+                </div>
+
+                <div class="field">
+                  <label class="label">Email</label>
+                  <asp:TextBox ID="REGISTERemail" runat="server" CssClass="input" MaxLength="100" />
+                    <asp:Label runat="server" ID="register__error_email" Visible="true"></asp:Label>
+                </div>
+
+                <div class="field">
+                  <label class="label">Full Name</label>
+                  <asp:TextBox ID="REGISTERfullname" runat="server" CssClass="input" MaxLength="50" />
+                </div>
+
+                <div class="actions">
+                  <!-- Cancel close -->
+                  <asp:LinkButton ID="LinkButton3" runat="server" CssClass="btn cancel"
+                      OnClick="hideModals" CausesValidation="false">Cancel</asp:LinkButton>
+
+                  <!-- Show next page -->
+                  <asp:Button ID="registerNextButton" runat="server" CssClass="btn primary" Text="Next"
+                      OnClick="showNextRegisterPanel" ValidationGroup="Register" />
+                </div>
+                </asp:Panel>
+
+                <asp:Panel ID="register_field_2" runat="server">
+                <!-- fields -->
+                <div class="field">
+                  <label class="label">Password</label>
+                  <asp:TextBox ID="REGISTERpassword" runat="server" CssClass="input" MaxLength="100" />
+                  <asp:Label runat="server" ID="register__error_password" Visible="true"></asp:Label>
+                </div>
+
+                <div class="field">
+                  <label class="label">Password Retry</label>
+                  <asp:TextBox ID="REGISTERpasswordretry" runat="server" CssClass="input" MaxLength="100" />
+                  <asp:Label runat="server" ID="register__error_passwordretry" Visible="true"></asp:Label>
+                </div>
+
+                <asp:Label runat="server" ID="register__error_passwordmatch" Visible="true"></asp:Label>
+
+                <div class="field">
+                  <label class="label">User Type</label>
+                    <div class="register--radio-button-container">
+                      <asp:RadioButton ID="student_radio" runat="server" GroupName="userType" Text="Student" Checked="true" CssClass="radio-button"/>
+                      <asp:RadioButton ID="lecturer_radio" runat="server" GroupName="userType" Text="Lecturer" CssClass="radio-button"/>
+                    </div>
+                </div>
+
+                <div class="actions">
+                  <!-- Go back to previous page -->
+                  <asp:LinkButton ID="LinkButton4" runat="server" CssClass="btn cancel"
+                      OnClick="showPrevRegisterPanel" CausesValidation="false">Back</asp:LinkButton>
+
+                  <!-- Register -->
+                  <asp:Button ID="Button1" runat="server" CssClass="btn primary" Text="Register"
+                      OnClick="Register" ValidationGroup="Register" />
+                </div>
+                </asp:Panel>
+
+                <div class="loginModal--register-container">
+                    <asp:LinkButton CssClass="loginModal--register-link" runat="server" OnClick="swapToLogin">Have an account?</asp:LinkButton>
+                </div>
+            </div>
+
+          </div>
+        </div>
+        </asp:Panel>
+        <%-- Register Modal END --%>
 
         <div class="">
             <%-- Main content goes into here --%>

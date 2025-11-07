@@ -7,11 +7,11 @@ using System.Web.UI.WebControls;
 
 namespace WAPP_Assignment.Lecturer
 {
-    public partial class Lecturer : System.Web.UI.MasterPage
+    public partial class LecturerMaster : System.Web.UI.MasterPage
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            // Keep for future auth/role logic if you like.
         }
     }
 }
