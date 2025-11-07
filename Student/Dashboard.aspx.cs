@@ -12,23 +12,56 @@ namespace WAPP_Assignment.Student
 {
     public partial class Dashboard : System.Web.UI.Page
     {
-        protected string StudentName { get; private set; }
+        protected string StudentName { get; set; }
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            Session["UserId"] = 1; //Testing
+            // Check if user is authenticated
+            var (isAuthenticated, userId, userType) = AuthCookieHelper.ReadAuthCookie();
+            
+            if (!isAuthenticated || string.IsNullOrEmpty(userId))
+            {
+                // Redirect to login if not authenticated
+                Response.Redirect("~/Default.aspx", true);
+                return;
+            }
+
+            // Store UserId in Session for backward compatibility
+            if (Session["UserId"] == null)
+            {
+                Session["UserId"] = int.Parse(userId);
+            }
 
             if (!IsPostBack)
             {
                 StudentName = LoadStudentName();
                 BindEnrollmentData();
+                BindFlashcardsData(); // Still needed for Quick Actions badge
             }
         }
+        
         private int ResolveUserId()
         {
+            // First try to get from query string (for admin viewing)
             if (int.TryParse(Request.QueryString["userId"], out var uid))
                 return uid;
 
-            return Convert.ToInt32(Session["UserId"]);
+            // Try to get from authentication cookie
+            var (isAuthenticated, userId, userType) = AuthCookieHelper.ReadAuthCookie();
+            if (isAuthenticated && !string.IsNullOrEmpty(userId))
+            {
+                return int.Parse(userId);
+            }
+
+            // Fallback to Session (for backward compatibility)
+            if (Session["UserId"] != null)
+            {
+                return Convert.ToInt32(Session["UserId"]);
+            }
+
+            // If no user found, redirect to login
+            Response.Redirect("~/Default.aspx", true);
+            return 0; // This won't be reached due to redirect
         }
         private void BindEnrollmentData()
         {
@@ -51,48 +84,51 @@ namespace WAPP_Assignment.Student
                 {
                     da.Fill(table);
 
-                    // list
-                    rptEnrollments.DataSource = table;
-                    rptEnrollments.DataBind();
+                    rptCoursesDropdown.DataSource = table;
+                    rptCoursesDropdown.DataBind();
 
-                    // empty state
-                    pnlEmpty.Visible = table.Rows.Count == 0;
+                    pnlCoursesDropdownEmpty.Visible = table.Rows.Count == 0;
 
-                    // summary counters + quick action
-                    int total = table.Rows.Count, completed = 0, inProg = 0;
-                    foreach (DataRow r in table.Rows)
-                    {
-                        var pct = r.Field<decimal>("ProgressPercent");
-                        bool done = r["CompletedAt"] != DBNull.Value || pct >= 100m;
-                        if (done) completed++; else inProg++;
-                    }
-
-                    lblTotalEnrolled.Text = total.ToString();
-                    lblInProgress.Text = inProg.ToString();
-                    lblCompleted.Text = completed.ToString();
-                    lblQuickEnrolled.Text = total.ToString(); // quick-action badge
+                    int total = table.Rows.Count;
+                    lblQuickEnrolled.Text = total.ToString();
                 }
             }
         }
+
+        private void BindFlashcardsData()
+        {
+            int userId = ResolveUserId();
+
+            using (var conn = DataAccess.GetOpenConnection())
+            using (var cmd = new SqlCommand(@"
+                SELECT COUNT(*) as TotalFlashcards
+                FROM dbo.Bookmarks
+                WHERE UserId = @UserId;", conn))
+            {
+                cmd.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+
+                object result = cmd.ExecuteScalar();
+                int total = result != null && result != DBNull.Value ? Convert.ToInt32(result) : 0;
+                lblQuickFlashcards.Text = total.ToString();
+            }
+        }
+
         private string LoadStudentName()
         {
             try
             {
-                // Check if user is logged in (UserId stored in Session)
-                if (Session["UserId"] != null)
+                int userId = ResolveUserId();
+                if (userId > 0)
                 {
-                    int userId = Convert.ToInt32(Session["UserId"]);
                     return GetStudentNameFromDatabase(userId);
                 }
                 else
                 {
-                    // Default value if not logged in
                     return StudentName = "Guest";
                 }
             }
             catch (Exception ex)
             {
-                // Log error and set default
                 System.Diagnostics.Debug.WriteLine($"Error loading student data: {ex.Message}");
                 return StudentName = "Student";
             }
@@ -105,8 +141,6 @@ namespace WAPP_Assignment.Student
             {
                 using (SqlConnection conn = DataAccess.GetOpenConnection())
                 {
-                    // Query to get username - adjust column names based on your actual database
-                    // Common column names: Username, FirstName, LastName, Name, UserName
                     string query = "SELECT Username FROM Users WHERE UserId = @UserId";
                         
 
@@ -132,6 +166,19 @@ namespace WAPP_Assignment.Student
                 System.Diagnostics.Debug.WriteLine($"Database error: {ex.Message}");
                 return StudentName = "Student";
             }
+        }
+
+        protected void Logout(object sender, EventArgs e)
+        {
+            // Remove authentication cookie
+            AuthCookieHelper.RemoveAuthCookie();
+            
+            // Clear session
+            Session.Clear();
+            Session.Abandon();
+            
+            // Redirect to home page
+            Response.Redirect("~/Default.aspx", true);
         }
     }
 } 
