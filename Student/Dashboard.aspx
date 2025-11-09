@@ -14,19 +14,19 @@
         <section class="welcome-section">
           <h2 class="section-heading">Quick Actions</h2>
           <div class="actions-grid">
-            <a href="<%= ResolveUrl("~/Student/Bookmarks.aspx") %>" class="action-card">
-              <span class="action-card-icon">📚</span>
+            <a href="#course-selector" class="action-card" onclick="event.preventDefault(); toggleCourseSelector(); return false;">
+              <span class="action-card-icon">🎓</span>
               <div class="action-card-content">
-                <h3 class="action-card-title">Bookmarked Lessons</h3>
+                <h3 class="action-card-title">Enrolled Classes</h3>
               </div>
-              <span class="action-card-badge">3</span>
+              <span class="action-card-badge"><asp:Label ID="lblQuickEnrolled" runat="server" Text="0" /></span>
             </a>
             <a href="<%= ResolveUrl("~/Student/Flashcards.aspx") %>" class="action-card">
               <span class="action-card-icon">🃏</span>
               <div class="action-card-content">
                 <h3 class="action-card-title">Saved Flashcards</h3>
               </div>
-              <span class="action-card-badge">12</span>
+              <span class="action-card-badge"><asp:Label ID="lblQuickFlashcards" runat="server" Text="0" /></span>
             </a>
             <a href="<%= ResolveUrl("~/Student/Notes.aspx") %>" class="action-card">
               <span class="action-card-icon">📝</span>
@@ -51,7 +51,7 @@
   <div class="continue-card-new"
        role="link"
        tabindex="0"
-       onclick="window.location.href='<%= ResolveUrl("~/Base/CourseDashboard.aspx") %>'"
+       onclick='window.location.href="<%= ResolveUrl("~/Base/CourseDashboard.aspx") %>"'
        onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); this.click();}">
     
     <div class="card-bg-image"></div>
@@ -83,6 +83,60 @@
   </div>
 </section>
 
+        <!-- Course Selector Dropdown -->
+        <section id="course-selector" class="course-selector-section">
+          <div class="course-selector">
+            <div class="course-selector-header" onclick="toggleCourseSelector()">
+              <h2 class="course-selector-title">My Courses</h2>
+              <button type="button" class="course-selector-toggle" id="courseToggle">▼</button>
+            </div>
+            <div class="courses-dropdown" id="coursesDropdown">
+              <asp:Panel ID="pnlCoursesDropdownEmpty" runat="server" Visible="false" CssClass="empty-state">
+                <p>You haven't enrolled in any courses yet.</p>
+              </asp:Panel>
+              <div class="courses-grid">
+                <asp:Repeater ID="rptCoursesDropdown" runat="server">
+                  <ItemTemplate>
+                    <div class="continue-card-new"
+                         role="link"
+                         tabindex="0"
+                         data-course-id="<%# Eval("CourseId") %>"
+                         onclick="window.location.href='<%= ResolveUrl("~/Base/CourseDashboard.aspx") %>?courseId=' + this.getAttribute('data-course-id');"
+                         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); this.click();}">
+                      
+                      <div class="card-bg-image" <%# Eval("CourseImgUrl") != null && !string.IsNullOrEmpty(Eval("CourseImgUrl").ToString()) ? "style=\"background-image: url('" + Eval("CourseImgUrl").ToString().Replace("'", "\\'") + "');\"" : "" %>></div>
+
+                      <div class="card-content-overlay">
+                        <div class="progress-section">
+                          <div class="progress-bar-modern">
+                            <div class="progress-fill-modern" style="width: <%# Eval("ProgressPercent", "{0:0}") %>%"></div>
+                          </div>
+                          <span class="progress-percent-modern"><%# Eval("ProgressPercent", "{0:0}%") %></span>
+                        </div>
+
+                        <div class="course-info-modern">
+                          <span class="course-badge-modern">COURSE</span>
+                          <h3 class="course-name-modern"><%# Eval("CourseTitle") %></h3>
+                          <p class="next-lesson-modern">Last accessed: <%# Eval("LastAccessedAt", "{0:yyyy-MM-dd HH:mm}") ?? "Never" %></p>
+                        </div>
+
+                        <div class="course-actions-modern">
+                          <a class="btn-continue-modern"
+                             href="<%= ResolveUrl("~/Base/CourseDashboard.aspx") %>?courseId=<%# Eval("CourseId") %>"
+                             onclick="event.stopPropagation();">Continue Learning</a>
+
+                          <a class="link-view-modern"
+                             href="<%= ResolveUrl("~/Base/CourseDashboard.aspx") %>?courseId=<%# Eval("CourseId") %>"
+                             onclick="event.stopPropagation();">View course</a>
+                        </div>
+                      </div>
+                    </div>
+                  </ItemTemplate>
+                </asp:Repeater>
+              </div>
+            </div>
+          </div>
+        </section>
 
         <!-- Progress Overview Section -->
         <section class="progress-overview">
@@ -269,7 +323,8 @@
               </div>
             </div>
           </div>
-          <button class="btn-view-profile" onclick="window.location.href='<%= ResolveUrl("~/Student/Profile.aspx") %>';">View profile</button>
+          <button class="btn-view-profile" onclick="window.location.href='<%= ResolveUrl("~/Student/Profile.aspx") %>'">View profile</button>
+          <asp:LinkButton ID="btnSidebarLogout" runat="server" OnClick="Logout" CssClass="btn-logout-sidebar" style="margin-top: 0.75rem;">Logout</asp:LinkButton>
         </div>
 
         <!-- Study Streak Calendar -->
@@ -310,4 +365,14 @@
       </aside>
     </div>
   </main>
+
+<script>
+    function toggleCourseSelector() {
+        const dropdown = document.getElementById('coursesDropdown');
+        const toggle = document.getElementById('courseToggle');
+        const open = dropdown.classList.toggle('open');
+        toggle.classList.toggle('open', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+</script>
 </asp:Content>

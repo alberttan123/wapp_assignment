@@ -15,6 +15,41 @@ namespace WAPP_Assignment
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!IsPostBack)
+            {
+                CheckAuthenticationStatus();
+            }
+        }
+
+        private void CheckAuthenticationStatus()
+        {
+            var (isAuthenticated, userId, userType) = AuthCookieHelper.ReadAuthCookie();
+            
+            if (isAuthenticated && !string.IsNullOrEmpty(userId))
+            {
+                // User is authenticated - show profile dropdown
+                pnlNotAuthenticated.Visible = false;
+                pnlAuthenticated.Visible = true;
+            }
+            else
+            {
+                // User is not authenticated - show login/register
+                pnlNotAuthenticated.Visible = true;
+                pnlAuthenticated.Visible = false;
+            }
+        }
+
+        protected void Logout(object sender, EventArgs e)
+        {
+            // Remove authentication cookie
+            AuthCookieHelper.RemoveAuthCookie();
+            
+            // Clear session
+            Session.Clear();
+            Session.Abandon();
+            
+            // Redirect to home page
+            Response.Redirect("~/Default.aspx", true);
         }
 
         protected void showLoginSignupModal(object sender, EventArgs e) 
@@ -87,7 +122,8 @@ namespace WAPP_Assignment
                             }
 
                             SignIn(rd);
-                            Response.Redirect("Student/Dashboard.aspx", true);
+                            // Redirect to dashboard after login
+                            Response.Redirect("~/Student/Dashboard.aspx", true);
                             return;
                         }
                     }
