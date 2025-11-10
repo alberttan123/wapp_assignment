@@ -30,8 +30,8 @@ namespace WAPP_Assignment.Lecturer
         {
             if (!IsPostBack)
             {
-                BindQuizzes();
-                BindTopics();
+                BindQuizzes();   // dropdown: exercises only
+                BindTopics();    // list: exercises only
                 EnsureCart();
                 BindCart();
             }
@@ -44,13 +44,15 @@ namespace WAPP_Assignment.Lecturer
             using (var cmd = new SqlCommand(@"
 SELECT z.QuizId, z.QuizTitle
 FROM dbo.Quiz z
-ORDER BY z.QuizTitle ASC", con))
+WHERE z.QuizType = 'exercise'      -- only exercises
+ORDER BY z.QuizTitle ASC;", con))
             using (var da = new SqlDataAdapter(cmd))
             {
                 var dt = new DataTable();
                 da.Fill(dt);
                 ddlQuiz.Items.Clear();
-                ddlQuiz.Items.Add(new System.Web.UI.WebControls.ListItem("All Quizzes", "all"));
+                // label it clearly as exercises
+                ddlQuiz.Items.Add(new System.Web.UI.WebControls.ListItem("All Exercises", "all"));
                 foreach (DataRow r in dt.Rows)
                 {
                     ddlQuiz.Items.Add(new System.Web.UI.WebControls.ListItem(
@@ -70,7 +72,7 @@ SELECT
     z.QuizTitle,
     (SELECT COUNT(*) FROM dbo.QuestionBank qb WHERE qb.QuizId = z.QuizId) AS QuestionCount
 FROM dbo.Quiz z
-WHERE 1=1
+WHERE z.QuizType = 'exercise'       -- only exercises
 " + (string.IsNullOrWhiteSpace(search) ? "" : " AND z.QuizTitle LIKE @search ") +
     ((string.IsNullOrEmpty(quizFilter) || quizFilter == "all") ? "" : " AND z.QuizId = @quizId ") +
     " ORDER BY z.QuizTitle ";
@@ -156,7 +158,7 @@ SELECT q.QuestionId, q.Question
 FROM dbo.QuestionBank qb
 JOIN dbo.Questions q ON q.QuestionId = qb.QuestionId
 WHERE qb.QuizId = @quizId
-ORDER BY q.QuestionId", con))
+ORDER BY q.QuestionId;", con))
                 using (var da = new SqlDataAdapter(cmd))
                 {
                     cmd.Parameters.AddWithValue("@quizId", quizId);
@@ -168,7 +170,7 @@ ORDER BY q.QuestionId", con))
             }
         }
 
-        // Handle per-question add from the nested questions repeater
+        // per-question add from nested questions repeater
         protected void RptQuestions_ItemCommand(object source, System.Web.UI.WebControls.RepeaterCommandEventArgs e)
         {
             if (e.CommandName == "addone")
@@ -197,12 +199,11 @@ ORDER BY q.QuestionId", con))
 
         private void AddSingleQuestionToCart(int questionId)
         {
-            // Fetch the question text once and add if not exists
             using (var con = new SqlConnection(ConnStr))
             using (var cmd = new SqlCommand(@"
 SELECT q.QuestionId, q.Question
 FROM dbo.Questions q
-WHERE q.QuestionId = @qid", con))
+WHERE q.QuestionId = @qid;", con))
             using (var da = new SqlDataAdapter(cmd))
             {
                 cmd.Parameters.AddWithValue("@qid", questionId);
@@ -233,7 +234,7 @@ WHERE q.QuestionId = @qid", con))
 SELECT q.QuestionId, q.Question
 FROM dbo.QuestionBank qb
 JOIN dbo.Questions q ON q.QuestionId = qb.QuestionId
-WHERE qb.QuizId = @quizId";
+WHERE qb.QuizId = @quizId;";
 
             using (var con = new SqlConnection(ConnStr))
             using (var cmd = new SqlCommand(sql, con))
@@ -288,9 +289,8 @@ WHERE qb.QuizId = @quizId";
                 {
                     try
                     {
-                        // Insert new quiz as an "assessment" (set QuizType to be assessment since it's an assessment builder...)
-                        int educatorId = (Session["UserId"] is int uid) ? uid : 2; // fallback to 2
-
+                        // Insert as assessment (explicit type)
+                        int educatorId = (Session["UserId"] is int uid) ? uid : 2; // optional CreatedBy
                         int quizId;
                         using (var cmd = new SqlCommand(@"
 IF COL_LENGTH('dbo.Quiz','CreatedBy') IS NOT NULL
@@ -309,8 +309,6 @@ SELECT CAST(SCOPE_IDENTITY() AS INT);", con, tx))
                             cmd.Parameters.AddWithValue("@uid", educatorId);
                             quizId = (int)cmd.ExecuteScalar();
                         }
-
-
 
                         // Link questions into QuestionBank
                         using (var cmd = new SqlCommand(
@@ -333,12 +331,15 @@ SELECT CAST(SCOPE_IDENTITY() AS INT);", con, tx))
                         BindCart();
                         txtExamTitle.Text = string.Empty; txtDuration.Text = string.Empty;
                         Expanded = new HashSet<int>(); // collapse any expanded lists
+
+                        // Rebind exercises list
                         BindTopics();
+                        BindQuizzes();
                     }
                     catch (Exception ex)
                     {
                         tx.Rollback();
-                        ShowErr("Failed to save exam: " + ex.Message);
+                        ShowErr("Failed to save assessment: " + ex.Message);
                     }
                 }
             }
