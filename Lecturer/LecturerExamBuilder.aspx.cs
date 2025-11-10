@@ -289,16 +289,27 @@ WHERE qb.QuizId = @quizId";
                     try
                     {
                         // Insert new quiz as an "assessment" (set QuizType to be assessment since it's an assessment builder...)
+                        int educatorId = (Session["UserId"] is int uid) ? uid : 2; // fallback to 2
+
                         int quizId;
                         using (var cmd = new SqlCommand(@"
-INSERT INTO dbo.Quiz(QuizTitle, QuizType)
-VALUES(@t, @type);
+IF COL_LENGTH('dbo.Quiz','CreatedBy') IS NOT NULL
+BEGIN
+  INSERT INTO dbo.Quiz(QuizTitle, QuizType, CreatedBy)
+  VALUES(@t, 'assessment', @uid);
+END
+ELSE
+BEGIN
+  INSERT INTO dbo.Quiz(QuizTitle, QuizType)
+  VALUES(@t, 'assessment');
+END
 SELECT CAST(SCOPE_IDENTITY() AS INT);", con, tx))
                         {
                             cmd.Parameters.AddWithValue("@t", title);
-                            cmd.Parameters.AddWithValue("@type", "assessment");
+                            cmd.Parameters.AddWithValue("@uid", educatorId);
                             quizId = (int)cmd.ExecuteScalar();
                         }
+
 
 
                         // Link questions into QuestionBank

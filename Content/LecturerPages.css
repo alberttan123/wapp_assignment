@@ -457,3 +457,9 @@ html, body {
         grid-template-columns: 1fr;
     }
 }
+
+.eb-top-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.75rem;
+}

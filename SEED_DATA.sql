@@ -100,10 +100,10 @@ VALUES
 -- QUIZZES (ContentType = 'Quiz')
 ------------------------------------------------------------
 
-INSERT INTO dbo.Quiz (QuizTitle, QuizType)
+INSERT INTO dbo.Quiz (QuizTitle, QuizType, CreatedBy)
 VALUES
-('Intro to Geography Quiz', 'exercise'),
-('Rocks Identification Test', 'assessment');
+('Intro to Geography Quiz', 'exercise', 2),
+('Rocks Identification Test', 'assessment', 2);
 
 
 ------------------------------------------------------------

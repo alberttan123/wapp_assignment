@@ -154,6 +154,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Base\Landing.aspx" />
+    <Content Include="Lecturer\LecturerAssessments.aspx" />
     <Content Include="Lecturer\LecturerCourses.aspx" />
     <Content Include="Lecturer\LecturerExamBuilder.aspx" />
     <Content Include="Media\pages.png" />
@@ -269,6 +270,13 @@
     </Compile>
     <Compile Include="Lecturer\Lecturer.Master.designer.cs">
       <DependentUpon>Lecturer.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Lecturer\LecturerAssessments.aspx.cs">
+      <DependentUpon>LecturerAssessments.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Lecturer\LecturerAssessments.aspx.designer.cs">
+      <DependentUpon>LecturerAssessments.aspx</DependentUpon>
     </Compile>
     <Compile Include="Lecturer\LecturerCourses.aspx.cs">
       <DependentUpon>LecturerCourses.aspx</DependentUpon>

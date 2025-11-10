@@ -33,7 +33,6 @@
     .eb-filters { grid-template-columns: 1fr auto; }
     .eb-filters .field.right { justify-self: end; }
 
-    /* Center title within content section (not the whole page) */
     .eb-header {
       display:flex; align-items:center; justify-content:center;
       margin-bottom:1rem;
@@ -48,13 +47,19 @@
     <h2 class="eb-title">Assessment Builder</h2>
   </div>
 
+    <!-- top-right action -->
+    <div class="eb-top-actions">
+      <a href="<%= ResolveUrl("~/Lecturer/LecturerAssessments.aspx") %>" class="btn primary">
+        Show Assessments
+      </a>
+    </div>
+
   <div class="eb-filters">
     <div class="field">
       <label>Search (Quiz Title)</label>
       <asp:TextBox ID="txtSearch" runat="server" CssClass="input" AutoPostBack="true" OnTextChanged="TxtSearch_TextChanged" />
     </div>
 
-    <!-- moved to right -->
     <div class="field right">
       <label>Filter Quiz</label>
       <asp:DropDownList ID="ddlQuiz" runat="server" CssClass="select" AutoPostBack="true" OnSelectedIndexChanged="DdlQuiz_SelectedIndexChanged" />
