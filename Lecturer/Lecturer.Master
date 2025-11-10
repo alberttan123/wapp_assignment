@@ -21,7 +21,7 @@
         <a class="lect-link" href="<%= ResolveUrl("~/Lecturer/Dashboard.aspx") %>">Dashboard</a>
         <a class="lect-link" href="<%= ResolveUrl("~/Lecturer/LecturerCourses.aspx") %>">Courses</a>
         <a class="lect-link" href="<%= ResolveUrl("~/Lecturer/Questions.aspx") %>">Questions</a>
-        <a class="lect-link" href="<%= ResolveUrl("~/Lecturer/Assessments.aspx") %>">Assessments</a>
+        <a class="lect-link" href="<%= ResolveUrl("~/Lecturer/LecturerAssessments.aspx") %>">Assessments</a>
       </div>
     </nav>
 

@@ -5,8 +5,9 @@
     Inherits="WAPP_Assignment.Lecturer.LecturerCourses" %>
 
 <asp:Content ID="HeadBlock" ContentPlaceHolderID="HeadLecturer" runat="server">
-    <%-- page-level <head> items if needed --%>
+    <link rel="stylesheet" href="<%= ResolveUrl(".\\Content\\LecturerPages.css") %>" />
 </asp:Content>
+
 
 <asp:Content ID="MainBlock" ContentPlaceHolderID="LecturerMain" runat="server">
     <div class="lc-header">Courses</div>
