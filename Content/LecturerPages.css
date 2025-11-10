@@ -1,91 +1,335 @@
-﻿/* ===== Lecturer-only layout (isolated from Site.Master) ===== */
+﻿/* =========================
+   Lecturer Area Styles (scoped)
+   ========================= */
+
+/* Theme tokens (use rem-first; px for borders/radii is okay) */
 :root {
-    /* If your global CSS already defines --nav-h, this will use it; otherwise 4.5rem */
-    --nav-h: 5.5rem;
-    --sb-w: 14rem; /* ~224px */
     --bg: #0b0f1a;
-    --panel: #121417;
-    --panel-2: #0f1114;
-    --line: #232a33;
+    --bg-2: #0f1422;
     --text: #e8eefc;
     --muted: #9fb0d1;
-    --accent: #ffd24a;
+    --brand: #ffd24a;
+    --panel: #0f1219;
+    --panel-2: #12161f;
+    --line: #1b253a;
+    --sb-w: 16rem;
+    --nav-h: 4.5rem; /* must match actual navbar height */
 }
 
-/* Everything below the fixed header lives inside this wrapper */
+html, body {
+    height: 100%;
+}
+
+    /* -----------------------------------
+   Lecturer-only hardening (no master edits)
+   Apply overrides ONLY when a lecturer page is present
+----------------------------------- */
+    body:has(.lect-wrap) {
+        background: var(--bg);
+        color: var(--text);
+    }
+
+        /* Navbar: fixed, solid, correct height */
+        body:has(.lect-wrap) .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--nav-h);
+            z-index: 60;
+            background: #121212; /* solid; no rgba/backdrop */
+        }
+
+        /* Align navbar contents sanely */
+        body:has(.lect-wrap) .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1rem;
+        }
+
+        /* Prevent landing/hero CSS from exploding the logo/text */
+        body:has(.lect-wrap) .navbar .brand-img {
+            height: 2.2rem;
+            width: auto;
+            display: inline-block;
+        }
+
+        body:has(.lect-wrap) .navbar .brand-title {
+            font-size: 1rem;
+            line-height: 1;
+            color: var(--text);
+        }
+
+        /* Navbar links */
+        body:has(.lect-wrap) .navbar .nav-link {
+            color: var(--text);
+            text-decoration: none;
+            opacity: .9;
+        }
+
+            body:has(.lect-wrap) .navbar .nav-link:hover {
+                opacity: 1;
+            }
+
+        /* Hide any hero/splash sections on lecturer pages */
+        body:has(.lect-wrap) .hero,
+        body:has(.lect-wrap) .landing-hero,
+        body:has(.lect-wrap) .splash,
+        body:has(.lect-wrap) .masthead {
+            display: none !important;
+        }
+
+/* -----------------------------------
+   Lecturer layout shell
+----------------------------------- */
 .lect-wrap {
-    padding-top: var(--nav-h); /* clear the fixed header from Site.Master */
-    background: var(--bg);
-    color: var(--text);
+    display: flex;
+    padding-top: var(--nav-h); /* avoids overlap with fixed navbar */
     min-height: 100vh;
+    background: var(--bg);
 }
 
+/* Sidebar – fixed under navbar; does not scroll with main */
 .lect-sb {
     position: fixed;
-    top: var(--nav-h); /* start right under the header */
+    top: var(--nav-h);
     left: 0;
     width: var(--sb-w);
-    height: 100vh;
+    height: calc(100vh - var(--nav-h));
     background: var(--panel-2);
     border-right: 1px solid var(--line);
-    padding-top: 1rem; /* keep inner content a little padded below the nav */
-    padding-right: 1rem;
-    padding-bottom: 1rem;
-    padding-left: 1rem;
-    box-sizing: border-box;
     overflow-y: auto;
-    z-index: 100; /* under the header, above page body */
+    z-index: 10;
 }
 
-.lect-sb-title {
-    font-weight: 700;
+.lect-sb__inner {
+    padding: 1rem;
+}
+
+.lect-sb__title {
+    font-size: 1.125rem;
+    font-weight: 600;
     margin-bottom: 0.75rem;
+    color: var(--brand);
 }
 
 .lect-links {
-    display: grid;
-    gap: 0.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .lect-link {
-    display: block;
-    text-decoration: none;
     color: var(--text);
-    background: #161a1f;
-    border: 1px solid var(--line);
-    border-radius: 0.5rem;
-    padding: 0.65rem 0.8rem;
+    text-decoration: none;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
 }
 
     .lect-link:hover {
-        background: #1b2127;
+        background: var(--panel);
     }
 
-/* Main content sits to the right of the fixed sidebar and can scroll */
+/* Main content – scrollable; footer lives inside */
 .lect-main {
     margin-left: var(--sb-w);
-    padding: 1rem;
+    width: calc(100% - var(--sb-w));
     min-height: calc(100vh - var(--nav-h));
+    padding: 1.25rem;
+    overflow: auto;
     background: var(--bg);
-    box-sizing: border-box;
 }
 
-/* --- Optional helpers for the Courses page mock --- */
-.lc-header {
-    background: var(--panel);
+.footer {
+    padding: 1rem 0;
+    color: var(--muted);
+}
+
+/* -----------------------------------
+   Generic UI tokens shared in lecturer area
+----------------------------------- */
+.btn {
+    padding: 0.5rem 0.9rem;
     border: 1px solid var(--line);
-    border-radius: 0.5rem;
+    border-radius: 10px;
+    background: var(--panel);
+    color: var(--text);
+}
+
+    .btn.primary {
+        background: var(--brand);
+        color: #111;
+        border-color: #000;
+    }
+
+    .btn.small {
+        padding: .35rem .7rem;
+    }
+
+.select, select {
+    padding: 0.5rem 0.6rem;
+    background: var(--panel);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+}
+
+.input {
+    padding: 0.6rem 0.75rem;
+    background: var(--panel);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+}
+
+.error {
+    color: #ff6b6b;
+    font-size: 0.9rem;
+}
+
+.muted {
+    color: var(--muted);
+}
+
+/* Cards/grid primitives */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 1rem;
+}
+
+.card {
+    background: linear-gradient(180deg, var(--panel-2), var(--panel));
+    border: 1px solid var(--line);
+    border-radius: 12px;
     padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+    .card .meta {
+        color: var(--muted);
+        font-size: .9rem;
+    }
+
+    .card .actions {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+.icon-btn {
+    padding: .45rem .6rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--panel);
+    color: var(--text);
+}
+
+/* -----------------------------------
+   Exam Builder (eb-*)
+----------------------------------- */
+.eb-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.eb-title {
+    margin: 0 auto;
     text-align: center;
+    font-size: 1.5rem;
     font-weight: 700;
+    color: var(--brand);
+}
+
+.eb-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.eb-filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+    .eb-filters .field {
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+    }
+
+.cart {
+    margin-top: 1.25rem;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+.cart-title {
+    font-weight: 700;
+}
+
+.cart-list {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    padding: .5rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--panel);
+}
+
+    .cart-item .q {
+        flex: 1;
+    }
+
+.form-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: .75rem;
+}
+
+    .form-row .input {
+        width: 100%;
+    }
+
+/* -----------------------------------
+   Lecturer Courses (lc-*)
+----------------------------------- */
+.lc-header {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--brand);
     margin-bottom: 1rem;
 }
 
 .lc-controls {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 1rem;
+    display: flex;
     align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
     margin-bottom: 1rem;
 }
 
@@ -95,104 +339,121 @@
 }
 
 .lc-icon {
+    padding: .45rem .6rem;
     border: 1px solid var(--line);
-    background: #161a1f;
+    border-radius: 10px;
+    background: var(--panel);
     color: var(--text);
-    padding: 0.5rem 0.75rem;
-    border-radius: 999rem;
+    cursor: pointer;
 }
 
 .lc-actions {
     display: flex;
-    gap: 0.75rem;
     align-items: center;
+    gap: .5rem;
 }
 
 .lc-add {
     display: inline-block;
-    background: var(--accent);
-    color: #101212;
-    font-weight: 800;
-    padding: 0.6rem 1rem;
-    border-radius: 0.5rem;
+    padding: .5rem .9rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--panel);
+    color: var(--text);
     text-decoration: none;
 }
 
+    .lc-add:hover {
+        filter: brightness(1.05);
+    }
+
 .lc-sort select {
-    background: #161a1f;
+    padding: .5rem .6rem;
+    background: var(--panel);
     color: var(--text);
     border: 1px solid var(--line);
-    border-radius: 0.5rem;
-    padding: 0.5rem 0.75rem;
+    border-radius: 10px;
 }
 
 .lc-search {
-    display: flex;
-    justify-content: center;
-    margin: 0 0 1.25rem 0;
+    margin: 1rem 0;
 }
 
     .lc-search input {
-        width: min(44rem, 100%);
-        border: 1px solid var(--line);
-        background: #151a20;
+        width: 100%;
+        max-width: 28rem;
+        padding: .6rem .75rem;
+        background: var(--panel);
         color: var(--text);
-        padding: 0.6rem 1rem;
-        border-radius: 999rem;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        letter-spacing: .06em;
     }
 
 .lc-grid {
     display: grid;
-    gap: 1.25rem;
-    grid-template-columns: repeat(3, 1fr);
-}
-
-@media (max-width: 64rem) {
-    .lc-grid {
-        grid-template-columns: repeat(2,1fr);
-    }
-}
-
-@media (max-width: 40rem) {
-    .lc-grid {
-        grid-template-columns: 1fr;
-    }
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 1rem;
 }
 
 .lc-card {
-    background: #101316;
+    background: linear-gradient(180deg, var(--panel-2), var(--panel));
     border: 1px solid var(--line);
-    border-radius: 0.5rem;
+    border-radius: 12px;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .lc-banner {
-    height: 3.5rem;
-    display: grid;
-    place-items: center;
+    background: #111;
+    color: #9fb0d1;
+    text-align: center;
+    padding: 1.25rem 0;
     border-bottom: 1px solid var(--line);
-    color: var(--muted);
 }
 
 .lc-card-body {
-    padding: 0.75rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
 }
 
     .lc-card-body h3 {
-        margin: 0 0 0.4rem 0;
-        font-size: 1.05rem;
+        margin: 0 0 .25rem 0;
+        font-size: 1.125rem;
+        color: var(--text);
     }
 
 .lc-date {
-    margin: 0 0 0.4rem 0;
     color: var(--muted);
+    font-size: .9rem;
 }
 
-/* Local footer for lecturer pages */
-.lect-footer {
-    margin-top: 2rem;
-    color: var(--muted);
-    text-align: center;
-    border-top: 1px solid var(--line);
-    padding-top: 1rem;
+/* -----------------------------------
+   Responsive
+----------------------------------- */
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+    }
+
+    .eb-filters {
+        grid-template-columns: 1fr;
+    }
+
+    .lc-grid {
+        grid-template-columns: repeat(1, minmax(0,1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .lc-grid {
+        grid-template-columns: 1fr;
+    }
 }
