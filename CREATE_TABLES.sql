@@ -135,7 +135,7 @@ CREATE TABLE dbo.ChapterContents (
 CREATE TABLE dbo.Quiz (
     QuizId     INT IDENTITY(1,1) PRIMARY KEY,
     QuizTitle  NVARCHAR(256) NOT NULL,
-    QuizType   NVARCHAR(20) NOT NULL DEFAULT 'exercise'
+    QuizType   NVARCHAR(20) NOT NULL DEFAULT 'exercise',
     CreatedBy INT NOT NULL,
         CONSTRAINT CK_Quiz_QuizType 
             CHECK (QuizType IN ('exercise','assessment')),

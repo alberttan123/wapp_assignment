@@ -9,10 +9,12 @@
 
 INSERT INTO dbo.Users (Username, Email, UserType, FullName, PasswordHash)
 VALUES
-('admin1', 'admin@geo.edu', 'Admin', 'System Administrator', 'HASHED_ADMIN123'),
-('geo_teacher', 'teacher@geo.edu', 'Educator', 'Dr. Emily Carter', 'HASHED_TEACHER123'),
-('student_amy', 'amy@geo.edu', 'Student', 'Amy Tan', 'HASHED_AMY123'),
-('student_john', 'john@geo.edu', 'Student', 'John Lim', 'HASHED_JOHN123');
+('admin1', 'admin@geo.edu', 'Admin', 'System Administrator', 'asdf'),
+('geo_teacher', 'teacher@geo.edu', 'Educator', 'Dr. Emily Carter', 'asdf'),
+('student_amy', 'amy@geo.edu', 'Student', 'Amy Tan', 'asdf'),
+('student_john', 'john@geo.edu', 'Student', 'John Lim', 'asdf'),
+('attain938', 'attain938@gmail.com', 'Student', 'Albert Tan', 'asdf'),
+('asdf', 'asdf@gmail.com', 'Student', 'asdf', 'asdf');
 
 ------------------------------------------------------------
 -- COURSES (taught by LecturerId = geo_teacher, assumed UserId = 2)
@@ -168,7 +170,8 @@ VALUES
 INSERT INTO dbo.ForumPost (UserId, PostTitle, PostMessage)
 VALUES
 (3, 'Struggling with map reading', 'Can someone explain latitude and longitude again?'),
-(4, 'Rock cycle question', 'Is metamorphic always formed from heat AND pressure?');
+(4, 'Rock cycle question', 'Is metamorphic always formed from heat AND pressure?'),
+(3, 'Is Dwayne the Rock Johnson a Rock?', 'Can someone please explain?');
 
 
 ------------------------------------------------------------
