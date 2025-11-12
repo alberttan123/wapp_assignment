@@ -16,8 +16,17 @@
     .asmt-actions{ display:flex; align-items:center; gap:.5rem; }
     .asmt-grid .card h3{ margin:0 0 .25rem; font-size:1.125rem; color:var(--text); }
     .asmt-grid .card .meta{ color:var(--muted); font-size:.9rem; }
-    .asmt-filters{ display:grid; grid-template-columns: 1fr; gap:1rem; margin:1rem 0; }
+
+    /* Make entire card clickable; keep delete button functional */
+    .card{ position:relative; cursor:pointer; }
+    .card .hit{ position:absolute; inset:0; z-index:1; }
+    .card .actions, .card h3, .card .meta{ position:relative; z-index:2; }
+    .card .btn{ position:relative; z-index:3; }
   </style>
+  <script>
+    function stopCardNav(e){ e.stopPropagation(); }
+    function goTo(url){ window.location.href = url; }
+  </script>
 </asp:Content>
 
 <asp:Content ID="MainBlock" ContentPlaceHolderID="LecturerMain" runat="server">
@@ -30,7 +39,7 @@
     </div>
   </div>
 
-  <div class="asmt-filters">
+  <div class="asmt-filters" style="display:grid;grid-template-columns:1fr;gap:1rem;margin:1rem 0;">
     <div class="field">
       <label>Search (Title)</label>
       <asp:TextBox ID="txtSearch" runat="server" CssClass="input" AutoPostBack="true"
@@ -43,17 +52,20 @@
   <asp:Repeater ID="rptAssessments" runat="server" OnItemCommand="RptAssessments_ItemCommand">
     <HeaderTemplate><div class="grid asmt-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));"></HeaderTemplate>
     <ItemTemplate>
-      <div class="card">
+      <div class="card" onclick="goTo('<%# ResolveUrl("~/Lecturer/LecturerAssessmentDetails.aspx?quizId=" + Eval("QuizId")) %>')">
+        <span class="hit" aria-hidden="true"></span>
+
         <div class="meta">Assessment #<%# Eval("QuizId") %></div>
         <h3><%# Eval("QuizTitle") %></h3>
         <div class="meta">Questions: <%# Eval("QuestionCount") %></div>
         <div class="meta">Type: <%# Eval("QuizType") %></div>
-        <div class="actions">
+
+        <div class="actions" style="margin-top:.5rem;display:flex;justify-content:flex-end;gap:.5rem;">
           <asp:LinkButton ID="btnDelete" runat="server"
                           CssClass="btn"
                           CommandName="delete"
                           CommandArgument='<%# Eval("QuizId") %>'
-                          OnClientClick="return confirm('Delete this assessment? This will remove its question links.');">
+                          OnClientClick="stopCardNav(event); return confirm('Delete this assessment? This will remove its question links.');">
             Delete
           </asp:LinkButton>
         </div>
