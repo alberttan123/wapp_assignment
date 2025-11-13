@@ -328,6 +328,6 @@ namespace WAPP_Assignment.Forum
                     addPostError.Text = ex.Message;
                 }
             }
-        }
+        }   
     }
 }

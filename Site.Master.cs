@@ -51,7 +51,7 @@ namespace WAPP_Assignment
             Session.Abandon();
             
             // Redirect to home page
-            Response.Redirect("~/Default.aspx", true);
+            Response.Redirect("~/Base/Landing.aspx", true);
         }
 
         protected void showLoginSignupModal(object sender, EventArgs e) 
