@@ -107,6 +107,8 @@
         </nav>
         <%-- Navigation Bar END --%>
 
+        <asp:Label ID="bruh" runat="server" Visible="true"></asp:Label>
+
         <%-- Login Modal START --%>
         <asp:Panel ID="loginModal" runat="server" Visible="false">
         <!-- Click outside to close (server-side backdrop) -->
