@@ -63,6 +63,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
@@ -247,6 +248,7 @@
     <Compile Include="Base\CourseDashboard.aspx.designer.cs">
       <DependentUpon>CourseDashboard.aspx</DependentUpon>
     </Compile>
+    <Compile Include="GeminiHelper.cs" />
     <Compile Include="Contact.aspx.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

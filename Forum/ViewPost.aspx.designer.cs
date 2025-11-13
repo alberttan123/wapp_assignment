@@ -87,6 +87,24 @@ namespace WAPP_Assignment.Forum
         protected global::System.Web.UI.WebControls.Label postError;
 
         /// <summary>
+        /// AI_OUTPUT control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label AI_OUTPUT;
+
+        /// <summary>
+        /// ai_summary_button control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton ai_summary_button;
+
+        /// <summary>
         /// addComment control.
         /// </summary>
         /// <remarks>
