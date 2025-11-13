@@ -149,9 +149,13 @@
     <Content Include="Content\LecturerPages.css" />
     <Content Include="Content\loginSignupModal.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\AllPosts.css" />
+    <Content Include="Content\ViewPost.css" />
     <Content Include="Content\waplanding.css" />
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
+    <Content Include="Forum\AllPosts.aspx" />
+    <Content Include="Forum\ViewPost.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Base\Landing.aspx" />
     <Content Include="Lecturer\LecturerAssessmentDetails.aspx" />
@@ -257,6 +261,20 @@
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Forum\AllPosts.aspx.cs">
+      <DependentUpon>AllPosts.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Forum\AllPosts.aspx.designer.cs">
+      <DependentUpon>AllPosts.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Forum\ViewPost.aspx.cs">
+      <DependentUpon>ViewPost.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Forum\ViewPost.aspx.designer.cs">
+      <DependentUpon>ViewPost.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

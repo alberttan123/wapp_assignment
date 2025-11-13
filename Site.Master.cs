@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.UI;
@@ -258,6 +260,7 @@ namespace WAPP_Assignment
                         cmd.Parameters.AddWithValue("@u", username);
                         cmd.Parameters.AddWithValue("@e", email);
                         cmd.Parameters.AddWithValue("@t", usertype);
+                        password = Hash(password);
                         cmd.Parameters.AddWithValue("@p", password);
                         int rows = cmd.ExecuteNonQuery();
 
@@ -278,8 +281,12 @@ namespace WAPP_Assignment
 
         private bool Verify(SqlDataReader rd, string password)
         {
-            var hash = rd.GetString(rd.GetOrdinal("PasswordHash"));
-            if (password == hash) //simple comparison TODO: CHANGE TO HASH COMPARISON
+            var storedHash = rd.GetString(rd.GetOrdinal("PasswordHash"));
+
+            if (storedHash == null)
+                return false;
+
+            if (Hash(password) == storedHash)
             {
                 return true;
             }
@@ -304,6 +311,20 @@ namespace WAPP_Assignment
         {
             string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
             return Regex.IsMatch(email, pattern);
+        }
+
+        // done this way so that there is no need to Install-Package BCrypt
+        public static string Hash(string input) 
+        {
+            if (input == null)
+                return null;
+
+            using (SHA256 sha = SHA256.Create()) 
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes(input);
+                byte[] hash = sha.ComputeHash(bytes);
+                return Convert.ToBase64String(hash);
+            }
         }
     }
 }

@@ -30,6 +30,9 @@
             font-weight: bold;
             background-color: #ffd24a;
         }
+        .main-content {
+            margin-top: 95px;
+        }
     </style>
 
 </head>
@@ -89,7 +92,7 @@
                 </div>
                 </div>
                 <a class="nav-link" href="<%= ResolveUrl("~/Student/praticeDashboard.aspx") %>">Practice</a>               
-                <a class="nav-link" href="#">Community</a>
+                <a class="nav-link" href="<%= ResolveUrl("~/Forum/AllPosts.aspx") %>">Community</a>
             </div>
 
             <div class="nav-actions">
@@ -103,6 +106,8 @@
             </div>
         </nav>
         <%-- Navigation Bar END --%>
+
+        <asp:Label ID="bruh" runat="server" Visible="true"></asp:Label>
 
         <%-- Login Modal START --%>
         <asp:Panel ID="loginModal" runat="server" Visible="false">
@@ -256,7 +261,7 @@
         </asp:Panel>
         <%-- Register Modal END --%>
 
-        <div class="">
+        <div class="main-content">
             <%-- Main content goes into here --%>
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
