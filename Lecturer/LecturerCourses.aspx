@@ -5,66 +5,65 @@
     Inherits="WAPP_Assignment.Lecturer.LecturerCourses" %>
 
 <asp:Content ID="HeadBlock" ContentPlaceHolderID="HeadLecturer" runat="server">
-    <link rel="stylesheet" href="<%= ResolveUrl(".\\Content\\LecturerPages.css") %>" />
+    <!-- page-level head if needed -->
 </asp:Content>
-
 
 <asp:Content ID="MainBlock" ContentPlaceHolderID="LecturerMain" runat="server">
     <div class="lc-header">Courses</div>
 
-    <div class="lc-controls">
-        <div class="lc-view">
-            <button type="button" class="lc-icon" title="Grid view">▦</button>
-            <button type="button" class="lc-icon" title="List view">≣</button>
+    <div class="lc-bar">
+        <div class="lc-search">
+            <asp:TextBox ID="txtSearch" runat="server" CssClass="input"
+                         Placeholder="Search by course title"
+                         AutoPostBack="true"
+                         OnTextChanged="TxtSearch_TextChanged" />
         </div>
-
-        <div class="lc-actions">
-            <a href="#" class="lc-add">Add Courses</a>
-            <label class="lc-sort">
-                <select>
-                    <option selected>Sort</option>
-                    <option>Newest</option>
-                    <option>Oldest</option>
-                    <option>A → Z</option>
-                    <option>Z → A</option>
-                </select>
-            </label>
-        </div>
-    </div>
-     
-    <div class="lc-search">   
-        <input type="text" placeholder="SEARCH" />
+        <a href="<%= ResolveUrl("~/Lecturer/LecturerCourseBuilder.aspx") %>" class="btn">
+            Build a Course
+        </a>
     </div>
 
-    <div class="lc-grid">
-        <div class="lc-card">
-            <div class="lc-banner">&lt;Banner&gt;</div>
-            <div class="lc-card-body">
-                <h3>Course A</h3>
-                <p class="lc-date">28 Dec 2025</p>
-                <p>Total Chapters: 10</p>
-                <p>Total Questions: 8</p>
-            </div>
-        </div>
+    <asp:Label ID="lblInfo" runat="server" CssClass="muted" Visible="false" />
 
-        <div class="lc-card">
-            <div class="lc-banner">&lt;Banner&gt;</div>
-            <div class="lc-card-body">
-                <h3>Course B</h3>
-                <p class="lc-date">29 Dec 2025</p>
-                <p>Total Chapters: 11</p>
-                <p>Total Questions: 6</p>
+    <asp:Repeater ID="rptCourses" runat="server" OnItemCommand="RptCourses_ItemCommand">
+        <HeaderTemplate>
+            <div class="lc-grid">
+        </HeaderTemplate>
+        <ItemTemplate>
+            <div class="lc-card">
+                <asp:HyperLink ID="lnkCourse" runat="server"
+                               CssClass="lc-card-link"
+                               NavigateUrl='<%# "~/Lecturer/LecturerCourseDetails.aspx?courseId=" + Eval("CourseId") %>'>
+                    <div class="lc-banner">
+                        <asp:Image ID="imgBanner" runat="server"
+                                   ImageUrl='<%# GetBannerUrl(Eval("CourseImgUrl")) %>'
+                                   AlternateText="" />
+                    </div>
+                    <div class="lc-card-body">
+                        <h3><%# Eval("CourseTitle") %></h3>
+                        <p class="lc-meta">
+                            Chapters: <%# Eval("ChapterCount") %> &bull;
+                            Quizzes: <%# Eval("QuizCount") %>
+                        </p>
+                        <p class="lc-date">
+                            Created: <%# string.Format("{0:dd MMM yyyy}", Eval("CourseCreatedAt")) %>
+                        </p>
+                    </div>
+                </asp:HyperLink>
+                <div class="lc-card-footer">
+                    <asp:LinkButton ID="btnDelete" runat="server"
+                                    CssClass="btn"
+                                    CommandName="delete"
+                                    CommandArgument='<%# Eval("CourseId") %>'
+                                    OnClientClick="return confirm('Delete this course and all its chapters?');"
+                                    CausesValidation="false">
+                        Delete
+                    </asp:LinkButton>
+                </div>
             </div>
-        </div>
-
-        <div class="lc-card">
-            <div class="lc-banner">&lt;Banner&gt;</div>
-            <div class="lc-card-body">
-                <h3>Course C</h3>
-                <p class="lc-date">31 Dec 2025</p>
-                <p>Total Chapters: 8</p>
-                <p>Total Questions: 7</p>
+        </ItemTemplate>
+        <FooterTemplate>
             </div>
-        </div>
-    </div>
+        </FooterTemplate>
+    </asp:Repeater>
 </asp:Content>

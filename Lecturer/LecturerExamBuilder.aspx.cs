@@ -9,7 +9,8 @@ namespace WAPP_Assignment.Lecturer
 {
     public partial class LecturerExamBuilder : System.Web.UI.Page
     {
-        private string ConnStr => ConfigurationManager.ConnectionStrings["DatabaseConnection"].ConnectionString;
+        private string ConnStr =>
+            ConfigurationManager.ConnectionStrings["DatabaseConnection"].ConnectionString;
 
         // Track which quizzes are expanded (to show/hide inline questions)
         private HashSet<int> Expanded
@@ -26,18 +27,34 @@ namespace WAPP_Assignment.Lecturer
             }
         }
 
+        // Track whether the exam cart dropdown is expanded
+        private bool CartExpanded
+        {
+            get
+            {
+                object o = ViewState["CartExpanded"];
+                return o != null && (bool)o;
+            }
+            set
+            {
+                ViewState["CartExpanded"] = value;
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-                BindQuizzes();   // dropdown: exercises only
-                BindTopics();    // list: exercises only
+                CartExpanded = false; // start collapsed
+                BindQuizzes();        // dropdown: exercises only
+                BindTopics();         // list: exercises only
                 EnsureCart();
                 BindCart();
             }
         }
 
         /* ---------- Binding ---------- */
+
         private void BindQuizzes()
         {
             using (var con = new SqlConnection(ConnStr))
@@ -51,7 +68,6 @@ ORDER BY z.QuizTitle ASC;", con))
                 var dt = new DataTable();
                 da.Fill(dt);
                 ddlQuiz.Items.Clear();
-                // label it clearly as exercises
                 ddlQuiz.Items.Add(new System.Web.UI.WebControls.ListItem("All Exercises", "all"));
                 foreach (DataRow r in dt.Rows)
                 {
@@ -66,16 +82,38 @@ ORDER BY z.QuizTitle ASC;", con))
             var search = txtSearch.Text?.Trim();
             var quizFilter = ddlQuiz.SelectedValue;
 
-            var sql = @"
+            string sql = @"
 SELECT
     z.QuizId,
     z.QuizTitle,
     (SELECT COUNT(*) FROM dbo.QuestionBank qb WHERE qb.QuizId = z.QuizId) AS QuestionCount
 FROM dbo.Quiz z
 WHERE z.QuizType = 'exercise'       -- only exercises
-" + (string.IsNullOrWhiteSpace(search) ? "" : " AND z.QuizTitle LIKE @search ") +
-    ((string.IsNullOrEmpty(quizFilter) || quizFilter == "all") ? "" : " AND z.QuizId = @quizId ") +
-    " ORDER BY z.QuizTitle ";
+";
+
+            // Search by quiz title OR any question text belonging to the quiz
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                sql += @"
+  AND (
+        z.QuizTitle LIKE @search
+        OR EXISTS (
+            SELECT 1
+            FROM dbo.QuestionBank qb
+            JOIN dbo.Questions q ON q.QuestionId = qb.QuestionId
+            WHERE qb.QuizId = z.QuizId
+              AND q.Question LIKE @search
+        )
+      )";
+            }
+
+            // Optional filter by selected quiz
+            if (!string.IsNullOrEmpty(quizFilter) && quizFilter != "all")
+            {
+                sql += " AND z.QuizId = @quizId";
+            }
+
+            sql += " ORDER BY z.QuizTitle;";
 
             using (var con = new SqlConnection(ConnStr))
             using (var cmd = new SqlCommand(sql, con))
@@ -106,14 +144,43 @@ WHERE z.QuizType = 'exercise'       -- only exercises
 
         private void BindCart()
         {
+            EnsureCart();
             var dt = Session["ExamDraft"] as DataTable;
             rptCart.DataSource = dt;
             rptCart.DataBind();
             txtTotal.Text = (dt?.Rows.Count ?? 0).ToString();
+            UpdateCartVisibility();
+        }
+
+        private void UpdateCartVisibility()
+        {
+            var dt = Session["ExamDraft"] as DataTable;
+            int count = dt?.Rows.Count ?? 0;
+
+            if (btnCartToggle != null)
+            {
+                string label = $"Exam cart ({count} question{(count == 1 ? "" : "s")}) ";
+                string arrow = CartExpanded ? "▲" : "▼";
+                btnCartToggle.Text = label + arrow;
+            }
+
+            if (pnlCart != null)
+            {
+                // Show dropdown content only when expanded and there is at least 1 question
+                pnlCart.Visible = CartExpanded && count > 0;
+            }
         }
 
         /* ---------- Events ---------- */
+
+        protected void BtnCartToggle_Click(object sender, EventArgs e)
+        {
+            CartExpanded = !CartExpanded;
+            UpdateCartVisibility();
+        }
+
         protected void TxtSearch_TextChanged(object sender, EventArgs e) => BindTopics();
+
         protected void DdlQuiz_SelectedIndexChanged(object sender, EventArgs e) => BindTopics();
 
         protected void RptTopics_ItemCommand(object source, System.Web.UI.WebControls.RepeaterCommandEventArgs e)
@@ -271,7 +338,7 @@ WHERE qb.QuizId = @quizId;";
 
             if (string.IsNullOrWhiteSpace(title))
             {
-                ShowErr("Please enter an exam title.");
+                ShowErr("Please enter an assessment title.");
                 return;
             }
 
@@ -327,9 +394,11 @@ SELECT CAST(SCOPE_IDENTITY() AS INT);", con, tx))
                         tx.Commit();
 
                         // Reset UI
-                        cart.Rows.Clear(); cart.AcceptChanges();
+                        cart.Rows.Clear();
+                        cart.AcceptChanges();
                         BindCart();
-                        txtExamTitle.Text = string.Empty; txtDuration.Text = string.Empty;
+                        txtExamTitle.Text = string.Empty;
+                        txtDuration.Text = string.Empty;
                         Expanded = new HashSet<int>(); // collapse any expanded lists
 
                         // Rebind exercises list

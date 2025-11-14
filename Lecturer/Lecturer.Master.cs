@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace WAPP_Assignment.Lecturer
 {
@@ -11,7 +8,25 @@ namespace WAPP_Assignment.Lecturer
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Keep for future auth/role logic if you like.
+            // Run on every request; if not an educator, kick back to landing
+            EnsureEducatorAuthenticated();
+        }
+
+        private void EnsureEducatorAuthenticated()
+        {
+            // Re-use the same auth cookie helper as the student dashboard
+            var info = AuthCookieHelper.ReadAuthCookie();
+            bool isAuthenticated = info.success;
+            string userId = info.UserId;
+            string userType = info.userType;
+
+            if (!isAuthenticated ||
+                string.IsNullOrEmpty(userId) ||
+                !string.Equals(userType, "Educator", StringComparison.OrdinalIgnoreCase))
+            {
+                // Not logged in or not an educator → go back to landing/login
+                Response.Redirect("~/Base/Landing.aspx", true);
+            }
         }
     }
 }
