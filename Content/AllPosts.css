@@ -1,4 +1,5 @@
-﻿
+﻿@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 @keyframes rainbow {
     0% { filter: hue-rotate(0deg); }
     100% { filter: hue-rotate(360deg); }
@@ -45,15 +46,16 @@
 }
 
 .forum-page-title {
-    font-size: 3rem;
+    font-size: 1.2rem;
     font-weight: 900;
     color: #ffd24a;
     margin: 0 0 0.75rem 0;
-    letter-spacing: 0.02em;
-    text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 210, 74, 0.3);
+    letter-spacing: 0.05em;
+    text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
     position: relative;
     display: inline-block;
-    animation: title-glow 3s ease-in-out infinite alternate;
+    font-family: 'Press Start 2P', monospace;
+    text-transform: uppercase;
     padding-left: 3.5rem;
 }
 
@@ -79,13 +81,16 @@
 }
 
 .forum-page-subtitle {
-    font-size: 1.15rem;
+    font-size: 0.7rem;
     color: #e8eefc;
     margin: 0;
     font-weight: 600;
     text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
     position: relative;
     padding-left: 1.5rem;
+    font-family: 'Press Start 2P', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .forum-page-subtitle::before {

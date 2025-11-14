@@ -1,4 +1,5 @@
 ﻿
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 @keyframes rainbow {
     0% { filter: hue-rotate(0deg); }
@@ -33,22 +34,27 @@
 }
 
 .viewpost-page-title {
-    font-size: 3rem;
+    font-size: 1.2rem;
     font-weight: 900;
     color: #ffd24a;
     margin: 0 0 0.75rem 0;
-    letter-spacing: 0.02em;
-    text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+    letter-spacing: 0.05em;
+    text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
     position: relative;
     display: inline-block;
+    font-family: 'Press Start 2P', monospace;
+    text-transform: uppercase;
 }
 
 .viewpost-page-subtitle {
-    font-size: 1.15rem;
+    font-size: 0.7rem;
     color: #e8eefc;
     margin: 0;
     font-weight: 600;
     text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+    font-family: 'Press Start 2P', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .back-button-container-header {
@@ -465,7 +471,7 @@
 }
 
 .section-heading-comment::before {
-    content: '💭';
+    content: '';
     font-size: 2.5rem;
     animation: float 3s ease-in-out infinite;
 }
@@ -640,7 +646,6 @@
 .addCommentSection #addCommentButton:hover,
 .addCommentSection input[type="submit"]:hover,
 .addCommentSection button:hover {
-    background: #ffdc6a !important;
     transform: translateY(2px);
     box-shadow: 0 2px 0 #b89200 !important;
 }
@@ -653,11 +658,6 @@
     box-shadow: 0 1px 0 #b89200 !important;
 }
 
-.addCommentSection #addCommentButton::before {
-    content: '📝';
-    margin-right: 0.5rem;
-    font-size: 1rem;
-}
 
 
 
