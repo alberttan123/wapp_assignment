@@ -15,9 +15,9 @@
                 </div>
 
                 <asp:Label Text="Post Title" runat="server"></asp:Label>
-                <asp:TextBox ID="postTitle" placeholder="" runat="server"></asp:TextBox>
+                <asp:TextBox ID="postTitle" placeholder="Enter your post title..." runat="server"></asp:TextBox>
                 <asp:Label Text="Post Message" runat="server"></asp:Label>
-                <asp:TextBox ID="postMessage" placeholder="" runat="server"></asp:TextBox>
+                <asp:TextBox ID="postMessage" TextMode="MultiLine" Rows="6" placeholder="Share your thoughts..." runat="server"></asp:TextBox>
                 <asp:Label ID="addPostError" CssClass="addPostError" runat="server"></asp:Label>
 
                 <div class="modalControls modalControls-addPost">
@@ -28,15 +28,22 @@
         </div>
     </asp:Panel> 
     
-    <div class="addPostButtonContainer">
-        <asp:Button ID="addPostButton" OnClick="showAddPostModal" CssClass="addPostButton" Text="Add Post" runat="server"></asp:Button>
+    <div class="forum-header">
+        <div class="forum-header-content">
+            <h1 class="forum-page-title">Forum</h1>
+            <p class="forum-page-subtitle">Share your thoughts and connect with the community</p>
+        </div>
+        <div class="addPostButtonContainer">
+            <asp:Button ID="addPostButton" OnClick="showAddPostModal" CssClass="addPostButton" Text="Add Post" runat="server"></asp:Button>
+        </div>
     </div>
-    <div class="forum-controls" style="margin-top: 95px; display: flex; flex-direction: row; justify-content: space-between; padding: 0 1rem;">
+    <div class="forum-controls">
         <div class="forum-search-container">
-            Search: 
+            <label>Search:</label>
             <asp:TextBox ID="searchBox" CssClass="forum-search" AutoPostBack="true" OnTextChanged="handleSearchAndSort" runat="server"></asp:TextBox>
         </div>
         <div class="forum-sort-container">
+            <label>Sort by:</label>
             <asp:DropDownList ID="sortDropdown" runat="server" AutoPostBack="true" OnSelectedIndexChanged="handleSearchAndSort" CssClass="forum-sort">
                 <asp:ListItem Text="Title Alphabetical (a -> z)" Value="a-to-z" />
                 <asp:ListItem Text="Title Alphabetical (z -> a)" Value="z-to-a" />

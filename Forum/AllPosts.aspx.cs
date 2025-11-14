@@ -175,14 +175,19 @@ namespace WAPP_Assignment.Forum
             card.CssClass = "post";
             card.ID = $@"post-{postCount}";
 
+            Panel postHeader = new Panel();
+            postHeader.CssClass = "post-header";
+
             Label labelUsername = new Label();
             labelUsername.Text = username;
             labelUsername.CssClass = "post-username";
 
             Label labelUserType = new Label();
             labelUserType.Text = createdByUserType;
-            labelUserType.CssClass = "post-usertype-pill";
+            labelUserType.CssClass = "post-usertype";
 
+            postHeader.Controls.Add(labelUsername);
+            postHeader.Controls.Add(labelUserType);
 
             Label labelTitle = new Label();
             labelTitle.Text = postTitle;
@@ -193,10 +198,34 @@ namespace WAPP_Assignment.Forum
             labelCreatedAt.Text = postCreatedAt;
             labelCreatedAt.CssClass = "post-createdAt";
 
-            card.Controls.Add(labelUsername);
-            card.Controls.Add(labelUserType);
+            card.Controls.Add(postHeader);
             card.Controls.Add(labelTitle);
             card.Controls.Add(labelCreatedAt);
+
+            var (isAuthenticated, userId, userType) = AuthCookieHelper.ReadAuthCookie();
+
+            if (!userId.IsNullOrWhiteSpace() && createdByUserId == int.Parse(userId))
+            {
+                //make delete button and error message panel if user is logged in and is the post creator
+                Panel postActions = new Panel();
+                postActions.CssClass = "post-actions";
+
+                Button deleteButton = new Button();
+                deleteButton.CommandArgument = postId.ToString();
+                deleteButton.Text = "Delete Post";
+                deleteButton.CssClass = "delete-button-post";
+                deleteButton.Command += deletePost;
+                postActions.Controls.Add(deleteButton);
+
+                Label errorMessage = new Label();
+                errorMessage.ID = $@"post_{postId}_error_message";
+                errorMessage.Visible = true;
+                errorMessage.Text = "";
+                errorMessage.CssClass = "post-delete-error";
+                postActions.Controls.Add(errorMessage);
+
+                card.Controls.Add(postActions);
+            }
 
             HtmlAnchor anchorTag = new HtmlAnchor();
             anchorTag.HRef = $@"/Forum/ViewPost?postId={postId}";
@@ -207,32 +236,6 @@ namespace WAPP_Assignment.Forum
             Panel fullContainer = new Panel();
             fullContainer.CssClass = "post-container";
             fullContainer.Controls.Add(anchorTag);
-
-            var (isAuthenticated, userId, userType) = AuthCookieHelper.ReadAuthCookie();
-
-            if (!userId.IsNullOrWhiteSpace()) //check if userId exists, if not do not run this: will bring error when trying to access null
-            {
-                if (createdByUserId == int.Parse(userId))
-                {
-                    //make delete button and error message panel if user is logged in and is the post creator
-                    Panel errorContainer = new Panel();
-
-                    Button deleteButton = new Button();
-                    deleteButton.CommandArgument = postId.ToString();
-                    deleteButton.Text = "Delete Post";
-                    deleteButton.CssClass = "delete-button";
-                    deleteButton.Command += deletePost;
-                    errorContainer.Controls.Add(deleteButton);
-
-                    Label errorMessage = new Label();
-                    errorMessage.ID = $@"post_{postId}_error_message";
-                    errorMessage.Visible = true;
-                    errorMessage.Text = "";
-                    errorContainer.Controls.Add(errorMessage);
-
-                    fullContainer.Controls.Add(errorContainer);
-                }
-            }
 
             return fullContainer;
         }
@@ -328,6 +331,6 @@ namespace WAPP_Assignment.Forum
                     addPostError.Text = ex.Message;
                 }
             }
-        }
+        }   
     }
 }

@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using System.Xml.Linq;
 
 namespace WAPP_Assignment.Forum
 {
@@ -96,6 +97,7 @@ namespace WAPP_Assignment.Forum
             {
                 Label message = new Label();
                 message.Text = "No comments made on this post. Be the first one!";
+                message.CssClass = "no-comments-message";
 
                 commentSection.CssClass = "commentSection justify-center";
                 commentSection.Controls.Add(message);
@@ -107,19 +109,31 @@ namespace WAPP_Assignment.Forum
             Panel commentCard = new Panel();
             commentCard.CssClass = "comment";
 
+            Panel commentHeader = new Panel();
+            commentHeader.CssClass = "comment-header";
+
             Label usernameLabel = new Label();
             usernameLabel.Text = username;
+            usernameLabel.CssClass = "commentUsername";
+
             Label createdByUserTypeLabel = new Label();
             createdByUserTypeLabel.Text = createdByUserType;
-            Label commentLabel = new Label();
-            commentLabel.Text = comment;
+            createdByUserTypeLabel.CssClass = "commentUserType";
+
             Label createdAtLabel = new Label();
             createdAtLabel.Text = createdAt;
+            createdAtLabel.CssClass = "commentCreatedAt";
 
-            commentCard.Controls.Add(usernameLabel);
-            commentCard.Controls.Add(createdByUserTypeLabel);
+            commentHeader.Controls.Add(usernameLabel);
+            commentHeader.Controls.Add(createdByUserTypeLabel);
+            commentHeader.Controls.Add(createdAtLabel);
+
+            Label commentLabel = new Label();
+            commentLabel.Text = comment;
+            commentLabel.CssClass = "commentMessage";
+
+            commentCard.Controls.Add(commentHeader);
             commentCard.Controls.Add(commentLabel);
-            commentCard.Controls.Add(createdAtLabel);
 
             var (isAuthenticated, userId, userType) = AuthCookieHelper.ReadAuthCookie();
 
@@ -128,12 +142,17 @@ namespace WAPP_Assignment.Forum
                 if (createdByUserId == int.Parse(userId))
                 {
                     // add delete button if the comment was made by the currently signed in user
+                    Panel commentActions = new Panel();
+                    commentActions.CssClass = "comment-actions";
+
                     Button deleteButton = new Button();
                     deleteButton.CommandArgument = commentId;
                     deleteButton.Command += delete;
                     deleteButton.Text = "Delete";
-                    deleteButton.CssClass = "delete-button";
-                    commentCard.Controls.Add(deleteButton);
+                    deleteButton.CssClass = "delete-button-comment";
+                    commentActions.Controls.Add(deleteButton);
+
+                    commentCard.Controls.Add(commentActions);
                 }
             }
 
@@ -311,6 +330,49 @@ namespace WAPP_Assignment.Forum
         protected void backToAllPosts(Object sender, EventArgs e) 
         {
             Response.Redirect("AllPosts.aspx");
+        }
+
+        protected async void generateAISummary(object sender, EventArgs e)
+        {
+            try
+            {
+                string mainPost = data[2]; //main post message
+
+                List<string> comments = new List<string>();
+                using (var conn = DataAccess.GetOpenConnection())
+                {
+                    var cmd = new SqlCommand("SELECT CommentMessage FROM dbo.ForumComment JOIN dbo.Users ON dbo.Users.UserId = dbo.ForumComment.UserId WHERE dbo.ForumComment.PostId = @postId ORDER BY CommentCreatedAt DESC", conn);
+                    cmd.Parameters.AddWithValue("@postId", postId);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        List<string[]> commentData = new List<string[]>();
+                        int count = 1;
+                        while (reader.Read())
+                        {
+                            string commentMessage = reader.GetString(0);
+                            commentMessage = $@"[COMMENT{count}]" + commentMessage;
+                            comments.Add(commentMessage);
+                            count++;
+                        }
+                    }
+                }
+
+                string prompt =
+                    "Summarize the following forum thread.\n\n" +
+                    "[MAIN POST]\n" + mainPost + "\n\n" +
+                    "[COMMENTS]\n" + string.Join("\n", comments) + "\n\n" +
+                    "[MAIN PROMPT] Provide a concise and professional summary of the key issue, main points, and any helpful suggestions. Limit the summary to 40–80 words.";
+                string systemConfig = "You summarize forum threads in a concise, neutral, and professional tone. Extract only the essential issue, main points, and useful suggestions. Keep wording minimal and avoid unnecessary details.";
+                //AI_OUTPUT.Text = prompt; this was for debug
+                ai_summary_button.CssClass = "aiSummaryButton loading"; //shows loading
+                string aiResponse = await GeminiHelper.Gemini(prompt, systemConfig);
+                ai_summary_button.CssClass = "aiSummaryButton"; //stops showing loading after received response
+                AI_OUTPUT.Text = aiResponse;
+            }
+            catch (Exception ex)
+            {
+                AI_OUTPUT.Text = ex.Message;
+            }
         }
     }
 }
