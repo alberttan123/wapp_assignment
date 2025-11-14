@@ -1,0 +1,35 @@
+﻿.postSection {
+    display: flex;
+    flex-direction: column;
+    border: 3px solid yellow;
+    margin: 1rem;
+}
+
+.addCommentSection {
+    border: 3px solid yellow;
+    margin: 0 1rem;
+    margin-bottom: 1rem;
+}
+
+.comment {
+    display: flex;
+    flex-direction: column;
+    border: 3px solid yellow;
+    margin: 0.5rem;
+
+}
+
+/* used in the text showing error message for comment */
+.commentError {
+    border: 1px solid red;
+    background-color: white;
+    color: red;
+}
+
+/* used in the text to show error message */
+.postNotFound {
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+    display: block;
+}
