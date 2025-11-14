@@ -25,13 +25,13 @@ VALUES
 ('Introduction to Geography',
  'Learn the basics of physical and human geography.',
  8,
- 'https://cdn.example.com/images/geo_intro.jpg',
+ '~/Media/geography-banner.jpg',
  2),
 
 ('Rocks & Minerals 101',
  'Explore igneous, sedimentary, and metamorphic rocks.',
  6,
- 'https://cdn.example.com/images/rocks101.jpg',
+ '~/Media/rock-banner.jpg',
  2);
 
 
