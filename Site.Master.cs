@@ -49,7 +49,7 @@ namespace WAPP_Assignment
             Session.Abandon();
             
             // Redirect to home page
-            Response.Redirect("~/Default.aspx", true);
+            Response.Redirect("~/Base/Landing.aspx", true);
         }
 
         protected void showLoginSignupModal(object sender, EventArgs e) 
@@ -88,8 +88,7 @@ namespace WAPP_Assignment
             register_field_2.Visible = true;
             register_field_1.Visible = false;
         }
-
-        protected void login(object sender, EventArgs e) 
+        protected void login(object sender, EventArgs e)
         {
             login_error_message.Text = "";
             login_error_message.Visible = false;
@@ -100,32 +99,50 @@ namespace WAPP_Assignment
             try
             {
                 using (var conn = DataAccess.GetOpenConnection())
+                using (var cmd = new SqlCommand(@"
+                SELECT TOP 1 UserId, Username, PasswordHash, UserType
+                FROM dbo.Users 
+                WHERE Username = @u", conn))
                 {
-                    // Try Students
-                    using (var cmd = new SqlCommand(@"
-                        SELECT TOP 1 UserId, Username, PasswordHash, UserType
-                        FROM dbo.Users WHERE Username = @u", conn))
+                    cmd.Parameters.AddWithValue("@u", username);
+
+                    using (var rd = cmd.ExecuteReader())
                     {
-                        cmd.Parameters.AddWithValue("@u", username);
-                        using (var rd = cmd.ExecuteReader())
+                        if (!rd.Read())
                         {
-                            if (!rd.Read())
-                            {
-                                ShowLoginError("Username does not exist.");
-                                return;
-                            }
-
-                            if (!Verify(rd, password))
-                            {
-                                ShowLoginError("Username password combination does not match.");
-                                return;
-                            }
-
-                            SignIn(rd);
-                            // Redirect to dashboard after login
-                            Response.Redirect("~/Student/Dashboard.aspx", true);
+                            ShowLoginError("Username does not exist.");
                             return;
                         }
+
+                        if (!Verify(rd, password))
+                        {
+                            ShowLoginError("Username password combination does not match.");
+                            return;
+                        }
+
+                        // Success → issue auth cookie
+                        SignIn(rd);
+
+                        // Decide where to send them based on role
+                        string userType = rd.GetString(rd.GetOrdinal("UserType"));
+
+                        if (string.Equals(userType, "Educator", StringComparison.OrdinalIgnoreCase))
+                        {
+                            // Lecturer area home
+                            Response.Redirect("~/Lecturer/LecturerDashboard.aspx", true);
+                        }
+                        else if (string.Equals(userType, "Student", StringComparison.OrdinalIgnoreCase))
+                        {
+                            // Existing student dashboard
+                            Response.Redirect("~/Student/Dashboard.aspx", true);
+                        }
+                        else
+                        {
+                            // Fallback for Admin/unknown roles
+                            Response.Redirect("~/Base/Landing.aspx", true);
+                        }
+
+                        return;
                     }
                 }
             }
@@ -134,7 +151,6 @@ namespace WAPP_Assignment
                 ShowLoginError(ex.ToString()); // show error
             }
         }
-
         protected void Register(object sender, EventArgs e)
         {
             string username = REGISTERusername.Text.Trim();

@@ -15,13 +15,49 @@ namespace WAPP_Assignment.Lecturer
     {
 
         /// <summary>
-        /// litCounter control.
+        /// chkExpanded control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litCounter;
+        protected global::System.Web.UI.WebControls.CheckBox chkExpanded;
+
+        /// <summary>
+        /// lblMsg control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblMsg;
+
+        /// <summary>
+        /// pnlList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlList;
+
+        /// <summary>
+        /// rptList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater rptList;
+
+        /// <summary>
+        /// pnlExpanded control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlExpanded;
 
         /// <summary>
         /// btnPrev control.
@@ -31,6 +67,33 @@ namespace WAPP_Assignment.Lecturer
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnPrev;
+
+        /// <summary>
+        /// btnNext control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnNext;
+
+        /// <summary>
+        /// litId control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litId;
+
+        /// <summary>
+        /// litCounter control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litCounter;
 
         /// <summary>
         /// imgQ control.
@@ -51,6 +114,15 @@ namespace WAPP_Assignment.Lecturer
         protected global::System.Web.UI.WebControls.Literal litQ;
 
         /// <summary>
+        /// viewOpt1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl viewOpt1;
+
+        /// <summary>
         /// litO1 control.
         /// </summary>
         /// <remarks>
@@ -58,6 +130,15 @@ namespace WAPP_Assignment.Lecturer
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litO1;
+
+        /// <summary>
+        /// viewOpt2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl viewOpt2;
 
         /// <summary>
         /// litO2 control.
@@ -69,6 +150,15 @@ namespace WAPP_Assignment.Lecturer
         protected global::System.Web.UI.WebControls.Literal litO2;
 
         /// <summary>
+        /// viewOpt3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl viewOpt3;
+
+        /// <summary>
         /// litO3 control.
         /// </summary>
         /// <remarks>
@@ -76,6 +166,15 @@ namespace WAPP_Assignment.Lecturer
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litO3;
+
+        /// <summary>
+        /// viewOpt4 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl viewOpt4;
 
         /// <summary>
         /// litO4 control.
@@ -87,40 +186,40 @@ namespace WAPP_Assignment.Lecturer
         protected global::System.Web.UI.WebControls.Literal litO4;
 
         /// <summary>
-        /// litAns control.
+        /// btnToggleEdit control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litAns;
+        protected global::System.Web.UI.WebControls.Button btnToggleEdit;
 
         /// <summary>
-        /// btnNext control.
+        /// pnlEdit control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnNext;
+        protected global::System.Web.UI.WebControls.Panel pnlEdit;
 
         /// <summary>
-        /// lblMsg control.
+        /// hfQuestionId control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMsg;
+        protected global::System.Web.UI.WebControls.HiddenField hfQuestionId;
 
         /// <summary>
-        /// hidQuestionId control.
+        /// hfEditCorrectAnswer control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hidQuestionId;
+        protected global::System.Web.UI.WebControls.HiddenField hfEditCorrectAnswer;
 
         /// <summary>
         /// txtQ control.
@@ -184,15 +283,6 @@ namespace WAPP_Assignment.Lecturer
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtO4;
-
-        /// <summary>
-        /// ddlAns control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlAns;
 
         /// <summary>
         /// btnUpdate control.

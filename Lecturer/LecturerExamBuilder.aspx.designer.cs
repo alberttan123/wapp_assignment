@@ -33,13 +33,22 @@ namespace WAPP_Assignment.Lecturer
         protected global::System.Web.UI.WebControls.DropDownList ddlQuiz;
 
         /// <summary>
-        /// rptTopics control.
+        /// btnCartToggle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptTopics;
+        protected global::System.Web.UI.WebControls.LinkButton btnCartToggle;
+
+        /// <summary>
+        /// pnlCart control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlCart;
 
         /// <summary>
         /// rptCart control.
@@ -94,5 +103,14 @@ namespace WAPP_Assignment.Lecturer
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSaveExam;
+
+        /// <summary>
+        /// rptTopics control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater rptTopics;
     }
 }

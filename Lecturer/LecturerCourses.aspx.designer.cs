@@ -9,8 +9,11 @@
 
 namespace WAPP_Assignment.Lecturer
 {
+
+
     public partial class LecturerCourses
     {
+
         /// <summary>
         /// txtSearch control.
         /// </summary>

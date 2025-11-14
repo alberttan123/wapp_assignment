@@ -18,9 +18,9 @@
     <nav class="lect-sb" aria-label="Lecturer sidebar">
       <div class="lect-sb-title">Menu</div>
       <div class="lect-links">
-        <a class="lect-link" href="<%= ResolveUrl("~/Lecturer/Dashboard.aspx") %>">Dashboard</a>
+        <a class="lect-link" href="<%= ResolveUrl("~/Lecturer/LecturerDashboard.aspx") %>">Dashboard</a>
         <a class="lect-link" href="<%= ResolveUrl("~/Lecturer/LecturerCourses.aspx") %>">Courses</a>
-        <a class="lect-link" href="<%= ResolveUrl("~/Lecturer/LecturerQuestions.aspx") %>">Questions</a>
+        <a class="lect-link" href="<%= ResolveUrl("~/Lecturer/LecturerQuestionViewer.aspx") %>">Questions</a>
         <a class="lect-link" href="<%= ResolveUrl("~/Lecturer/LecturerAssessments.aspx") %>">Assessments</a>
       </div>
     </nav>
