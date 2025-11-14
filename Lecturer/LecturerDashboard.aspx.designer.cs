@@ -11,106 +11,124 @@ namespace WAPP_Assignment.Lecturer
 {
 
 
-    public partial class LecturerExamBuilder
+    public partial class LecturerDashboard
     {
 
         /// <summary>
-        /// txtSearch control.
+        /// litCoursesCount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSearch;
+        protected global::System.Web.UI.WebControls.Literal litCoursesCount;
 
         /// <summary>
-        /// ddlQuiz control.
+        /// litAssessmentsCount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlQuiz;
+        protected global::System.Web.UI.WebControls.Literal litAssessmentsCount;
 
         /// <summary>
-        /// btnCartToggle control.
+        /// litExercisesCount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnCartToggle;
+        protected global::System.Web.UI.WebControls.Literal litExercisesCount;
 
         /// <summary>
-        /// pnlCart control.
+        /// litQuestionsCount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlCart;
+        protected global::System.Web.UI.WebControls.Literal litQuestionsCount;
 
         /// <summary>
-        /// rptCart control.
+        /// litStudentsCount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptCart;
+        protected global::System.Web.UI.WebControls.Literal litStudentsCount;
 
         /// <summary>
-        /// txtExamTitle control.
+        /// litEnrollmentsCount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtExamTitle;
+        protected global::System.Web.UI.WebControls.Literal litEnrollmentsCount;
 
         /// <summary>
-        /// txtDuration control.
+        /// litAvgProgress control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDuration;
+        protected global::System.Web.UI.WebControls.Literal litAvgProgress;
 
         /// <summary>
-        /// txtTotal control.
+        /// litTopCourseTitle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtTotal;
+        protected global::System.Web.UI.WebControls.Literal litTopCourseTitle;
 
         /// <summary>
-        /// lblError control.
+        /// litTopCourseEnrollments control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblError;
+        protected global::System.Web.UI.WebControls.Literal litTopCourseEnrollments;
 
         /// <summary>
-        /// btnSaveExam control.
+        /// lblCoursesEmpty control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSaveExam;
+        protected global::System.Web.UI.WebControls.Label lblCoursesEmpty;
 
         /// <summary>
-        /// rptTopics control.
+        /// rptRecentCourses control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptTopics;
+        protected global::System.Web.UI.WebControls.Repeater rptRecentCourses;
+
+        /// <summary>
+        /// lblAssessmentsEmpty control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblAssessmentsEmpty;
+
+        /// <summary>
+        /// rptRecentAssessments control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater rptRecentAssessments;
     }
 }

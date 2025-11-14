@@ -24,15 +24,6 @@ namespace WAPP_Assignment.Lecturer
         protected global::System.Web.UI.WebControls.Label lblMsg;
 
         /// <summary>
-        /// txtQ control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtQ;
-
-        /// <summary>
         /// fuImg control.
         /// </summary>
         /// <remarks>
@@ -40,6 +31,15 @@ namespace WAPP_Assignment.Lecturer
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.FileUpload fuImg;
+
+        /// <summary>
+        /// txtQ control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtQ;
 
         /// <summary>
         /// txtO1 control.
@@ -78,13 +78,13 @@ namespace WAPP_Assignment.Lecturer
         protected global::System.Web.UI.WebControls.TextBox txtO4;
 
         /// <summary>
-        /// ddlAns control.
+        /// hfCorrectAnswer control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlAns;
+        protected global::System.Web.UI.WebControls.HiddenField hfCorrectAnswer;
 
         /// <summary>
         /// btnSave control.

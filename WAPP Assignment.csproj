@@ -161,12 +161,16 @@
     <Content Include="Base\Landing.aspx" />
     <Content Include="Lecturer\LecturerAssessmentDetails.aspx" />
     <Content Include="Lecturer\LecturerAssessments.aspx" />
+    <Content Include="Lecturer\LecturerCourseBuilder.aspx" />
     <Content Include="Lecturer\LecturerCourseDetails.aspx" />
+    <Content Include="Lecturer\LecturerCourseEditor.aspx" />
     <Content Include="Lecturer\LecturerCourses.aspx" />
+    <Content Include="Lecturer\LecturerDashboard.aspx" />
     <Content Include="Lecturer\LecturerExamBuilder.aspx" />
     <Content Include="Lecturer\LecturerQuestionAdd.aspx" />
     <Content Include="Lecturer\LecturerQuestionViewer.aspx" />
     <Content Include="Media\pages.png" />
+    <Content Include="Media\pages-default-banner.jpg" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -309,6 +313,13 @@
     <Compile Include="Lecturer\LecturerAssessments.aspx.designer.cs">
       <DependentUpon>LecturerAssessments.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Lecturer\LecturerCourseBuilder.aspx.cs">
+      <DependentUpon>LecturerCourseBuilder.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Lecturer\LecturerCourseBuilder.aspx.designer.cs">
+      <DependentUpon>LecturerCourseBuilder.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Lecturer\LecturerCourseDetails.aspx.cs">
       <DependentUpon>LecturerCourseDetails.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -316,12 +327,26 @@
     <Compile Include="Lecturer\LecturerCourseDetails.aspx.designer.cs">
       <DependentUpon>LecturerCourseDetails.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Lecturer\LecturerCourseEditor.aspx.cs">
+      <DependentUpon>LecturerCourseEditor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Lecturer\LecturerCourseEditor.aspx.designer.cs">
+      <DependentUpon>LecturerCourseEditor.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Lecturer\LecturerCourses.aspx.cs">
       <DependentUpon>LecturerCourses.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Lecturer\LecturerCourses.aspx.designer.cs">
       <DependentUpon>LecturerCourses.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Lecturer\LecturerDashboard.aspx.cs">
+      <DependentUpon>LecturerDashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Lecturer\LecturerDashboard.aspx.designer.cs">
+      <DependentUpon>LecturerDashboard.aspx</DependentUpon>
     </Compile>
     <Compile Include="Lecturer\LecturerExamBuilder.aspx.cs">
       <DependentUpon>LecturerExamBuilder.aspx</DependentUpon>

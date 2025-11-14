@@ -2,131 +2,144 @@
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Web.UI.WebControls;
 
 namespace WAPP_Assignment.Lecturer
 {
     public partial class LecturerAssessments : System.Web.UI.Page
     {
-        private string ConnStr => ConfigurationManager.ConnectionStrings["DatabaseConnection"].ConnectionString;
+        private string ConnStr =>
+            ConfigurationManager.ConnectionStrings["DatabaseConnection"].ConnectionString;
+
+        private int CurrentLecturerId
+        {
+            get
+            {
+                if (Session["UserId"] != null &&
+                    int.TryParse(Session["UserId"].ToString(), out int uid))
+                {
+                    return uid;
+                }
+                // fallback to seeded educator if not logged in
+                return 2;
+            }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
-                BindAssessments();
-        }
-
-        private int GetCurrentEducatorId()
-        {
-            // Use your actual auth/session value if available.
-            if (Session["UserId"] is int uid) return uid;
-            return 2; // fallback to geo_teacher from seed data
-        }
-
-        private bool QuizHasCreatedByColumn()
-        {
-            using (var con = new SqlConnection(ConnStr))
-            using (var cmd = new SqlCommand(@"
-SELECT COUNT(*) FROM sys.columns
-WHERE object_id = OBJECT_ID('dbo.Quiz') AND name = 'CreatedBy';", con))
             {
-                con.Open();
-                var count = (int)cmd.ExecuteScalar();
-                return count > 0;
+                BindAssessments();
             }
+        }
+
+        protected void TxtSearch_TextChanged(object sender, EventArgs e)
+        {
+            BindAssessments();
         }
 
         private void BindAssessments()
         {
             lblInfo.Visible = false;
-            bool hasCreatedBy = QuizHasCreatedByColumn();
-            int educatorId = GetCurrentEducatorId();
 
-            // Base query: only assessments
+            string search = txtSearch.Text.Trim();
+            bool hasCreatedBy = QuizHasCreatedBy();
+
             string sql = @"
-SELECT q.QuizId, q.QuizTitle, q.QuizType,
+SELECT q.QuizId,
+       q.QuizTitle,
        (SELECT COUNT(*) FROM dbo.QuestionBank qb WHERE qb.QuizId = q.QuizId) AS QuestionCount
 FROM dbo.Quiz q
 WHERE q.QuizType = 'assessment'";
 
-            // Always scope to current educator if CreatedBy exists
             if (hasCreatedBy)
+            {
                 sql += " AND q.CreatedBy = @uid";
+            }
 
-            // Optional title search
-            if (!string.IsNullOrWhiteSpace(txtSearch.Text))
+            if (!string.IsNullOrWhiteSpace(search))
+            {
                 sql += " AND q.QuizTitle LIKE @search";
+            }
 
-            sql += " ORDER BY q.QuizTitle ASC";
+            sql += " ORDER BY q.QuizTitle;";
 
             using (var con = new SqlConnection(ConnStr))
             using (var cmd = new SqlCommand(sql, con))
             using (var da = new SqlDataAdapter(cmd))
             {
                 if (hasCreatedBy)
-                    cmd.Parameters.AddWithValue("@uid", educatorId);
-
-                if (!string.IsNullOrWhiteSpace(txtSearch.Text))
-                    cmd.Parameters.AddWithValue("@search", "%" + txtSearch.Text.Trim() + "%");
+                    cmd.Parameters.AddWithValue("@uid", CurrentLecturerId);
+                if (!string.IsNullOrWhiteSpace(search))
+                    cmd.Parameters.AddWithValue("@search", "%" + search + "%");
 
                 var dt = new DataTable();
                 da.Fill(dt);
-                rptAssessments.DataSource = dt;
-                rptAssessments.DataBind();
 
                 if (dt.Rows.Count == 0)
                 {
-                    lblInfo.Text = hasCreatedBy
-                        ? "No assessments found for your account."
-                        : "No assessments found. (Tip: run the CreatedBy migration to scope by educator.)";
+                    lblInfo.Text = "No assessments found.";
                     lblInfo.Visible = true;
                 }
+
+                rptAssessments.DataSource = dt;
+                rptAssessments.DataBind();
             }
         }
 
-        protected void TxtSearch_TextChanged(object sender, EventArgs e) => BindAssessments();
-
-        protected void RptAssessments_ItemCommand(object source, System.Web.UI.WebControls.RepeaterCommandEventArgs e)
+        private bool QuizHasCreatedBy()
         {
-            if (e.CommandName == "delete")
+            using (var con = new SqlConnection(ConnStr))
+            using (var cmd = new SqlCommand(@"
+SELECT CASE WHEN COL_LENGTH('dbo.Quiz','CreatedBy') IS NULL THEN 0 ELSE 1 END;", con))
             {
-                if (!int.TryParse((string)e.CommandArgument, out int quizId))
-                    return;
+                con.Open();
+                int v = (int)cmd.ExecuteScalar();
+                return v == 1;
+            }
+        }
 
-                using (var con = new SqlConnection(ConnStr))
+        protected void RptAssessments_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            if (e.CommandName != "delete")
+                return;
+
+            if (!int.TryParse(e.CommandArgument as string, out int quizId) || quizId <= 0)
+                return;
+
+            using (var con = new SqlConnection(ConnStr))
+            {
+                con.Open();
+                using (var tx = con.BeginTransaction())
+                using (var cmd = new SqlCommand())
                 {
-                    con.Open();
-                    using (var tx = con.BeginTransaction())
+                    cmd.Connection = con;
+                    cmd.Transaction = tx;
+
+                    try
                     {
-                        try
-                        {
-                            // Remove links first
-                            using (var cmd = new SqlCommand(
-                                "DELETE FROM dbo.QuestionBank WHERE QuizId = @id;", con, tx))
-                            {
-                                cmd.Parameters.AddWithValue("@id", quizId);
-                                cmd.ExecuteNonQuery();
-                            }
+                        // remove links from QuestionBank first
+                        cmd.CommandText = "DELETE FROM dbo.QuestionBank WHERE QuizId = @qid;";
+                        cmd.Parameters.Clear();
+                        cmd.Parameters.AddWithValue("@qid", quizId);
+                        cmd.ExecuteNonQuery();
 
-                            // Delete quiz
-                            using (var cmd = new SqlCommand(
-                                "DELETE FROM dbo.Quiz WHERE QuizId = @id;", con, tx))
-                            {
-                                cmd.Parameters.AddWithValue("@id", quizId);
-                                cmd.ExecuteNonQuery();
-                            }
+                        // then delete the Quiz row
+                        cmd.CommandText = "DELETE FROM dbo.Quiz WHERE QuizId = @qid;";
+                        cmd.ExecuteNonQuery();
 
-                            tx.Commit();
-                        }
-                        catch
-                        {
-                            tx.Rollback();
-                            // Optional: surface error to a label
-                        }
+                        tx.Commit();
+                    }
+                    catch
+                    {
+                        tx.Rollback();
+                        lblInfo.Text = "Failed to delete assessment.";
+                        lblInfo.Visible = true;
                     }
                 }
-
-                BindAssessments();
             }
+
+            BindAssessments();
         }
     }
 }

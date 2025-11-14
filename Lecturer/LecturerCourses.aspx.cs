@@ -7,7 +7,8 @@ namespace WAPP_Assignment.Lecturer
 {
     public partial class LecturerCourses : System.Web.UI.Page
     {
-        private string ConnStr => ConfigurationManager.ConnectionStrings["DatabaseConnection"].ConnectionString;
+        private string ConnStr =>
+            ConfigurationManager.ConnectionStrings["DatabaseConnection"].ConnectionString;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -17,7 +18,7 @@ namespace WAPP_Assignment.Lecturer
 
         private int GetCurrentEducatorId()
         {
-            // Use your real session if you have auth wired.
+            // Use your real session value if auth is wired
             if (Session["UserId"] is int uid) return uid;
             return 2; // fallback to geo_teacher from seed data
         }
@@ -32,6 +33,7 @@ SELECT
     c.CourseTitle,
     c.TotalLessons,
     c.CourseCreatedAt,
+    c.CourseImgUrl,
     (SELECT COUNT(*) FROM dbo.Chapters ch WHERE ch.CourseId = c.CourseId) AS ChapterCount,
     (SELECT COUNT(*) FROM dbo.ChapterContents cc
         JOIN dbo.Chapters ch2 ON ch2.ChapterId = cc.ChapterId
@@ -55,6 +57,7 @@ WHERE c.LecturerId = @uid";
 
                 var dt = new DataTable();
                 da.Fill(dt);
+
                 rptCourses.DataSource = dt;
                 rptCourses.DataBind();
 
@@ -66,7 +69,30 @@ WHERE c.LecturerId = @uid";
             }
         }
 
-        protected void TxtSearch_TextChanged(object sender, EventArgs e) => BindCourses();
+        // This is called from the <%# ... %> binding in the .aspx
+        protected string GetBannerUrl(object courseImgUrl)
+        {
+            string img = null;
+
+            if (courseImgUrl != null && courseImgUrl != DBNull.Value)
+            {
+                img = courseImgUrl as string ?? courseImgUrl.ToString();
+            }
+
+            if (string.IsNullOrWhiteSpace(img))
+            {
+                // Use default banner when no course-specific image is set
+                return ResolveUrl("~/Media/pages-default-banner.jpg");
+            }
+
+            // Course has its own banner path saved in DB
+            return ResolveUrl(img);
+        }
+
+        protected void TxtSearch_TextChanged(object sender, EventArgs e)
+        {
+            BindCourses();
+        }
 
         protected void RptCourses_ItemCommand(object source, System.Web.UI.WebControls.RepeaterCommandEventArgs e)
         {
@@ -83,6 +109,7 @@ WHERE c.LecturerId = @uid";
                         try
                         {
                             // 1) Remove dependent rows safely (no FK cascades defined)
+
                             // Remove ChapterContents for chapters under this course
                             using (var cmd = new SqlCommand(@"
 DELETE cc
@@ -131,7 +158,7 @@ DELETE FROM dbo.Courses WHERE CourseId = @cid;", con, tx))
                         catch
                         {
                             tx.Rollback();
-                            // Optional: surface an error label if you add one
+                            // Optional: surface an error label if needed
                         }
                     }
                 }

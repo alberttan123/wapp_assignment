@@ -8,148 +8,218 @@ namespace WAPP_Assignment.Lecturer
 {
     public partial class LecturerCourseDetails : System.Web.UI.Page
     {
-        private string ConnStr => ConfigurationManager.ConnectionStrings["DatabaseConnection"].ConnectionString;
+        private string ConnStr =>
+            ConfigurationManager.ConnectionStrings["DatabaseConnection"].ConnectionString;
+
+        private int CurrentLecturerId
+        {
+            get
+            {
+                if (Session["UserId"] != null &&
+                    int.TryParse(Session["UserId"].ToString(), out int uid))
+                {
+                    return uid;
+                }
+                return 2; // geo_teacher from seed data
+            }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-                if (!int.TryParse(Request.QueryString["courseId"], out int courseId))
+                if (int.TryParse(Request.QueryString["courseId"], out int courseId) &&
+                    courseId > 0)
                 {
-                    ShowInfo("Invalid course id.");
-                    return;
+                    LoadCourse(courseId);
                 }
-                BindCourse(courseId);
+                else
+                {
+                    ShowInfo("No course selected.");
+                }
             }
         }
 
-        private int GetCurrentEducatorId()
+        private void LoadCourse(int courseId)
         {
-            if (Session["UserId"] is int uid) return uid;
-            return 2; // fallback to geo_teacher from seed data
-        }
-
-        private void ShowInfo(string msg)
-        {
-            lblInfo.Text = msg;
-            lblInfo.Visible = true;
-        }
-
-        private void BindCourse(int courseId)
-        {
-            // 1) Load and verify ownership
             using (var con = new SqlConnection(ConnStr))
             using (var cmd = new SqlCommand(@"
-SELECT CourseId, CourseTitle, CourseDescription, TotalLessons, CourseCreatedAt
+SELECT CourseId,
+       CourseTitle,
+       CourseDescription,
+       TotalLessons,
+       CourseCreatedAt
 FROM dbo.Courses
-WHERE CourseId = @id AND LecturerId = @uid;", con))
+WHERE CourseId = @id AND LecturerId = @lect;", con))
             {
                 cmd.Parameters.AddWithValue("@id", courseId);
-                cmd.Parameters.AddWithValue("@uid", GetCurrentEducatorId());
+                cmd.Parameters.AddWithValue("@lect", CurrentLecturerId);
+
                 con.Open();
                 using (var r = cmd.ExecuteReader())
                 {
                     if (!r.Read())
                     {
-                        ShowInfo("Course not found or you do not have permission to view it.");
+                        ShowInfo("Course not found or does not belong to you.");
                         return;
                     }
 
-                    litCourseTitle.Text = r["CourseTitle"].ToString();
-                    litCourseDesc.Text = (r["CourseDescription"] == DBNull.Value) ? "(No description provided.)" : r["CourseDescription"].ToString();
+                    string title = r["CourseTitle"].ToString();
+                    litCourseTitle.Text = title;
 
-                    var createdAt = (DateTime)r["CourseCreatedAt"];
-                    var totalLessons = Convert.ToInt32(r["TotalLessons"]);
-                    litCourseMeta.Text = $"Created on {createdAt:yyyy-MM-dd} • Total Lessons: {totalLessons}";
+                    DateTime created = (DateTime)r["CourseCreatedAt"];
+                    int totalLessons = r["TotalLessons"] == DBNull.Value
+                        ? 0
+                        : Convert.ToInt32(r["TotalLessons"]);
+
+                    litCourseMeta.Text = string.Format(
+                        "Created on {0:dd MMM yyyy} • Total chapters: {1}",
+                        created,
+                        totalLessons);
+
+                    litCourseDesc.Text = r["CourseDescription"] == DBNull.Value
+                        ? "No description set yet."
+                        : Server.HtmlEncode(r["CourseDescription"].ToString()).Replace("\n", "<br />");
+
+                    // link for Edit this Course
+                    lnkEditCourse.NavigateUrl =
+                        "~/Lecturer/LecturerCourseEditor.aspx?courseId=" + courseId;
                 }
             }
 
-            // 2) Load chapters
-            DataTable chapters;
+            BindChapters(courseId);
+        }
+
+        private void BindChapters(int courseId)
+        {
             using (var con = new SqlConnection(ConnStr))
-            using (var cmd = new SqlCommand(@"
-SELECT ChapterId, ChapterOrder, ChapterTitle
+            using (var da = new SqlDataAdapter(@"
+SELECT ChapterId,
+       ChapterOrder,
+       ChapterTitle
 FROM dbo.Chapters
-WHERE CourseId = @id
-ORDER BY ChapterOrder ASC, ChapterId ASC;", con))
-            using (var da = new SqlDataAdapter(cmd))
+WHERE CourseId = @cid
+ORDER BY ChapterOrder ASC;", con))
             {
-                cmd.Parameters.AddWithValue("@id", courseId);
-                chapters = new DataTable();
-                da.Fill(chapters);
-            }
+                da.SelectCommand.Parameters.AddWithValue("@cid", courseId);
+                var dt = new DataTable();
+                da.Fill(dt);
 
-            if (chapters.Rows.Count == 0)
-            {
-                ShowInfo("This course has no chapters yet.");
-            }
+                rptChapters.DataSource = dt;
+                rptChapters.DataBind();
 
-            rptChapters.DataSource = chapters;
-            rptChapters.DataBind();
+                if (dt.Rows.Count == 0)
+                {
+                    ShowInfo("This course has no chapters yet.");
+                }
+            }
+        }
+
+        private void ShowInfo(string message)
+        {
+            lblInfo.Text = message;
+            lblInfo.Visible = true;
         }
 
         protected void RptChapters_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
-            if (e.Item.ItemType != ListItemType.Item && e.Item.ItemType != ListItemType.AlternatingItem) return;
+            if (e.Item.ItemType != ListItemType.Item &&
+                e.Item.ItemType != ListItemType.AlternatingItem)
+                return;
 
-            var drv = (DataRowView)e.Item.DataItem;
-            int chapterId = (int)drv["ChapterId"];
+            var drv = e.Item.DataItem as DataRowView;
+            if (drv == null) return;
 
-            // Load chapter contents for this chapter
-            DataTable contents;
+            int chapterId = Convert.ToInt32(drv["ChapterId"]);
+
+            var rptContents = e.Item.FindControl("rptContents") as Repeater;
+            if (rptContents == null) return;
+
             using (var con = new SqlConnection(ConnStr))
-            using (var cmd = new SqlCommand(@"
-SELECT ContentId, ContentType, ContentTitle, LinkId
+            using (var da = new SqlDataAdapter(@"
+SELECT ContentId,
+       ContentType,
+       ContentTitle,
+       LinkId
 FROM dbo.ChapterContents
-WHERE ChapterId = @ch
+WHERE ChapterId = @cid
 ORDER BY ContentId ASC;", con))
-            using (var da = new SqlDataAdapter(cmd))
             {
-                cmd.Parameters.AddWithValue("@ch", chapterId);
-                contents = new DataTable();
-                da.Fill(contents);
+                da.SelectCommand.Parameters.AddWithValue("@cid", chapterId);
+                var dt = new DataTable();
+                da.Fill(dt);
+
+                rptContents.DataSource = dt;
+                rptContents.DataBind();
             }
-
-            var rpt = (Repeater)e.Item.FindControl("rptContents");
-            rpt.DataSource = contents;
-            rpt.DataBind();
-
-            // For each content row, if it is a Quiz, show question count on the right
-            rpt.ItemDataBound += (s, args) =>
-            {
-                if (args.Item.ItemType != ListItemType.Item && args.Item.ItemType != ListItemType.AlternatingItem) return;
-
-                var row = (DataRowView)args.Item.DataItem;
-                var litRight = (Literal)args.Item.FindControl("litRightMeta");
-                string ctype = row["ContentType"].ToString();
-
-                if (string.Equals(ctype, "Quiz", StringComparison.OrdinalIgnoreCase))
-                {
-                    int quizId = Convert.ToInt32(row["LinkId"]);
-                    int qCount = GetQuizQuestionCount(quizId);
-                    litRight.Text = $"<span class='muted'>{qCount} question(s)</span>";
-                }
-                else if (string.Equals(ctype, "File", StringComparison.OrdinalIgnoreCase))
-                {
-                    litRight.Text = "<span class='muted'>File</span>";
-                }
-                else
-                {
-                    litRight.Text = "<span class='muted'>Page</span>";
-                }
-            };
         }
 
-        private int GetQuizQuestionCount(int quizId)
+        protected void RptContents_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
+            if (e.Item.ItemType != ListItemType.Item &&
+                e.Item.ItemType != ListItemType.AlternatingItem)
+                return;
+
+            var drv = e.Item.DataItem as DataRowView;
+            if (drv == null) return;
+
+            string type = (drv["ContentType"] ?? "").ToString();
+            int linkId = Convert.ToInt32(drv["LinkId"]);
+
+            var litRightMeta = e.Item.FindControl("litRightMeta") as Literal;
+            if (litRightMeta == null) return;
+
+            // Right-hand summary based on content type
+            switch (type)
+            {
+                case "Quiz":
+                    litRightMeta.Text = GetQuizMeta(linkId);
+                    break;
+                case "File":
+                    litRightMeta.Text = "File ID #" + linkId;
+                    break;
+                case "Page":
+                    litRightMeta.Text = "Static page";
+                    break;
+                default:
+                    litRightMeta.Text = "";
+                    break;
+            }
+        }
+
+        private string GetQuizMeta(int quizId)
+        {
+            int count = 0;
+            string title = "";
+
             using (var con = new SqlConnection(ConnStr))
             using (var cmd = new SqlCommand(@"
-SELECT COUNT(*) FROM dbo.QuestionBank WHERE QuizId = @qz;", con))
+SELECT q.QuizTitle,
+       (SELECT COUNT(*) FROM dbo.QuestionBank qb WHERE qb.QuizId = q.QuizId) AS QCount
+FROM dbo.Quiz q
+WHERE q.QuizId = @id;", con))
             {
-                cmd.Parameters.AddWithValue("@qz", quizId);
+                cmd.Parameters.AddWithValue("@id", quizId);
                 con.Open();
-                return (int)cmd.ExecuteScalar();
+                using (var r = cmd.ExecuteReader())
+                {
+                    if (r.Read())
+                    {
+                        title = r["QuizTitle"].ToString();
+                        count = r["QCount"] == DBNull.Value
+                            ? 0
+                            : Convert.ToInt32(r["QCount"]);
+                    }
+                }
             }
+
+            if (string.IsNullOrEmpty(title))
+                return "Quiz #" + quizId;
+
+            return string.Format("{0} • {1} question{2}",
+                title,
+                count,
+                count == 1 ? "" : "s");
         }
     }
 }
