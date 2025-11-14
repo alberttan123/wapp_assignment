@@ -96,6 +96,7 @@ namespace WAPP_Assignment.Forum
             {
                 Label message = new Label();
                 message.Text = "No comments made on this post. Be the first one!";
+                message.CssClass = "no-comments-message";
 
                 commentSection.CssClass = "commentSection justify-center";
                 commentSection.Controls.Add(message);
@@ -107,19 +108,31 @@ namespace WAPP_Assignment.Forum
             Panel commentCard = new Panel();
             commentCard.CssClass = "comment";
 
+            Panel commentHeader = new Panel();
+            commentHeader.CssClass = "comment-header";
+
             Label usernameLabel = new Label();
             usernameLabel.Text = username;
+            usernameLabel.CssClass = "commentUsername";
+
             Label createdByUserTypeLabel = new Label();
             createdByUserTypeLabel.Text = createdByUserType;
-            Label commentLabel = new Label();
-            commentLabel.Text = comment;
+            createdByUserTypeLabel.CssClass = "commentUserType";
+
             Label createdAtLabel = new Label();
             createdAtLabel.Text = createdAt;
+            createdAtLabel.CssClass = "commentCreatedAt";
 
-            commentCard.Controls.Add(usernameLabel);
-            commentCard.Controls.Add(createdByUserTypeLabel);
+            commentHeader.Controls.Add(usernameLabel);
+            commentHeader.Controls.Add(createdByUserTypeLabel);
+            commentHeader.Controls.Add(createdAtLabel);
+
+            Label commentLabel = new Label();
+            commentLabel.Text = comment;
+            commentLabel.CssClass = "commentMessage";
+
+            commentCard.Controls.Add(commentHeader);
             commentCard.Controls.Add(commentLabel);
-            commentCard.Controls.Add(createdAtLabel);
 
             var (isAuthenticated, userId, userType) = AuthCookieHelper.ReadAuthCookie();
 
@@ -128,12 +141,17 @@ namespace WAPP_Assignment.Forum
                 if (createdByUserId == int.Parse(userId))
                 {
                     // add delete button if the comment was made by the currently signed in user
+                    Panel commentActions = new Panel();
+                    commentActions.CssClass = "comment-actions";
+
                     Button deleteButton = new Button();
                     deleteButton.CommandArgument = commentId;
                     deleteButton.Command += delete;
                     deleteButton.Text = "Delete";
-                    deleteButton.CssClass = "delete-button";
-                    commentCard.Controls.Add(deleteButton);
+                    deleteButton.CssClass = "delete-button-comment";
+                    commentActions.Controls.Add(deleteButton);
+
+                    commentCard.Controls.Add(commentActions);
                 }
             }
 
