@@ -1,0 +1,58 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true"
+    CodeBehind="Admin.Master.cs"
+    Inherits="WAPP_Assignment.Admin.AdminMaster"
+    MasterPageFile="~/Site.Master" %>
+
+<%-- Put admin CSS into Site.Master's <head> via its HeadContent placeholder --%>
+<asp:Content ID="AdminHead" ContentPlaceHolderID="HeadContent" runat="server">
+    <%-- Reuse lecturer design system + landing typography --%>
+    <link rel="stylesheet" href="<%= ResolveUrl("~/Content/LecturerPages.css") %>" />
+    <link rel="stylesheet" href="<%= ResolveUrl("~/Content/waplanding.css") %>" />
+
+    <%-- Per-page <head> items (optional) --%>
+    <asp:ContentPlaceHolder ID="HeadAdmin" runat="server" />
+</asp:Content>
+
+<%-- Put the admin shell into Site.Master's MainContent --%>
+<asp:Content ID="AdminBody" ContentPlaceHolderID="MainContent" runat="server">
+    <div class="lect-wrap">
+        <%-- Sidebar: reuse same layout tokens and structure as lecturer shell --%>
+        <nav class="lect-sb">
+            <div class="lect-sb__inner">
+                <div class="lect-sb__title">Admin</div>
+
+                <div class="lect-links">
+                    <a class="lect-link"
+                       href="<%= ResolveUrl("~/Admin/AdminDashboard.aspx") %>">
+                        Dashboard
+                    </a>
+
+                    <a class="lect-link"
+                       href="<%= ResolveUrl("~/Admin/AdminUserManage.aspx") %>">
+                        Manage Users
+                    </a>
+
+                    <a class="lect-link"
+                       href="<%= ResolveUrl("~/Admin/AdminCourses.aspx") %>">
+                        Courses
+                    </a>
+
+                    <a class="lect-link"
+                       href="<%= ResolveUrl("~/Admin/AdminForum.aspx") %>">
+                        Forum & Posts
+                    </a>
+
+                    <a class="lect-link"
+                       href="<%= ResolveUrl("~/Admin/AdminSettings.aspx") %>">
+                        Settings
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <%-- Scrollable content to the right of the fixed sidebar --%>
+        <main class="lect-main">
+            <asp:ContentPlaceHolder ID="AdminMain" runat="server" />
+        </main>
+    </div>
+</asp:Content>

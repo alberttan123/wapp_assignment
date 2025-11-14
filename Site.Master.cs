@@ -26,7 +26,7 @@ namespace WAPP_Assignment
         private void CheckAuthenticationStatus()
         {
             var (isAuthenticated, userId, userType) = AuthCookieHelper.ReadAuthCookie();
-            
+
             if (isAuthenticated && !string.IsNullOrEmpty(userId))
             {
                 // User is authenticated - show profile dropdown
@@ -45,17 +45,17 @@ namespace WAPP_Assignment
         {
             // Remove authentication cookie
             AuthCookieHelper.RemoveAuthCookie();
-            
+
             // Clear session
             Session.Clear();
             Session.Abandon();
-            
+
             // Redirect to home page
             Response.Redirect("~/Base/Landing.aspx", true);
         }
 
-        protected void showLoginSignupModal(object sender, EventArgs e) 
-        { 
+        protected void showLoginSignupModal(object sender, EventArgs e)
+        {
             loginModal.Visible = true;
         }
 
@@ -65,7 +65,7 @@ namespace WAPP_Assignment
             registerModal.Visible = false;
         }
 
-        protected void swapToRegister(object sender, EventArgs e) 
+        protected void swapToRegister(object sender, EventArgs e)
         {
             registerModal.Visible = true;
             register_field_1.Visible = true;
@@ -85,7 +85,7 @@ namespace WAPP_Assignment
             register_field_2.Visible = false;
         }
 
-        protected void showNextRegisterPanel(object sender, EventArgs e) 
+        protected void showNextRegisterPanel(object sender, EventArgs e)
         {
             register_field_2.Visible = true;
             register_field_1.Visible = false;
@@ -128,7 +128,12 @@ namespace WAPP_Assignment
                         // Decide where to send them based on role
                         string userType = rd.GetString(rd.GetOrdinal("UserType"));
 
-                        if (string.Equals(userType, "Educator", StringComparison.OrdinalIgnoreCase))
+                        if (string.Equals(userType, "Admin", StringComparison.OrdinalIgnoreCase))
+                        {
+                            // Admin area home (to be built under Admin/)
+                            Response.Redirect("~/Admin/AdminUserManage.aspx", true);
+                        }
+                        else if (string.Equals(userType, "Educator", StringComparison.OrdinalIgnoreCase))
                         {
                             // Lecturer area home
                             Response.Redirect("~/Lecturer/LecturerDashboard.aspx", true);
@@ -140,7 +145,7 @@ namespace WAPP_Assignment
                         }
                         else
                         {
-                            // Fallback for Admin/unknown roles
+                            // Fallback for unknown roles
                             Response.Redirect("~/Base/Landing.aspx", true);
                         }
 
@@ -148,11 +153,12 @@ namespace WAPP_Assignment
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ShowLoginError(ex.ToString()); // show error
             }
         }
+
         protected void Register(object sender, EventArgs e)
         {
             string username = REGISTERusername.Text.Trim();
@@ -268,7 +274,6 @@ namespace WAPP_Assignment
             {
                 using (var conn = DataAccess.GetOpenConnection())
                 {
-                    // Try Students
                     using (var cmd = new SqlCommand(@"
                         INSERT INTO dbo.Users (Username, Email, UserType, PasswordHash) VALUES
                         (@u, @e, @t, @p)", conn))
@@ -309,7 +314,7 @@ namespace WAPP_Assignment
             return false;
         }
 
-        private void SignIn(SqlDataReader rd) 
+        private void SignIn(SqlDataReader rd)
         {
             var UserId = rd.GetInt32(rd.GetOrdinal("UserId")).ToString();
             var userType = rd.GetString(rd.GetOrdinal("UserType"));
@@ -317,8 +322,8 @@ namespace WAPP_Assignment
             Response.Cookies.Add(cookie);
         }
 
-        private void ShowLoginError(string errorMessage) 
-        { 
+        private void ShowLoginError(string errorMessage)
+        {
             login_error_message.Text = errorMessage;
             login_error_message.Visible = true;
         }
@@ -330,12 +335,12 @@ namespace WAPP_Assignment
         }
 
         // done this way so that there is no need to Install-Package BCrypt
-        public static string Hash(string input) 
+        public static string Hash(string input)
         {
             if (input == null)
                 return null;
 
-            using (SHA256 sha = SHA256.Create()) 
+            using (SHA256 sha = SHA256.Create())
             {
                 byte[] bytes = Encoding.UTF8.GetBytes(input);
                 byte[] hash = sha.ComputeHash(bytes);
