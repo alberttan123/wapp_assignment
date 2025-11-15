@@ -36,7 +36,6 @@ namespace WAPP_Assignment.Student
             {
                 StudentName = LoadStudentName();
                 BindEnrollmentData();
-                BindFlashcardsData(); // Still needed for Quick Actions badge
             }
         }
         
@@ -88,30 +87,29 @@ namespace WAPP_Assignment.Student
                     rptCoursesDropdown.DataBind();
 
                     pnlCoursesDropdownEmpty.Visible = table.Rows.Count == 0;
-
-                    int total = table.Rows.Count;
-                    lblQuickEnrolled.Text = total.ToString();
                 }
             }
         }
 
-        private void BindFlashcardsData()
-        {
-            int userId = ResolveUserId();
+        //private void BindFlashcardsData()
+        //{
+        //    int userId = ResolveUserId();
 
-            using (var conn = DataAccess.GetOpenConnection())
-            using (var cmd = new SqlCommand(@"
-                SELECT COUNT(*) as TotalFlashcards
-                FROM dbo.Bookmarks
-                WHERE UserId = @UserId;", conn))
-            {
-                cmd.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+        //    using (var conn = DataAccess.GetOpenConnection())
+        //    using (var cmd = new SqlCommand(@"
+        //        SELECT COUNT(*) as TotalFlashcards
+        //        FROM dbo.Bookmarks
+        //        WHERE UserId = @UserId;", conn))
+        //    {
+        //        cmd.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
 
-                object result = cmd.ExecuteScalar();
-                int total = result != null && result != DBNull.Value ? Convert.ToInt32(result) : 0;
-                lblQuickFlashcards.Text = total.ToString();
-            }
-        }
+        //        object result = cmd.ExecuteScalar();
+        //        int total = result != null && result != DBNull.Value ? Convert.ToInt32(result) : 0;
+        //        lblQuickFlashcards.Text = total.ToString();
+        //    }
+        //}
+        // AHHHHHHHHHHHHHHHHHHHHH - this section contains the code for bookmarking/favoriting a question and turning it into a flashcard
+        // only implement when have time
 
         private string LoadStudentName()
         {

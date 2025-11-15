@@ -7,102 +7,255 @@
 <asp:Content ID="HeadBlock" ContentPlaceHolderID="HeadLecturer" runat="server">
   <link rel="stylesheet" href="<%= ResolveUrl("~/Content/LecturerPages.css") %>" />
   <style>
-    .qadd-shell{
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+    
+    .qadd-shell {
       max-width: 960px;
       margin: 0 auto;
     }
 
-    .qadd-top{
+    .qadd-top {
       display: flex;
       justify-content: flex-end;
-      margin-bottom: 0.75rem;
+      margin-bottom: 1.5rem;
     }
 
-    .qadd-stage{
-      background: var(--panel-2);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 1.5rem 3.5rem;
-    }
-
-    .qadd-inner{
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 1rem 1.5rem;
-      text-align: center;
-    }
-
-    .qadd-img{
-      margin-bottom: 0.5rem;
-    }
-
-    .qadd-img input[type="file"]{
-      margin: 0.25rem auto;
-    }
-
-    .qadd-qbox{
-      margin-top: 0.5rem;
-    }
-
-    .qadd-qbox .input{
-      width: 100%;
-    }
-
-    .qadd-options{
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 1rem;
-      margin-top: 1.25rem;
-    }
-
-    .opt-card{
+    .qadd-top .btn {
+      padding: 0.9rem 1.5rem;
+      font-weight: 900;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.65rem;
       cursor: pointer;
-      background: var(--panel-2);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 0.5rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.35rem;
-      transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-radius: 0;
+      border: 2px solid #23304a;
+      background: rgba(15, 20, 34, 0.8);
+      color: #e8eefc;
+      text-decoration: none;
+      box-shadow: 3px 3px 0 rgba(27, 37, 58, 0.8);
+      display: inline-block;
+      white-space: nowrap;
     }
 
-    .opt-label{
-      font-size: 0.9rem;
-      color: var(--muted);
+    .qadd-top .btn:hover {
+      background: rgba(15, 20, 34, 0.95);
+      border-color: #ffd24a;
+      color: #ffd24a;
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 rgba(27, 37, 58, 0.8);
     }
 
-    .opt-card .input{
+    .qadd-top .btn:active {
+      transform: translate(3px, 3px);
+      box-shadow: 0 0 0 rgba(27, 37, 58, 0.8);
+    }
+
+    .qadd-stage {
+      background: #121a2a;
+      border: 2px solid #23304a;
+      border-radius: 0;
+      padding: 2rem;
+      box-shadow: 0 8px 0 rgba(27, 37, 58, 0.8), 0 12px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .qadd-inner {
+      background: rgba(15, 20, 34, 0.6);
+      border: 2px solid #23304a;
+      border-radius: 0;
+      padding: 1.5rem;
       text-align: center;
+      box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3);
     }
 
-    .opt-radio{
-      font-size: 0.8rem;
-      color: var(--muted);
+    .qadd-img {
+      margin-bottom: 1rem;
     }
 
-    .opt-card.is-correct{
-      border-color: var(--brand);
-      box-shadow: 0 0 0 1px var(--brand);
-      background: rgba(255,210,74,0.08);
+    .qadd-img input[type="file"] {
+      margin: 0.5rem auto;
+      padding: 0.75rem;
+      background: rgba(15, 20, 34, 0.8);
+      border: 2px solid #23304a;
+      border-radius: 0;
+      color: #e8eefc;
+      font-family: Poppins, system-ui, Segoe UI, Arial, sans-serif;
+      font-size: 0.9rem;
+      cursor: pointer;
     }
 
-    .opt-card.is-correct .opt-radio{
-      color: var(--brand);
-      font-weight: 600;
-    }
-
-    .qadd-footer{
-      display: flex;
-      justify-content: flex-end;
+    .qadd-qbox {
       margin-top: 1rem;
     }
 
-    .hint{
-      color: var(--muted);
-      font-size: 0.875rem;
+    .qadd-qbox .input,
+    .qadd-qbox textarea {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      background: rgba(15, 20, 34, 0.8);
+      border: 2px solid #23304a;
+      border-radius: 0;
+      color: #e8eefc;
+      font-family: Poppins, system-ui, Segoe UI, Arial, sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3), 0 2px 0 rgba(27, 37, 58, 0.5);
+      box-sizing: border-box;
+      resize: vertical;
+    }
+
+    .qadd-qbox .input:focus,
+    .qadd-qbox textarea:focus {
+      outline: none;
+      background: rgba(15, 20, 34, 0.95);
+      border-color: #ffd24a;
+      box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3), 0 0 25px rgba(255, 210, 74, 0.25);
+    }
+
+    .qadd-options {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .opt-card {
+      cursor: pointer;
+      background: rgba(15, 20, 34, 0.8);
+      border: 2px solid #23304a;
+      border-radius: 0;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      transition: all 0.2s ease;
+      box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    .opt-card:hover {
+      border-color: #ffd24a;
+      background: rgba(15, 20, 34, 0.95);
+      box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 210, 74, 0.2);
+    }
+
+    .opt-label {
+      font-size: 0.65rem;
+      color: #9fb0d1;
+      font-family: 'Press Start 2P', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .opt-card .input,
+    .opt-card input[type="text"] {
+      text-align: center;
+      width: 100%;
+      padding: 0.75rem 0.5rem;
+      background: rgba(15, 20, 34, 0.6);
+      border: 2px solid #23304a;
+      border-radius: 0;
+      color: #e8eefc;
+      font-family: Poppins, system-ui, Segoe UI, Arial, sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      box-shadow: inset 0 2px 0 rgba(0, 0, 0, 0.3);
+      box-sizing: border-box;
+    }
+
+    .opt-card .input:focus,
+    .opt-card input[type="text"]:focus {
+      outline: none;
+      background: rgba(15, 20, 34, 0.8);
+      border-color: #ffd24a;
+      box-shadow: inset 0 2px 0 rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 210, 74, 0.2);
+    }
+
+    .opt-radio {
+      font-size: 0.6rem;
+      color: #9fb0d1;
+      font-family: 'Press Start 2P', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .opt-card.is-correct {
+      border-color: #ffd24a;
+      background: rgba(255, 210, 74, 0.15);
+      box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3), 0 0 30px rgba(255, 210, 74, 0.4);
+    }
+
+    .opt-card.is-correct .opt-radio {
+      color: #ffd24a;
+      font-weight: 400;
+    }
+
+    .opt-card.is-correct:hover {
+      background: rgba(255, 210, 74, 0.2);
+      box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3), 0 0 40px rgba(255, 210, 74, 0.5);
+    }
+
+    .qadd-footer {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1.5rem;
+    }
+
+    .qadd-footer .btn.primary {
+      padding: 0.9rem 2rem;
+      font-weight: 900;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-radius: 0;
+      border: 2px solid #ffd24a;
+      background: #ffd24a;
+      color: #0b0f1a;
+      text-decoration: none;
+      box-shadow: 4px 4px 0 #b89200;
+      display: inline-block;
+    }
+
+    .qadd-footer .btn.primary:hover {
+      background: #ffdc6a;
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 #b89200;
+    }
+
+    .qadd-footer .btn.primary:active {
+      transform: translate(4px, 4px);
+      box-shadow: 0 0 0 #b89200;
+    }
+
+    .hint {
+      color: #9fb0d1;
+      font-size: 0.65rem;
+      font-family: 'Press Start 2P', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.5rem;
+    }
+
+    @media (max-width: 960px) {
+      .qadd-options {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .qadd-options {
+        grid-template-columns: 1fr;
+      }
+
+      .qadd-stage {
+        padding: 1.5rem;
+      }
     }
   </style>
 </asp:Content>
