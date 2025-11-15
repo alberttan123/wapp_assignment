@@ -7,22 +7,69 @@
 <asp:Content ID="HeadBlock" ContentPlaceHolderID="HeadLecturer" runat="server">
   <link rel="stylesheet" href="<%= ResolveUrl("~/Content/LecturerPages.css") %>" />
   <style>
-    .qv-shell{ max-width:1000px; margin:0 auto; }
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+    
+    .qv-shell{ 
+      max-width:1000px; 
+      margin:0 auto; 
+      padding: 2rem;
+      background: #121a2a;
+    }
+    
     .qv-topbar{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      margin-bottom:.75rem;
+      margin-bottom:2rem;
+      padding-bottom:1.5rem;
+      border-bottom: 2px solid #23304a;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
-    .qv-left-actions{ display:flex; gap:.5rem; align-items:center; }
+    
+    .qv-left-actions{ 
+      display:flex; 
+      gap:.5rem; 
+      align-items:center; 
+    }
+    
+    .qv-left-actions .btn {
+      padding: 0.9rem 2rem;
+      font-weight: 900;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-radius: 0;
+      border: 2px solid #23304a;
+      background: rgba(15, 20, 34, 0.8);
+      color: #e8eefc;
+      text-decoration: none;
+      box-shadow: 3px 3px 0 rgba(27, 37, 58, 0.8);
+      display: inline-block;
+    }
+    
+    .qv-left-actions .btn:hover {
+      background: rgba(15, 20, 34, 0.95);
+      border-color: #ffd24a;
+      color: #ffd24a;
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 rgba(27, 37, 58, 0.8);
+    }
 
     /* --- toggle container --- */
     .qv-toggle{
       display:flex;
       align-items:center;
-      gap:.5rem;
+      gap:.75rem;
       font-size:.9rem;
-      color:var(--muted);
+      color:#9fb0d1;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
     }
     .qv-toggle-label{
       white-space:nowrap;
@@ -51,15 +98,16 @@
       position:relative;
       width:3.5rem;
       height:1.7rem;
-      border-radius:999px;
-      background:var(--panel-2);
-      border:1px solid var(--line);
+      border-radius: 0;
+      background:rgba(15, 20, 34, 0.8);
+      border:2px solid #23304a;
       display:flex;
       align-items:center;
       justify-content:space-between;
       padding:0 0.35rem;
       box-sizing:border-box;
       cursor:pointer;
+      box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3);
     }
     .qv-toggle-thumb{
       position:absolute;
@@ -67,9 +115,10 @@
       left:2px;
       width:1.5rem;
       height:1.3rem;
-      border-radius:999px;
-      background:var(--brand);
+      border-radius: 0;
+      background:#ffd24a;
       transition:transform .18s ease;
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
     }
     .qv-toggle-icon{
       position:relative;
@@ -77,10 +126,10 @@
       font-size:0.8rem;
     }
     .qv-toggle-icon-list{
-      color:var(--text);
+      color:#e8eefc;
     }
     .qv-toggle-icon-card{
-      color:var(--muted);
+      color:#9fb0d1;
     }
 
     /*
@@ -92,168 +141,359 @@
       transform:translateX(1.5rem);
     }
     .qv-toggle-input:has(input:checked) ~ .qv-toggle-track .qv-toggle-icon-list{
-      color:var(--muted);
+      color:#9fb0d1;
     }
     .qv-toggle-input:has(input:checked) ~ .qv-toggle-track .qv-toggle-icon-card{
-      color:var(--text);
+      color:#e8eefc;
     }
 
     /* List mode */
     .qv-list-panel{
-      background:var(--panel-2);
-      border:1px solid var(--line);
-      border-radius:12px;
-      padding:1rem;
+      background:#121a2a;
+      border:2px solid #23304a;
+      border-radius: 0;
+      padding:1.5rem;
+      box-shadow: 0 8px 0 rgba(27, 37, 58, 0.8), 0 12px 24px rgba(0, 0, 0, 0.3);
     }
     .qv-list-row{
       display:flex;
       flex-direction:column;
-      gap:.75rem;
+      gap:1rem;
     }
     .qv-list-card{
       width:100%;
-      background:var(--panel);
-      border:1px solid var(--line);
-      border-radius:10px;
-      padding:.75rem;
+      background:rgba(15, 20, 34, 0.6);
+      border:2px solid #23304a;
+      border-radius: 0;
+      padding:1.25rem;
       display:flex;
       flex-direction:column;
       justify-content:space-between;
       cursor:pointer;
-      transition:border-color .15s ease, box-shadow .15s ease, background .15s ease;
+      transition:all 0.2s ease;
       text-align:left;
+      text-decoration: none;
+      color: inherit;
+      box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3);
     }
     .qv-list-card:hover{
-      border-color:var(--brand);
-      box-shadow:0 0 0 1px var(--brand);
-      background:rgba(255,210,74,.06);
+      border-color:#ffd24a;
+      box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 210, 74, 0.2);
+      background:rgba(15, 20, 34, 0.8);
+      transform: translateX(4px);
     }
     .qv-list-text{
-      font-size:.9rem;
-      color:var(--text);
-      margin-bottom:.5rem;
+      font-size:0.7rem;
+      color:#e8eefc;
+      margin-bottom:.75rem;
       max-height:4.3rem;
       overflow:hidden;
+      font-family: 'Press Start 2P', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      line-height: 1.5;
     }
     .qv-list-meta{
-      font-size:.8rem;
-      color:var(--muted);
+      font-size:0.6rem;
+      color:#9fb0d1;
       display:flex;
       justify-content:space-between;
+      font-family: 'Press Start 2P', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
     }
 
     /* Expanded mode */
     .qv-stage{
       position:relative;
-      background:var(--panel-2);
-      border:1px solid var(--line);
-      border-radius:12px;
-      padding:1.25rem 3.25rem;
-      margin-bottom:.75rem;
+      background:#121a2a;
+      border:2px solid #23304a;
+      border-radius: 0;
+      padding:2rem 4rem;
+      margin-bottom:1.5rem;
+      box-shadow: 0 8px 0 rgba(27, 37, 58, 0.8), 0 12px 24px rgba(0, 0, 0, 0.3);
     }
-    .qv-counter{ color:var(--muted); font-size:.9rem; }
+    .qv-counter{ 
+      color:#9fb0d1; 
+      font-size:0.7rem;
+      font-family: 'Press Start 2P', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
     .qv-inner{
-      background:var(--panel);
-      border:1px solid var(--line);
-      border-radius:10px;
-      padding:1rem 1.5rem;
+      background:rgba(15, 20, 34, 0.6);
+      border:2px solid #23304a;
+      border-radius: 0;
+      padding:2rem 1.5rem;
       text-align:center;
+      box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3);
     }
     .qv-img img{
       max-width:100%;
       height:auto;
-      border-radius:8px;
-      border:1px solid var(--line);
-      margin:.25rem 0 .5rem;
+      border-radius: 0;
+      border:2px solid #23304a;
+      margin:.5rem 0 1rem;
+      image-rendering: pixelated;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: crisp-edges;
     }
     .qv-text{
       font-weight:700;
-      margin-bottom:.5rem;
+      margin-bottom:1rem;
+      color:#e8eefc;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      line-height: 1.6;
     }
     .qv-opts{
       display:grid;
       grid-template-columns:repeat(4,minmax(0,1fr));
-      gap:.75rem;
-      margin-top:.5rem;
+      gap:1rem;
+      margin-top:1rem;
     }
     .qv-opt{
-      background:var(--panel-2);
-      border:1px solid var(--line);
-      border-radius:10px;
-      padding:.6rem;
-      color:var(--muted);
+      background:rgba(15, 20, 34, 0.8);
+      border:2px solid #23304a;
+      border-radius: 0;
+      padding:1rem;
+      color:#9fb0d1;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3);
+      transition: all 0.2s ease;
     }
     .qv-opt.is-correct{
-      border-color:var(--brand);
-      background:rgba(255,210,74,.08);
-      color:var(--text);
+      border-color:#ffd24a;
+      background:rgba(255,210,74,.15);
+      color:#ffd24a;
       font-weight:600;
+      box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 210, 74, 0.3);
     }
 
     .qv-arrow{
       position:absolute;
       top:0;
       bottom:0;
-      width:3rem;
+      width:3.5rem;
       display:flex;
       align-items:center;
       justify-content:center;
     }
-    .qv-arrow.left{ left:.25rem; }
-    .qv-arrow.right{ right:.25rem; }
+    .qv-arrow.left{ left:0.5rem; }
+    .qv-arrow.right{ right:0.5rem; }
     .qv-arrow .btn{
-      min-width:2.5rem;
-      height:2.5rem;
-      border-radius:999px;
+      min-width:3rem;
+      height:3rem;
+      border-radius: 0;
       padding:0;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 1rem;
+      border: 2px solid #23304a;
+      background: rgba(15, 20, 34, 0.8);
+      color: #e8eefc;
+      box-shadow: 3px 3px 0 rgba(27, 37, 58, 0.8);
+      transition: all 0.2s ease;
+    }
+    .qv-arrow .btn:hover {
+      border-color: #ffd24a;
+      color: #ffd24a;
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 rgba(27, 37, 58, 0.8);
     }
 
     /* Edit dropdown */
     .qv-edit-toggle{
       display:flex;
       justify-content:flex-end;
-      margin-bottom:.25rem;
+      margin-bottom:1rem;
+    }
+    .qv-edit-toggle .btn {
+      padding: 0.9rem 2rem;
+      font-weight: 900;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-radius: 0;
+      border: 2px solid #23304a;
+      background: rgba(15, 20, 34, 0.8);
+      color: #e8eefc;
+      box-shadow: 3px 3px 0 rgba(27, 37, 58, 0.8);
+    }
+    .qv-edit-toggle .btn:hover {
+      background: rgba(15, 20, 34, 0.95);
+      border-color: #ffd24a;
+      color: #ffd24a;
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 rgba(27, 37, 58, 0.8);
     }
     .qv-edit-panel{
-      background:var(--bg-2);
-      border:1px dashed var(--line);
-      border-radius:10px;
-      padding:1rem;
-      margin-top:.25rem;
+      background:#121a2a;
+      border:2px dashed #23304a;
+      border-radius: 0;
+      padding:2rem;
+      margin-top:1rem;
+      box-shadow: 0 8px 0 rgba(27, 37, 58, 0.8), 0 12px 24px rgba(0, 0, 0, 0.3);
     }
-    .field{ display:flex; flex-direction:column; gap:.25rem; margin-bottom:.5rem; }
+    .field{ 
+      display:flex; 
+      flex-direction:column; 
+      gap:.5rem; 
+      margin-bottom:1.5rem; 
+    }
+    .field label {
+      font-size: 0.7rem;
+      color: #e8eefc;
+      font-family: 'Press Start 2P', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 400;
+    }
+    .field .input,
+    .field input[type="text"],
+    .field textarea {
+      padding: 1rem 1.25rem;
+      background: rgba(15, 20, 34, 0.8);
+      border: 2px solid #23304a;
+      border-radius: 0;
+      color: #e8eefc;
+      font-family: Poppins, system-ui, Segoe UI, Arial, sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3), 0 2px 0 rgba(27, 37, 58, 0.5);
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .field .input:focus,
+    .field input[type="text"]:focus,
+    .field textarea:focus {
+      outline: none;
+      background: rgba(15, 20, 34, 0.95);
+      border-color: #ffd24a;
+      box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3), 0 0 25px rgba(255, 210, 74, 0.25);
+    }
+    .field input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: #ffd24a;
+    }
+    .field label[for] {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
     .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:.5rem; }
-    .hint{ color:var(--muted); font-size:.875rem; }
+    .hint{ 
+      color:#9fb0d1; 
+      font-size:0.65rem;
+      font-family: 'Press Start 2P', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
 
     .edit-opt-row{
       display:grid;
       grid-template-columns:repeat(4,minmax(0,1fr));
       gap:1rem;
-      margin-top:.75rem;
+      margin-top:1.5rem;
     }
     .edit-opt-card{
       cursor:pointer;
-      background:var(--panel-2);
-      border:1px solid var(--line);
-      border-radius:12px;
-      padding:.5rem;
+      background:rgba(15, 20, 34, 0.6);
+      border:2px solid #23304a;
+      border-radius: 0;
+      padding:1rem;
       display:flex;
       flex-direction:column;
       align-items:center;
-      gap:.35rem;
-      transition:background .15s ease, border-color .15s ease, box-shadow .15s ease;
+      gap:.5rem;
+      transition:all 0.2s ease;
+      box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3);
     }
-    .edit-opt-card .input{ text-align:center; }
-    .edit-opt-label{ font-size:.9rem; color:var(--muted); }
-    .edit-opt-radio{ font-size:.8rem; color:var(--muted); }
+    .edit-opt-card .input{ 
+      text-align:center;
+      padding: 0.75rem;
+      background: rgba(15, 20, 34, 0.8);
+      border: 2px solid #23304a;
+      border-radius: 0;
+      color: #e8eefc;
+      font-family: Poppins, system-ui, Segoe UI, Arial, sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3);
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .edit-opt-card .input:focus {
+      outline: none;
+      border-color: #ffd24a;
+      box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 210, 74, 0.2);
+    }
+    .edit-opt-label{ 
+      font-size:0.65rem; 
+      color:#9fb0d1;
+      font-family: 'Press Start 2P', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .edit-opt-radio{ 
+      font-size:0.6rem; 
+      color:#9fb0d1;
+      font-family: 'Press Start 2P', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
     .edit-opt-card.is-correct{
-      border-color:var(--brand);
-      box-shadow:0 0 0 1px var(--brand);
-      background:rgba(255,210,74,.08);
+      border-color:#ffd24a;
+      box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 210, 74, 0.3);
+      background:rgba(255,210,74,.15);
     }
     .edit-opt-card.is-correct .edit-opt-radio{
-      color:var(--brand);
+      color:#ffd24a;
       font-weight:600;
+    }
+    .qv-edit-panel .btn {
+      padding: 0.9rem 2rem;
+      font-weight: 900;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-radius: 0;
+      border: 2px solid #23304a;
+      background: rgba(15, 20, 34, 0.8);
+      color: #e8eefc;
+      box-shadow: 3px 3px 0 rgba(27, 37, 58, 0.8);
+    }
+    .qv-edit-panel .btn:hover {
+      background: rgba(15, 20, 34, 0.95);
+      border-color: #ffd24a;
+      color: #ffd24a;
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 rgba(27, 37, 58, 0.8);
+    }
+    .qv-edit-panel .btn.primary {
+      background: #ffd24a;
+      color: #0b0f1a;
+      border-color: #ffd24a;
+      box-shadow: 4px 4px 0 #b89200;
+    }
+    .qv-edit-panel .btn.primary:hover {
+      background: #ffdc6a;
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 #b89200;
     }
   </style>
 </asp:Content>
@@ -287,7 +527,7 @@
 
     <!-- MODE 1: VERTICAL LIST -->
     <asp:Panel ID="pnlList" runat="server" CssClass="qv-list-panel">
-      <div class="hint" style="margin-bottom:.5rem;">
+      <div class="hint" style="margin-bottom:1rem;">
         Click a question card to open it in expanded view.
       </div>
       <asp:Repeater ID="rptList" runat="server" OnItemCommand="RptList_ItemCommand">
@@ -320,7 +560,7 @@
         </div>
 
         <div class="qv-inner">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:.25rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
             <div class="hint">Question #<asp:Literal ID="litId" runat="server" /></div>
             <div class="qv-counter"><asp:Literal ID="litCounter" runat="server" /></div>
           </div>

@@ -5,7 +5,327 @@
     Inherits="WAPP_Assignment.Lecturer.LecturerDashboard" %>
 
 <asp:Content ID="HeadBlock" ContentPlaceHolderID="HeadLecturer" runat="server">
-    <!-- Uses shared LecturerPages.css via Lecturer.Master -->
+    <link rel="stylesheet" href="<%= ResolveUrl("~/Content/LecturerPages.css") %>" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        .ld-shell {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #121a2a;
+        }
+
+        .ld-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #23304a;
+        }
+
+        .ld-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #ffd24a;
+            margin: 0;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1.2rem;
+            text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .ld-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .ld-actions .btn {
+            padding: 0.9rem 2rem;
+            font-weight: 900;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-radius: 0;
+            border: 2px solid #23304a;
+            background: rgba(15, 20, 34, 0.8);
+            color: #e8eefc;
+            text-decoration: none;
+            box-shadow: 3px 3px 0 rgba(27, 37, 58, 0.8);
+            display: inline-block;
+        }
+
+        .ld-actions .btn:hover {
+            background: rgba(15, 20, 34, 0.95);
+            border-color: #ffd24a;
+            color: #ffd24a;
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0 rgba(27, 37, 58, 0.8);
+        }
+
+        .ld-actions .btn.primary {
+            background: #ffd24a;
+            color: #0b0f1a;
+            border-color: #ffd24a;
+            box-shadow: 4px 4px 0 #b89200;
+        }
+
+        .ld-actions .btn.primary:hover {
+            background: #ffdc6a;
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 #b89200;
+        }
+
+        .ld-stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .ld-stat-card {
+            background: #121a2a;
+            border: 2px solid #23304a;
+            border-radius: 0;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            position: relative;
+            box-shadow: 0 8px 0 rgba(27, 37, 58, 0.8), 0 12px 24px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .ld-stat-card:hover {
+            border-color: #ffd24a;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 0 rgba(27, 37, 58, 0.8), 0 16px 32px rgba(0, 0, 0, 0.4), 0 0 40px rgba(255, 210, 74, 0.2);
+        }
+
+        .ld-stat-label {
+            font-size: 0.75rem;
+            color: #9fb0d1;
+            font-weight: 600;
+            font-family: 'Press Start 2P', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .ld-stat-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #ffd24a;
+            font-family: 'Press Start 2P', monospace;
+            text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
+            line-height: 1.2;
+        }
+
+        .ld-mid-row {
+            display: grid;
+            grid-template-columns: 2fr 1.4fr;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .ld-panel {
+            background: #121a2a;
+            border: 2px solid #23304a;
+            border-radius: 0;
+            padding: 2rem;
+            box-shadow: 0 8px 0 rgba(27, 37, 58, 0.8), 0 12px 24px rgba(0, 0, 0, 0.3);
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .ld-panel:hover {
+            border-color: #ffd24a;
+            box-shadow: 0 8px 0 rgba(27, 37, 58, 0.8), 0 16px 32px rgba(0, 0, 0, 0.4), 0 0 40px rgba(255, 210, 74, 0.2);
+        }
+
+        .ld-panel-header {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #1b253a;
+        }
+
+        .ld-panel-title {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #e8eefc;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .ld-metrics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .ld-metric {
+            flex: 1 1 9rem;
+            background: rgba(15, 20, 34, 0.6);
+            border-radius: 0;
+            border: 2px solid #23304a;
+            padding: 1.25rem 1rem;
+            box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .ld-metric-label {
+            font-size: 0.65rem;
+            color: #9fb0d1;
+            font-family: 'Press Start 2P', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            margin-bottom: 0.75rem;
+        }
+
+        .ld-metric-value {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #ffd24a;
+            font-family: 'Press Start 2P', monospace;
+            text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+            line-height: 1.2;
+        }
+
+        .ld-top-course {
+            padding: 1rem 0;
+        }
+
+        .ld-top-course-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #e8eefc;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            line-height: 1.5;
+        }
+
+        .ld-top-course-meta {
+            font-size: 0.65rem;
+            color: #9fb0d1;
+            font-family: 'Press Start 2P', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .ld-two-col {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1.5rem;
+        }
+
+        .ld-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .ld-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.25rem 1rem;
+            border-radius: 0;
+            background: rgba(15, 20, 34, 0.6);
+            border: 2px solid #23304a;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+            box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .ld-list-item:hover {
+            border-color: #ffd24a;
+            background: rgba(15, 20, 34, 0.8);
+            transform: translateX(4px);
+            box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 210, 74, 0.2);
+        }
+
+        .ld-list-main {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex: 1;
+        }
+
+        .ld-list-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #e8eefc;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            line-height: 1.4;
+        }
+
+        .ld-list-meta {
+            font-size: 0.6rem;
+            color: #9fb0d1;
+            font-family: 'Press Start 2P', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .ld-list-extra {
+            font-size: 0.6rem;
+            color: #9fb0d1;
+            white-space: nowrap;
+            font-family: 'Press Start 2P', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        @media (max-width: 1024px) {
+            .ld-stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .ld-mid-row {
+                grid-template-columns: 1fr;
+            }
+
+            .ld-two-col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .ld-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .ld-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .ld-actions {
+                width: 100%;
+            }
+
+            .ld-actions .btn {
+                flex: 1;
+                text-align: center;
+            }
+        }
+    </style>
 </asp:Content>
 
 <asp:Content ID="MainBlock" ContentPlaceHolderID="LecturerMain" runat="server">
@@ -18,8 +338,8 @@
                 <a href="<%= ResolveUrl("~/Lecturer/LecturerCourses.aspx") %>" class="btn">
                     View Courses
                 </a>
-                <a href="<%= ResolveUrl("~/Lecturer/LecturerCourseBuilder.aspx") %>" class="btn">
-                    New Course
+                <a href="<%= ResolveUrl("~/Lecturer/LecturerAssessments.aspx") %>" class="btn">
+                    View Assessment
                 </a>
                 <a href="<%= ResolveUrl("~/Lecturer/LecturerExamBuilder.aspx") %>" class="btn primary">
                     Build Assessment
