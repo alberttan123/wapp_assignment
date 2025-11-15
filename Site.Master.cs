@@ -8,7 +8,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
+using System.Web.Security;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using static WAPP_Assignment.DataAccess;
 
@@ -18,10 +20,96 @@ namespace WAPP_Assignment
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            CheckAuthenticationStatus();
+            CheckNavbarVisibility();
+        }
+
+        protected void Page_PreRender(object sender, EventArgs e)
+        {
+            CheckNavbarVisibility();
+        }
+
+        private void CheckNavbarVisibility()
+        {
+            try
             {
-                CheckAuthenticationStatus();
+                // Read cookie directly from Request - this works immediately even after redirects
+                string userType = null;
+                bool isAuthenticated = false;
+                
+                HttpCookie authCookie = Request.Cookies["AuthCookie"];
+                if (authCookie != null && !string.IsNullOrEmpty(authCookie.Value))
+                {
+                    try
+                    {
+                        var ticket = FormsAuthentication.Decrypt(authCookie.Value);
+                        if (ticket != null)
+                        {
+                            userType = ticket.UserData;
+                            isAuthenticated = !string.IsNullOrEmpty(ticket.Name);
+                        }
+                    }
+                    catch { }
+                }
+                
+                // Fallback to helper if direct read didn't work
+                if (string.IsNullOrEmpty(userType))
+                {
+                    var (auth, userId, ut) = AuthCookieHelper.ReadAuthCookie();
+                    if (auth && !string.IsNullOrEmpty(ut))
+                    {
+                        userType = ut;
+                        isAuthenticated = auth;
+                    }
+                }
+                
+                // Check if user is an educator
+                bool isEducator = isAuthenticated && 
+                                !string.IsNullOrEmpty(userType) && 
+                                string.Equals(userType, "Educator", StringComparison.OrdinalIgnoreCase);
+                
+                // Check if we're on a forum page
+                string currentPath = Request.Url.AbsolutePath.ToLower();
+                bool isForumPage = currentPath.Contains("/forum/");
+                
+                if (isEducator && isForumPage)
+                {
+                    // Hide navbar for educators on forum pages
+                    if (pnlNavbar != null)
+                    {
+                        pnlNavbar.Visible = false;
+                    }
+                    
+                    // Add CSS style block using Literal control - this is more reliable
+                    if (litEducatorNavbarHide != null)
+                    {
+                        litEducatorNavbarHide.Text = @"<style type=""text/css"">
+                            .navbar, nav.navbar, #mainNavbar, #pnlNavbar, nav { 
+                                display: none !important; 
+                                visibility: hidden !important; 
+                                height: 0 !important; 
+                                overflow: hidden !important; 
+                                margin: 0 !important;
+                                padding: 0 !important;
+                            }
+                            .main-content { margin-top: 0 !important; }
+                        </style>";
+                    }
+                }
+                else
+                {
+                    // Not educator on forum page - clear the style and show navbar
+                    if (litEducatorNavbarHide != null)
+                    {
+                        litEducatorNavbarHide.Text = "";
+                    }
+                    if (pnlNavbar != null)
+                    {
+                        pnlNavbar.Visible = true;
+                    }
+                }
             }
+            catch { }
         }
 
         private void CheckAuthenticationStatus()

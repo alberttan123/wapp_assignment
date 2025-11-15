@@ -5,14 +5,16 @@
 </asp:Content>
 
 <asp:Content ContentPlaceHolderID="MainContent" runat="server">
+    <!-- Back button to All Posts - always visible -->
+    <div class="back-button-container">
+        <asp:LinkButton ID="backButton" CssClass="backButton" runat="server" OnClick="backToAllPosts" Text="go back"></asp:LinkButton>
+    </div>
+    
     <asp:Panel ID="container" runat="server">
-        <div class="viewpost-header">
+        <div class="viewpost-header" id="viewpostHeader" runat="server">
             <div class="viewpost-header-content">
                 <h1 class="viewpost-page-title">Post Details</h1>
                 <p class="viewpost-page-subtitle">Explore the discussion and join the conversation</p>
-            </div>
-            <div class="back-button-container-header">
-                <asp:LinkButton CssClass="backButton" runat="server" OnClick="backToAllPosts" Text="go back"></asp:LinkButton>
             </div>
         </div>
         <div class="postSection">

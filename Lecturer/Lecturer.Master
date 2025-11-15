@@ -30,8 +30,6 @@
         <div class="lect-wrap">
             <!-- Fixed sidebar -->
             <nav class="lect-sb" aria-label="Lecturer sidebar">
-                <div class="lect-sb-title">Menu</div>
-
                 <div class="lect-links">
                     <a class="lect-link"
                        href="<%= ResolveUrl("~/Lecturer/LecturerDashboard.aspx") %>">
@@ -54,8 +52,8 @@
                     </a>
 
                     <a class="lect-link"
-                       href="<%= ResolveUrl("~/Lecturer/LecturerExamBuilder.aspx") %>">
-                        Exam Builder
+                       href="<%= ResolveUrl("~/Forum/AllPosts.aspx") %>">
+                        Community
                     </a>
                 </div>
             </nav>

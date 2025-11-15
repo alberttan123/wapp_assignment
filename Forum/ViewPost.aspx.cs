@@ -19,6 +19,23 @@ namespace WAPP_Assignment.Forum
         protected string[] data = new string[6];
         protected void Page_Load(object sender, EventArgs e)
         {
+            // Check if user is a lecturer/educator
+            var (isAuthenticated, userId, userType) = AuthCookieHelper.ReadAuthCookie();
+            bool isLecturer = isAuthenticated && 
+                             !string.IsNullOrEmpty(userType) && 
+                             string.Equals(userType, "Educator", StringComparison.OrdinalIgnoreCase);
+
+            if (isLecturer)
+            {
+                // Hide the forum header for lecturers
+                viewpostHeader.Visible = false;
+            }
+            else
+            {
+                // Show forum header for non-lecturers
+                viewpostHeader.Visible = true;
+            }
+
             if (Request.QueryString["postId"].IsNullOrWhiteSpace()) 
             {
                 showPostNotFound();
