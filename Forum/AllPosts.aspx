@@ -28,15 +28,15 @@
         </div>
     </asp:Panel> 
     
-    <!-- Back button and Add Post button for lecturers -->
+    <!-- Back button and Add Post button for lecturers and admins -->
     <asp:Panel ID="pnlLecturerBack" runat="server" Visible="false" CssClass="lecturer-top-bar">
-        <a href="<%= ResolveUrl("~/Lecturer/LecturerDashboard.aspx") %>" class="lecturer-back-btn">Back to Dashboard</a>
+        <asp:HyperLink ID="lnkBackToDashboard" runat="server" CssClass="lecturer-back-btn" NavigateUrl="~/Lecturer/LecturerDashboard.aspx">Back to Dashboard</asp:HyperLink>
         <div class="addPostButtonContainer">
             <asp:Button ID="addPostButtonLecturer" OnClick="showAddPostModal" CssClass="addPostButton" Text="Add Post" runat="server"></asp:Button>
         </div>
     </asp:Panel>
     
-    <asp:Panel ID="pnlForumHeader" runat="server" CssClass="forum-header">
+    <asp:Panel ID="pnlForumHeader" runat="server" CssClass="forum-header" Visible="false">
         <div class="forum-header-content">
             <h1 class="forum-page-title">Forum</h1>
             <p class="forum-page-subtitle">Share your thoughts and connect with the community</p>
@@ -61,5 +61,8 @@
             </asp:DropDownList>
         </div>
     </div>
+    <asp:Panel ID="pnlDeleteMessage" runat="server" Visible="false" CssClass="delete-message-panel">
+        <asp:Label ID="lblDeleteMessage" runat="server" CssClass="delete-message"></asp:Label>
+    </asp:Panel>
     <asp:Panel CssClass="forum-content" ID="forum_content" runat="server"></asp:Panel>
 </asp:Content>

@@ -61,9 +61,9 @@
 .back-button-container-header {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
+    flex-shrink: 0;
 }
-
-
 
 .back-button-container {
     padding: 0 2rem;

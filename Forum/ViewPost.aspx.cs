@@ -18,24 +18,55 @@ namespace WAPP_Assignment.Forum
     {
         protected int postId = 0;
         protected string[] data = new string[6];
-        protected void Page_Load(object sender, EventArgs e)
+        
+        protected void Page_PreInit(object sender, EventArgs e)
         {
-            // Check if user is a lecturer/educator
+            // Switch master page based on user type
             var (isAuthenticated, userId, userType) = AuthCookieHelper.ReadAuthCookie();
-            bool isLecturer = isAuthenticated && 
-                             !string.IsNullOrEmpty(userType) && 
-                             string.Equals(userType, "Educator", StringComparison.OrdinalIgnoreCase);
-
-            if (isLecturer)
+            
+            // Trim userType to handle any whitespace issues
+            string trimmedUserType = userType?.Trim();
+            
+            if (isAuthenticated && !string.IsNullOrEmpty(trimmedUserType))
             {
-                // Hide the forum header for lecturers
-                viewpostHeader.Visible = false;
+                if (string.Equals(trimmedUserType, "Admin", StringComparison.OrdinalIgnoreCase))
+                {
+                    // Switch to Admin.Master for admins (no navbar, has admin sidebar)
+                    this.MasterPageFile = "~/Admin/Admin.Master";
+                    return;
+                }
+                else if (string.Equals(trimmedUserType, "Educator", StringComparison.OrdinalIgnoreCase))
+                {
+                    // Switch to Lecturer.Master for educators/lecturers (no navbar, has lecturer sidebar)
+                    this.MasterPageFile = "~/Lecturer/Lecturer.Master";
+                    return;
+                }
             }
-            else
+            // Otherwise use default Site.Master (for students and non-authenticated users)
+        }
+        
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            // Note: viewpostHeader contains the post details and back button
+            // It should ALWAYS be visible - it's not a forum header, it's the post details header
+            // The forum header logic from AllPosts.aspx doesn't apply here
+            if (viewpostHeader != null)
             {
-                // Show forum header for non-lecturers
                 viewpostHeader.Visible = true;
             }
+        }
+
+        protected void Page_PreRender(object sender, EventArgs e)
+        {
+            // Ensure post details header is always visible (contains post details and back button)
+            if (viewpostHeader != null)
+            {
+                viewpostHeader.Visible = true;
+            }
+        }
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
 
             if (Request.QueryString["postId"].IsNullOrWhiteSpace()) 
             {
@@ -71,12 +102,18 @@ namespace WAPP_Assignment.Forum
             postCreatedAt.Text = createdAt;
 
             var (isAuthenticated, userId, userType) = AuthCookieHelper.ReadAuthCookie();
+            string trimmedUserType = userType?.Trim();
+            bool isAdmin = isAuthenticated && 
+                          !string.IsNullOrEmpty(trimmedUserType) && 
+                          string.Equals(trimmedUserType, "Admin", StringComparison.OrdinalIgnoreCase);
 
             if (!userId.IsNullOrWhiteSpace()) //check if userId exists, if not do not run this: will bring error when trying to access null
             {
-                if (int.Parse(createdByUserId) == int.Parse(userId))
+                bool isPostOwner = int.Parse(createdByUserId) == int.Parse(userId);
+                // Show delete button if user is the post owner OR if user is an Admin
+                if (isPostOwner || isAdmin)
                 {
-                    // add delete button if the post was made by the currently signed in user
+                    // add delete button if the post was made by the currently signed in user OR if user is an admin
                     Button deleteButton = new Button();
                     deleteButton.CommandArgument = postId.ToString();
                     deleteButton.Command += deletePost;
@@ -260,7 +297,7 @@ namespace WAPP_Assignment.Forum
                     int rowsAffected = cmd.ExecuteNonQuery();
                     if (rowsAffected > 0)
                     {
-                        Response.Redirect($@"ViewPost.aspx?postId={postId}");
+                        Response.Redirect(ResolveUrl($@"~/Forum/ViewPost.aspx?postId={postId}"), true);
                     }
                 }
                 catch (Exception ex)
@@ -297,7 +334,7 @@ namespace WAPP_Assignment.Forum
                     int rowsAffected = cmd.ExecuteNonQuery();
                     if (rowsAffected > 0)
                     {
-                        Response.Redirect($@"ViewPost.aspx?postId={postId}");
+                        Response.Redirect(ResolveUrl($@"~/Forum/ViewPost.aspx?postId={postId}"), true);
                     }
                 }
                 catch (Exception ex)
@@ -325,8 +362,50 @@ namespace WAPP_Assignment.Forum
                 return;
             }
 
+            string trimmedUserType = userType?.Trim();
+            bool isAdmin = !string.IsNullOrEmpty(trimmedUserType) && 
+                          string.Equals(trimmedUserType, "Admin", StringComparison.OrdinalIgnoreCase);
+
             using (var conn = DataAccess.GetOpenConnection())
             {
+                // First, check if the post exists and get the creator's userId
+                SqlCommand checkCmd = new SqlCommand("SELECT UserId FROM dbo.ForumPost WHERE PostId=@PostId", conn);
+                checkCmd.Parameters.AddWithValue("@PostId", Id);
+                
+                int postOwnerId = 0;
+                try
+                {
+                    object result = checkCmd.ExecuteScalar();
+                    if (result != null)
+                    {
+                        postOwnerId = Convert.ToInt32(result);
+                    }
+                    else
+                    {
+                        // Post doesn't exist
+                        postError.Visible = true;
+                        postError.Text = "Post not found.";
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    postError.Visible = true;
+                    postError.Text = "Unable to verify post ownership.\n" + ex.Message;
+                    return;
+                }
+
+                // Check if user is the post owner OR is an admin
+                bool isPostOwner = postOwnerId == int.Parse(userId);
+                if (!isPostOwner && !isAdmin)
+                {
+                    // User is not the post owner and is not an admin - unauthorized
+                    postError.Visible = true;
+                    postError.Text = "You are not authorized to delete this post.";
+                    return;
+                }
+
+                // User is authorized - proceed with deletion
                 SqlCommand cmd = new SqlCommand("DELETE FROM dbo.ForumPost WHERE PostId=@PostId", conn);
                 cmd.Parameters.AddWithValue("@PostId", Id);
                 try
@@ -334,13 +413,13 @@ namespace WAPP_Assignment.Forum
                     int rowsAffected = cmd.ExecuteNonQuery();
                     if (rowsAffected > 0)
                     {
-                        Response.Redirect("AllPosts.aspx");
+                        Response.Redirect(ResolveUrl("~/Forum/AllPosts.aspx"), true);
                     }
                 }
                 catch (Exception ex)
                 {
                     postError.Visible = true;
-                    postError.Text = "Unable to delete your post.\n" + ex.Message;
+                    postError.Text = "Unable to delete the post.\n" + ex.Message;
                 }
             }
         }
@@ -356,7 +435,7 @@ namespace WAPP_Assignment.Forum
 
         protected void backToAllPosts(Object sender, EventArgs e) 
         {
-            Response.Redirect("AllPosts.aspx");
+            Response.Redirect(ResolveUrl("~/Forum/AllPosts.aspx"), true);
         }
 
         protected async void generateAISummary(object sender, EventArgs e)

@@ -17,32 +17,152 @@ namespace WAPP_Assignment.Forum
     public partial class AllPosts : System.Web.UI.Page
     {
         protected List<string[]> postData = new List<string[]>();
-        protected void Page_Load(object sender, EventArgs e)
+        
+        protected void Page_PreInit(object sender, EventArgs e)
         {
-            // Check if user is a lecturer/educator
+            // Switch master page based on user type
             var (isAuthenticated, userId, userType) = AuthCookieHelper.ReadAuthCookie();
-            bool isLecturer = isAuthenticated && 
-                             !string.IsNullOrEmpty(userType) && 
-                             string.Equals(userType, "Educator", StringComparison.OrdinalIgnoreCase);
-
-            if (isLecturer)
+            
+            // Trim userType to handle any whitespace issues
+            string trimmedUserType = userType?.Trim();
+            
+            if (isAuthenticated && !string.IsNullOrEmpty(trimmedUserType))
             {
-                // Hide forum header for lecturers
-                pnlForumHeader.Visible = false;
-                // Show back button for lecturers
-                pnlLecturerBack.Visible = true;
+                if (string.Equals(trimmedUserType, "Admin", StringComparison.OrdinalIgnoreCase))
+                {
+                    // Switch to Admin.Master for admins (no navbar, has admin sidebar)
+                    this.MasterPageFile = "~/Admin/Admin.Master";
+                    return;
+                }
+                else if (string.Equals(trimmedUserType, "Educator", StringComparison.OrdinalIgnoreCase))
+                {
+                    // Switch to Lecturer.Master for educators/lecturers (no navbar, has lecturer sidebar)
+                    this.MasterPageFile = "~/Lecturer/Lecturer.Master";
+                    return;
+                }
+            }
+            // Otherwise use default Site.Master (for students and non-authenticated users)
+        }
+        
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            // Check if user is a lecturer/educator or admin - set visibility early
+            var (isAuthenticated, userId, userType) = AuthCookieHelper.ReadAuthCookie();
+            string trimmedUserType = userType?.Trim();
+            bool isLecturer = isAuthenticated && 
+                             !string.IsNullOrEmpty(trimmedUserType) && 
+                             string.Equals(trimmedUserType, "Educator", StringComparison.OrdinalIgnoreCase);
+            bool isAdmin = isAuthenticated && 
+                          !string.IsNullOrEmpty(trimmedUserType) && 
+                          string.Equals(trimmedUserType, "Admin", StringComparison.OrdinalIgnoreCase);
+
+            // Check which master page is being used
+            bool usingAdminMaster = this.Master != null && this.Master.GetType().Name.Contains("Admin");
+            bool usingLecturerMaster = this.Master != null && this.Master.GetType().Name.Contains("Lecturer");
+
+            if ((isLecturer || isAdmin) || usingAdminMaster || usingLecturerMaster)
+            {
+                // Hide forum header for lecturers and admins (or when using admin/lecturer master)
+                if (pnlForumHeader != null)
+                {
+                    pnlForumHeader.Visible = false;
+                }
+                // Show back button for lecturers and admins
+                if (pnlLecturerBack != null)
+                {
+                    pnlLecturerBack.Visible = true;
+                }
+                
+                // Update back button link based on user type
+                if (isAdmin || usingAdminMaster)
+                {
+                    // Update the link to point to admin dashboard
+                    if (lnkBackToDashboard != null)
+                    {
+                        lnkBackToDashboard.NavigateUrl = ResolveUrl("~/Admin/AdminDashboard.aspx");
+                    }
+                }
+                else if (isLecturer || usingLecturerMaster)
+                {
+                    // Ensure link points to lecturer dashboard for lecturers
+                    if (lnkBackToDashboard != null)
+                    {
+                        lnkBackToDashboard.NavigateUrl = ResolveUrl("~/Lecturer/LecturerDashboard.aspx");
+                    }
+                }
             }
             else
             {
-                // Show forum header for non-lecturers
-                pnlForumHeader.Visible = true;
-                // Hide back button for non-lecturers
-                pnlLecturerBack.Visible = false;
+                // Show forum header for non-lecturers/non-admins (using Site.Master)
+                if (pnlForumHeader != null)
+                {
+                    pnlForumHeader.Visible = true;
+                }
+                // Hide back button for non-lecturers/non-admins
+                if (pnlLecturerBack != null)
+                {
+                    pnlLecturerBack.Visible = false;
+                }
             }
+        }
 
+        protected void Page_PreRender(object sender, EventArgs e)
+        {
+            // Ensure visibility is set correctly before rendering (safety check)
+            var (isAuthenticated, userId, userType) = AuthCookieHelper.ReadAuthCookie();
+            string trimmedUserType = userType?.Trim();
+            bool isLecturer = isAuthenticated && 
+                             !string.IsNullOrEmpty(trimmedUserType) && 
+                             string.Equals(trimmedUserType, "Educator", StringComparison.OrdinalIgnoreCase);
+            bool isAdmin = isAuthenticated && 
+                          !string.IsNullOrEmpty(trimmedUserType) && 
+                          string.Equals(trimmedUserType, "Admin", StringComparison.OrdinalIgnoreCase);
+
+            bool usingAdminMaster = this.Master != null && this.Master.GetType().Name.Contains("Admin");
+            bool usingLecturerMaster = this.Master != null && this.Master.GetType().Name.Contains("Lecturer");
+
+            if ((isLecturer || isAdmin) || usingAdminMaster || usingLecturerMaster)
+            {
+                // Force hide forum header
+                if (pnlForumHeader != null)
+                {
+                    pnlForumHeader.Visible = false;
+                }
+                // Force show back button
+                if (pnlLecturerBack != null)
+                {
+                    pnlLecturerBack.Visible = true;
+                }
+            }
+            else
+            {
+                // Force show forum header
+                if (pnlForumHeader != null)
+                {
+                    pnlForumHeader.Visible = true;
+                }
+                // Force hide back button
+                if (pnlLecturerBack != null)
+                {
+                    pnlLecturerBack.Visible = false;
+                }
+            }
+        }
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            // Always render posts in Page_Load (before event handlers fire)
+            // This ensures dynamically created controls exist when their event handlers are called
             if (!IsPostBack)
             {
                 postData = Sort("latest first", fetchAllPosts()); //fetch data and sort it to be latest first
+                renderPosts(postData);
+            }
+            else
+            {
+                // On postback, reload data and render so controls exist for event handlers
+                // Event handlers (like deletePost) will re-render if needed after their action
+                postData = Sort("latest first", fetchAllPosts());
                 renderPosts(postData);
             }
         }
@@ -167,6 +287,9 @@ namespace WAPP_Assignment.Forum
 
         protected void renderPosts(List<string[]> postData) //renders all posts using buildPost
         {
+            // Clear existing controls before re-rendering (important for postback)
+            forum_content.Controls.Clear();
+            
             int count = 0;
             while (count < postData.Count) 
             {
@@ -231,19 +354,40 @@ namespace WAPP_Assignment.Forum
             card.Controls.Add(labelCreatedAt);
 
             var (isAuthenticated, userId, userType) = AuthCookieHelper.ReadAuthCookie();
+            string trimmedUserType = userType?.Trim();
+            bool isAdmin = isAuthenticated && 
+                          !string.IsNullOrEmpty(trimmedUserType) && 
+                          string.Equals(trimmedUserType, "Admin", StringComparison.OrdinalIgnoreCase);
+            bool isPostOwner = !userId.IsNullOrWhiteSpace() && createdByUserId == int.Parse(userId);
 
-            if (!userId.IsNullOrWhiteSpace() && createdByUserId == int.Parse(userId))
+            // Create anchor tag for post navigation
+            HtmlAnchor anchorTag = new HtmlAnchor();
+            anchorTag.HRef = $@"/Forum/ViewPost?postId={postId}";
+            anchorTag.Attributes.Add("class", "post-link");
+
+            // Wrap card in anchor
+            anchorTag.Controls.Add(card);
+
+            Panel fullContainer = new Panel();
+            fullContainer.CssClass = "post-container";
+            fullContainer.Controls.Add(anchorTag);
+
+            // Show delete button if user is the post creator OR if user is an Admin
+            // Add delete button OUTSIDE the anchor tag so it doesn't interfere with postback
+            if (isPostOwner || isAdmin)
             {
-                //make delete button and error message panel if user is logged in and is the post creator
+                //make delete button and error message panel if user is logged in and is the post creator OR is an admin
                 Panel postActions = new Panel();
                 postActions.CssClass = "post-actions";
 
                 Button deleteButton = new Button();
+                deleteButton.ID = $"deleteBtn_{postId}";
                 deleteButton.CommandArgument = postId.ToString();
                 deleteButton.Text = "Delete Post";
                 deleteButton.CssClass = "delete-button-post";
                 deleteButton.Command += deletePost;
-                deleteButton.OnClientClick = "event.stopPropagation(); event.preventDefault(); return true;";
+                deleteButton.UseSubmitBehavior = true;
+                deleteButton.CausesValidation = false;
                 postActions.Controls.Add(deleteButton);
 
                 Label errorMessage = new Label();
@@ -253,39 +397,22 @@ namespace WAPP_Assignment.Forum
                 errorMessage.CssClass = "post-delete-error";
                 postActions.Controls.Add(errorMessage);
 
-                // Add delete button panel to card (inside card, but will handle clicks separately)
-                card.Controls.Add(postActions);
+                // Add delete button panel OUTSIDE the anchor tag
+                fullContainer.Controls.Add(postActions);
             }
-
-            // Create anchor tag for post navigation
-            HtmlAnchor anchorTag = new HtmlAnchor();
-            anchorTag.HRef = $@"/Forum/ViewPost?postId={postId}";
-            anchorTag.Attributes.Add("class", "post-link");
-
-            // Wrap card in anchor (delete button inside will still work due to event.stopPropagation)
-            anchorTag.Controls.Add(card);
-
-            Panel fullContainer = new Panel();
-            fullContainer.CssClass = "post-container";
-            fullContainer.Controls.Add(anchorTag);
 
             return fullContainer;
         }
         protected void deletePost(object sender, CommandEventArgs e)
         {
-            Button btn = (Button)sender;
-            Panel errorContainer = (Panel)btn.Parent;
+            // Hide any previous messages
+            if (pnlDeleteMessage != null)
+            {
+                pnlDeleteMessage.Visible = false;
+                lblDeleteMessage.Text = "";
+            }
 
             string Id = e.CommandArgument.ToString();
-            string labelId = $@"post_{Id}_error_message";
-
-            Label postError = (Label)errorContainer.FindControl(labelId);
-            //note: postError with the FindControl doesn't seem to work rn, ignoring as won't face errors with normal usage, not sure abt edge cases tho
-            if (postError != null)
-            {
-                postError.Visible = false;
-                postError.Text = "";
-            }
 
             var (isAuthenticated, userId, userType) = AuthCookieHelper.ReadAuthCookie();
             if (!isAuthenticated || string.IsNullOrEmpty(userId))
@@ -299,8 +426,47 @@ namespace WAPP_Assignment.Forum
                 return;
             }
 
+            string trimmedUserType = userType?.Trim();
+            bool isAdmin = !string.IsNullOrEmpty(trimmedUserType) && 
+                          string.Equals(trimmedUserType, "Admin", StringComparison.OrdinalIgnoreCase);
+
             using (var conn = DataAccess.GetOpenConnection())
             {
+                // First, check if the post exists and get the creator's userId
+                SqlCommand checkCmd = new SqlCommand("SELECT UserId FROM dbo.ForumPost WHERE PostId=@PostId", conn);
+                checkCmd.Parameters.AddWithValue("@PostId", Id);
+                
+                int postOwnerId = 0;
+                try
+                {
+                    object result = checkCmd.ExecuteScalar();
+                    if (result != null)
+                    {
+                        postOwnerId = Convert.ToInt32(result);
+                    }
+                    else
+                    {
+                        // Post doesn't exist
+                        ShowDeleteMessage("Post not found.", "error");
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ShowDeleteMessage("Unable to verify post ownership. " + ex.Message, "error");
+                    return;
+                }
+
+                // Check if user is the post owner OR is an admin
+                bool isPostOwner = postOwnerId == int.Parse(userId);
+                if (!isPostOwner && !isAdmin)
+                {
+                    // User is not the post owner and is not an admin - unauthorized
+                    ShowDeleteMessage("You are not authorized to delete this post.", "error");
+                    return;
+                }
+
+                // User is authorized - proceed with deletion
                 SqlCommand cmd = new SqlCommand("DELETE FROM dbo.ForumPost WHERE PostId=@PostId", conn);
                 cmd.Parameters.AddWithValue("@PostId", Id);
                 try
@@ -308,27 +474,81 @@ namespace WAPP_Assignment.Forum
                     int rowsAffected = cmd.ExecuteNonQuery();
                     if (rowsAffected > 0)
                     {
-                        Response.Redirect("AllPosts.aspx");
+                        // Success - reload data and re-render posts
+                        postData = Sort("latest first", fetchAllPosts());
+                        forum_content.Controls.Clear();
+                        renderPosts(postData);
+                        ShowDeleteMessage("Post deleted successfully.", "success");
+                    }
+                    else
+                    {
+                        // Post was not deleted (might have been already deleted)
+                        ShowDeleteMessage("Post could not be deleted. It may have been already removed.", "error");
                     }
                 }
                 catch (Exception ex)
                 {
-                    if(postError != null)
-                    {
-                        postError.Text = "Unable to delete your post.\n" + ex.Message;
-                    }
+                    ShowDeleteMessage("Unable to delete the post. " + ex.Message, "error");
                 }
+            }
+        }
+
+        private void ShowDeleteMessage(string message, string type)
+        {
+            if (pnlDeleteMessage != null && lblDeleteMessage != null)
+            {
+                pnlDeleteMessage.Visible = true;
+                lblDeleteMessage.Text = message;
+                lblDeleteMessage.CssClass = "delete-message " + type;
             }
         }
 
         protected void showAddPostModal(object sender, EventArgs e) 
         {
             addPostModal.Visible = true;
+            // Hide the top bar (Back to Dashboard and Add Post buttons) when modal is open
+            if (pnlLecturerBack != null)
+            {
+                pnlLecturerBack.Visible = false;
+            }
+            if (pnlForumHeader != null)
+            {
+                pnlForumHeader.Visible = false;
+            }
         }
 
         protected void hideAddPostModal(object sender, EventArgs e)
         {
             addPostModal.Visible = false;
+            // Show the top bar again when modal is closed
+            var (isAuthenticated, userId, userType) = AuthCookieHelper.ReadAuthCookie();
+            string trimmedUserType = userType?.Trim();
+            bool isLecturer = isAuthenticated && 
+                             !string.IsNullOrEmpty(trimmedUserType) && 
+                             string.Equals(trimmedUserType, "Educator", StringComparison.OrdinalIgnoreCase);
+            bool isAdmin = isAuthenticated && 
+                          !string.IsNullOrEmpty(trimmedUserType) && 
+                          string.Equals(trimmedUserType, "Admin", StringComparison.OrdinalIgnoreCase);
+
+            bool usingAdminMaster = this.Master != null && this.Master.GetType().Name.Contains("Admin");
+            bool usingLecturerMaster = this.Master != null && this.Master.GetType().Name.Contains("Lecturer");
+
+            if ((isLecturer || isAdmin) || usingAdminMaster || usingLecturerMaster)
+            {
+                // Show back button for lecturers/admins
+                if (pnlLecturerBack != null)
+                {
+                    pnlLecturerBack.Visible = true;
+                }
+            }
+            else
+            {
+                // Show forum header for non-lecturers/non-admins
+                if (pnlForumHeader != null)
+                {
+                    pnlForumHeader.Visible = true;
+                }
+            }
         }
 
         protected void addPost(object sender, EventArgs e) 
@@ -361,7 +581,7 @@ namespace WAPP_Assignment.Forum
                     int rowsAffected = cmd.ExecuteNonQuery();
                     if (rowsAffected > 0)
                     {
-                        Response.Redirect("AllPosts.aspx");
+                        Response.Redirect(ResolveUrl("~/Forum/AllPosts.aspx"), true);
                     }
                 }
                 catch (Exception ex)
