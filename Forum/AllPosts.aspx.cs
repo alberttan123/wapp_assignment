@@ -86,8 +86,12 @@ namespace WAPP_Assignment.Forum
                     var (isAuthenticated, userId, userType) = AuthCookieHelper.ReadAuthCookie();
                     if (!isAuthenticated || string.IsNullOrEmpty(userId))
                     {
-                        // Redirect to login if not authenticated
-                        Response.Redirect("~/Default.aspx", true);
+                        MasterPageInterface masterPageInterface = this.Master as MasterPageInterface;
+                        if (masterPageInterface != null)
+                        {
+                            masterPageInterface.showLoginSignupModal(this, null);
+                        }
+                        break;
                     }
 
                     sorted = filtered
@@ -258,8 +262,12 @@ namespace WAPP_Assignment.Forum
             var (isAuthenticated, userId, userType) = AuthCookieHelper.ReadAuthCookie();
             if (!isAuthenticated || string.IsNullOrEmpty(userId))
             {
-                // Redirect to login if not authenticated
-                Response.Redirect("~/Default.aspx", true);
+                MasterPageInterface masterPageInterface = this.Master as MasterPageInterface;
+                if (masterPageInterface != null)
+                {
+                    masterPageInterface.showLoginSignupModal(this, null);
+                }
+                return;
                 return;
             }
 
@@ -303,8 +311,11 @@ namespace WAPP_Assignment.Forum
             var (isAuthenticated, userId, userType) = AuthCookieHelper.ReadAuthCookie();
             if (!isAuthenticated || string.IsNullOrEmpty(userId))
             {
-                // Redirect to login if not authenticated
-                Response.Redirect("~/Default.aspx", true);
+                MasterPageInterface masterPageInterface = this.Master as MasterPageInterface;
+                if (masterPageInterface != null)
+                {
+                    masterPageInterface.showLoginSignupModal(this, null);
+                }
                 return;
             }
 
