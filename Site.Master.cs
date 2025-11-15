@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace WAPP_Assignment
         private void CheckAuthenticationStatus()
         {
             var (isAuthenticated, userId, userType) = AuthCookieHelper.ReadAuthCookie();
-            
+
             if (isAuthenticated && !string.IsNullOrEmpty(userId))
             {
                 // User is authenticated - show profile dropdown
@@ -45,17 +46,17 @@ namespace WAPP_Assignment
         {
             // Remove authentication cookie
             AuthCookieHelper.RemoveAuthCookie();
-            
+
             // Clear session
             Session.Clear();
             Session.Abandon();
-            
+
             // Redirect to home page
             Response.Redirect("~/Base/Landing.aspx", true);
         }
 
-        protected void showLoginSignupModal(object sender, EventArgs e) 
-        { 
+        protected void showLoginSignupModal(object sender, EventArgs e)
+        {
             loginModal.Visible = true;
         }
 
@@ -65,7 +66,7 @@ namespace WAPP_Assignment
             registerModal.Visible = false;
         }
 
-        protected void swapToRegister(object sender, EventArgs e) 
+        protected void swapToRegister(object sender, EventArgs e)
         {
             registerModal.Visible = true;
             register_field_1.Visible = true;
@@ -85,11 +86,12 @@ namespace WAPP_Assignment
             register_field_2.Visible = false;
         }
 
-        protected void showNextRegisterPanel(object sender, EventArgs e) 
+        protected void showNextRegisterPanel(object sender, EventArgs e)
         {
             register_field_2.Visible = true;
             register_field_1.Visible = false;
         }
+
         protected void login(object sender, EventArgs e)
         {
             login_error_message.Text = "";
@@ -102,7 +104,7 @@ namespace WAPP_Assignment
             {
                 using (var conn = DataAccess.GetOpenConnection())
                 using (var cmd = new SqlCommand(@"
-                SELECT TOP 1 UserId, Username, PasswordHash, UserType
+                SELECT TOP 1 UserId, Username, PasswordHash, UserType, IsPasswordReset
                 FROM dbo.Users 
                 WHERE Username = @u", conn))
                 {
@@ -122,25 +124,66 @@ namespace WAPP_Assignment
                             return;
                         }
 
-                        // Success → issue auth cookie
-                        SignIn(rd);
-
-                        // Decide where to send them based on role
+                        // Extract values BEFORE closing reader
+                        int userId = rd.GetInt32(rd.GetOrdinal("UserId"));
                         string userType = rd.GetString(rd.GetOrdinal("UserType"));
 
+                        bool isResetRequired = false;
+                        int idxReset = rd.GetOrdinal("IsPasswordReset");
+                        if (!rd.IsDBNull(idxReset))
+                        {
+                            isResetRequired = rd.GetBoolean(idxReset);
+                        }
+
+                        // Reader no longer needed
+                        rd.Close();
+
+                        // Update LastLogin (stored in UTC)
+                        using (var updateCmd = new SqlCommand(@"
+                            UPDATE dbo.Users
+                            SET LastLogin = SYSUTCDATETIME()
+                            WHERE UserId = @id;", conn))
+                        {
+                            updateCmd.Parameters.Add("@id", SqlDbType.Int).Value = userId;
+                            updateCmd.ExecuteNonQuery();
+                        }
+
+                        // Issue auth cookie
+                        SignIn(userId, userType);
+
+                        // Decide where to send them based on role + reset flag
                         if (string.Equals(userType, "Educator", StringComparison.OrdinalIgnoreCase))
                         {
-                            // Lecturer area home
-                            Response.Redirect("~/Lecturer/LecturerDashboard.aspx", true);
+                            // Lecturer: force password change if reset required
+                            if (isResetRequired)
+                            {
+                                Response.Redirect("~/Lecturer/LecturerForcePasswordReset.aspx", true);
+                            }
+                            else
+                            {
+                                Response.Redirect("~/Lecturer/LecturerDashboard.aspx", true);
+                            }
                         }
                         else if (string.Equals(userType, "Student", StringComparison.OrdinalIgnoreCase))
                         {
-                            // Existing student dashboard
+                            // Student dashboard
                             Response.Redirect("~/Student/Dashboard.aspx", true);
+                        }
+                        else if (string.Equals(userType, "Admin", StringComparison.OrdinalIgnoreCase))
+                        {
+                            // Admin: force password change if reset required
+                            if (isResetRequired)
+                            {
+                                Response.Redirect("~/Admin/AdminForcePasswordReset.aspx", true);
+                            }
+                            else
+                            {
+                                Response.Redirect("~/Admin/AdminDashboard.aspx", true);
+                            }
                         }
                         else
                         {
-                            // Fallback for Admin/unknown roles
+                            // Fallback
                             Response.Redirect("~/Base/Landing.aspx", true);
                         }
 
@@ -148,11 +191,12 @@ namespace WAPP_Assignment
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ShowLoginError(ex.ToString()); // show error
             }
         }
+
         protected void Register(object sender, EventArgs e)
         {
             string username = REGISTERusername.Text.Trim();
@@ -268,7 +312,6 @@ namespace WAPP_Assignment
             {
                 using (var conn = DataAccess.GetOpenConnection())
                 {
-                    // Try Students
                     using (var cmd = new SqlCommand(@"
                         INSERT INTO dbo.Users (Username, Email, UserType, PasswordHash) VALUES
                         (@u, @e, @t, @p)", conn))
@@ -309,16 +352,24 @@ namespace WAPP_Assignment
             return false;
         }
 
-        private void SignIn(SqlDataReader rd) 
+        // Legacy helper (still here if anything calls it with a reader)
+        private void SignIn(SqlDataReader rd)
         {
-            var UserId = rd.GetInt32(rd.GetOrdinal("UserId")).ToString();
-            var userType = rd.GetString(rd.GetOrdinal("UserType"));
-            HttpCookie cookie = AuthCookieHelper.BuildAuthCookie(UserId, userType);
+            int userId = rd.GetInt32(rd.GetOrdinal("UserId"));
+            string userType = rd.GetString(rd.GetOrdinal("UserType"));
+            SignIn(userId, userType);
+        }
+
+        // New helper: sign in from values (used by login after closing reader)
+        private void SignIn(int userId, string userType)
+        {
+            string userIdStr = userId.ToString();
+            HttpCookie cookie = AuthCookieHelper.BuildAuthCookie(userIdStr, userType);
             Response.Cookies.Add(cookie);
         }
 
-        private void ShowLoginError(string errorMessage) 
-        { 
+        private void ShowLoginError(string errorMessage)
+        {
             login_error_message.Text = errorMessage;
             login_error_message.Visible = true;
         }
@@ -330,12 +381,12 @@ namespace WAPP_Assignment
         }
 
         // done this way so that there is no need to Install-Package BCrypt
-        public static string Hash(string input) 
+        public static string Hash(string input)
         {
             if (input == null)
                 return null;
 
-            using (SHA256 sha = SHA256.Create()) 
+            using (SHA256 sha = SHA256.Create())
             {
                 byte[] bytes = Encoding.UTF8.GetBytes(input);
                 byte[] hash = sha.ComputeHash(bytes);

@@ -1231,3 +1231,36 @@ html, body {
     }
 }
 
+/* -----------------------------------
+   Lecturer top bar (logo only)
+----------------------------------- */
+.lect-topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--nav-h);
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
+    background: #05060a;
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 2px 0 0 #00000080;
+    z-index: 100;
+}
+
+.lect-logo {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--brand);
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+    .lect-logo span {
+        padding: 0.1rem 0.4rem;
+        border-radius: 0.35rem;
+        background: rgba(0, 0, 0, 0.4);
+        box-shadow: 0 0 0 1px #00000070;
+    }

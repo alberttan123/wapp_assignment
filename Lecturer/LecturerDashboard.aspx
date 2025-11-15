@@ -1,499 +1,445 @@
-﻿<%@ Page Title="Lecturer • Dashboard" Language="C#"
+﻿<%@ Page Title="Lecturer • Dashboard"
+    Language="C#"
     MasterPageFile="~/Lecturer/Lecturer.Master"
     AutoEventWireup="true"
     CodeBehind="LecturerDashboard.aspx.cs"
     Inherits="WAPP_Assignment.Lecturer.LecturerDashboard" %>
 
 <asp:Content ID="HeadBlock" ContentPlaceHolderID="HeadLecturer" runat="server">
-    <link rel="stylesheet" href="<%= ResolveUrl("~/Content/LecturerPages.css") %>" />
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-        
         .ld-shell {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-            background: #121a2a;
+            width: 100%;
+            margin: 0;
+            padding: 0.5rem 0 1.25rem;
         }
 
         .ld-header {
             display: flex;
+            align-items: flex-start;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 2px solid #23304a;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .ld-title-block {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
         }
 
         .ld-title {
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: #ffd24a;
-            margin: 0;
-            font-family: 'Press Start 2P', monospace;
-            font-size: 1.2rem;
-            text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--brand);
+            text-shadow: 0 0 0.0625rem #000;
         }
 
-        .ld-actions {
+        .ld-subtitle {
+            font-size: 0.82rem;
+            color: var(--muted);
+        }
+
+        .ld-header-right {
             display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
+            align-items: center;
         }
 
-        .ld-actions .btn {
-            padding: 0.9rem 2rem;
-            font-weight: 900;
-            font-family: 'Press Start 2P', monospace;
-            font-size: 0.7rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            border-radius: 0;
-            border: 2px solid #23304a;
-            background: rgba(15, 20, 34, 0.8);
-            color: #e8eefc;
-            text-decoration: none;
-            box-shadow: 3px 3px 0 rgba(27, 37, 58, 0.8);
-            display: inline-block;
+        .ld-profile-card {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.4rem 0.75rem;
+            border-radius: 999px;
+            border: 0.0625rem solid var(--line);
+            background: var(--panel-2);
+            box-shadow:
+                0 0 0 0.0625rem #00000040,
+                0 0.1875rem 0 0 #00000060;
         }
 
-        .ld-actions .btn:hover {
-            background: rgba(15, 20, 34, 0.95);
-            border-color: #ffd24a;
-            color: #ffd24a;
-            transform: translate(2px, 2px);
-            box-shadow: 1px 1px 0 rgba(27, 37, 58, 0.8);
-        }
-
-        .ld-actions .btn.primary {
-            background: #ffd24a;
-            color: #0b0f1a;
-            border-color: #ffd24a;
-            box-shadow: 4px 4px 0 #b89200;
-        }
-
-        .ld-actions .btn.primary:hover {
-            background: #ffdc6a;
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0 #b89200;
-        }
-
-        .ld-stats {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2.5rem;
-        }
-
-        .ld-stat-card {
-            background: #121a2a;
-            border: 2px solid #23304a;
-            border-radius: 0;
-            padding: 2rem 1.5rem;
+        .ld-profile-main {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
-            position: relative;
-            box-shadow: 0 8px 0 rgba(27, 37, 58, 0.8), 0 12px 24px rgba(0, 0, 0, 0.3);
-            transition: all 0.2s ease;
+            gap: 0.1rem;
         }
 
-        .ld-stat-card:hover {
-            border-color: #ffd24a;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 0 rgba(27, 37, 58, 0.8), 0 16px 32px rgba(0, 0, 0, 0.4), 0 0 40px rgba(255, 210, 74, 0.2);
+        .ld-profile-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .ld-profile-meta {
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        .ld-profile-role-pill {
+            display: inline-block;
+            margin-right: 0.3rem;
+            padding: 0.05rem 0.45rem;
+            border-radius: 999px;
+            border: 0.0625rem solid var(--line);
+            background: var(--panel);
+            font-size: 0.7rem;
+            color: var(--muted);
+        }
+
+        .ld-profile-actions .btn {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.7rem;
+        }
+
+        @media (max-width: 37.5rem) {
+            .ld-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .ld-header-right {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .ld-profile-card {
+                border-radius: 0.5rem;
+            }
+        }
+
+        .ld-top-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.6fr);
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        @media (max-width: 56.25rem) {
+            .ld-top-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .ld-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.5rem;
+        }
+
+        @media (max-width: 48rem) {
+            .ld-stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        .ld-card {
+            background: var(--panel);
+            border-radius: 0.625rem;
+            border: 0.0625rem solid var(--line);
+            padding: 0.75rem 0.75rem;
+            box-shadow:
+                0 0 0 0.0625rem #00000040,
+                0 0.25rem 0 0 #00000050;
+        }
+
+        .ld-card--accent-main {
+            background: linear-gradient(135deg, var(--panel) 0%, var(--panel-2) 60%, #24272e 100%);
+        }
+
+        .ld-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.4rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .ld-card-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .ld-card-subtitle {
+            font-size: 0.8rem;
+            color: var(--muted);
         }
 
         .ld-stat-label {
-            font-size: 0.75rem;
-            color: #9fb0d1;
-            font-weight: 600;
-            font-family: 'Press Start 2P', monospace;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin-bottom: 0.15rem;
         }
 
         .ld-stat-value {
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: #ffd24a;
-            font-family: 'Press Start 2P', monospace;
-            text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
-            line-height: 1.2;
-        }
-
-        .ld-mid-row {
-            display: grid;
-            grid-template-columns: 2fr 1.4fr;
-            gap: 1.5rem;
-            margin-bottom: 2.5rem;
-        }
-
-        .ld-panel {
-            background: #121a2a;
-            border: 2px solid #23304a;
-            border-radius: 0;
-            padding: 2rem;
-            box-shadow: 0 8px 0 rgba(27, 37, 58, 0.8), 0 12px 24px rgba(0, 0, 0, 0.3);
-            position: relative;
-            transition: all 0.2s ease;
-        }
-
-        .ld-panel:hover {
-            border-color: #ffd24a;
-            box-shadow: 0 8px 0 rgba(27, 37, 58, 0.8), 0 16px 32px rgba(0, 0, 0, 0.4), 0 0 40px rgba(255, 210, 74, 0.2);
-        }
-
-        .ld-panel-header {
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #1b253a;
-        }
-
-        .ld-panel-title {
-            margin: 0;
-            font-size: 1rem;
+            font-size: 1.15rem;
             font-weight: 600;
-            color: #e8eefc;
-            font-family: 'Press Start 2P', monospace;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            color: var(--text);
         }
 
-        .ld-metrics {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .ld-metric {
-            flex: 1 1 9rem;
-            background: rgba(15, 20, 34, 0.6);
-            border-radius: 0;
-            border: 2px solid #23304a;
-            padding: 1.25rem 1rem;
-            box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3);
-        }
-
-        .ld-metric-label {
-            font-size: 0.65rem;
-            color: #9fb0d1;
-            font-family: 'Press Start 2P', monospace;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-            margin-bottom: 0.75rem;
-        }
-
-        .ld-metric-value {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: #ffd24a;
-            font-family: 'Press Start 2P', monospace;
-            text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
-            line-height: 1.2;
-        }
-
-        .ld-top-course {
-            padding: 1rem 0;
-        }
-
-        .ld-top-course-title {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            color: #e8eefc;
-            font-family: 'Press Start 2P', monospace;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-            line-height: 1.5;
-        }
-
-        .ld-top-course-meta {
-            font-size: 0.65rem;
-            color: #9fb0d1;
-            font-family: 'Press Start 2P', monospace;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-        }
-
-        .ld-two-col {
+        .ld-engagement-body {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 1.5rem;
+            gap: 0.5rem;
+        }
+
+        @media (max-width: 40rem) {
+            .ld-engagement-body {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .ld-eng-item-label {
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        .ld-eng-item-value {
+            font-size: 0.95rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .ld-eng-topcourse-title {
+            font-size: 0.8rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .ld-eng-topcourse-meta {
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        .ld-bottom-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.4fr);
+            gap: 0.75rem;
+        }
+
+        @media (max-width: 56.25rem) {
+            .ld-bottom-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .ld-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.4rem;
+            margin-bottom: 0.4rem;
         }
 
         .ld-list {
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+            gap: 0.3rem;
         }
 
         .ld-list-item {
+            padding: 0.4rem 0.5rem;
+            border-radius: 0.5rem;
+            border: 0.0625rem solid var(--line);
+            background: var(--panel-2);
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            gap: 1rem;
-            padding: 1.25rem 1rem;
-            border-radius: 0;
-            background: rgba(15, 20, 34, 0.6);
-            border: 2px solid #23304a;
-            text-decoration: none;
-            color: inherit;
-            transition: all 0.2s ease;
-            box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3);
-        }
-
-        .ld-list-item:hover {
-            border-color: #ffd24a;
-            background: rgba(15, 20, 34, 0.8);
-            transform: translateX(4px);
-            box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 210, 74, 0.2);
+            align-items: center;
+            gap: 0.4rem;
         }
 
         .ld-list-main {
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
-            flex: 1;
+            gap: 0.1rem;
         }
 
         .ld-list-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #e8eefc;
-            font-family: 'Press Start 2P', monospace;
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-            line-height: 1.4;
+            font-size: 0.85rem;
+            color: var(--text);
+            font-weight: 500;
         }
 
         .ld-list-meta {
-            font-size: 0.6rem;
-            color: #9fb0d1;
-            font-family: 'Press Start 2P', monospace;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
+            font-size: 0.78rem;
+            color: var(--muted);
         }
 
-        .ld-list-extra {
-            font-size: 0.6rem;
-            color: #9fb0d1;
+        .ld-list-pill {
+            font-size: 0.78rem;
+            padding: 0.1rem 0.45rem;
+            border-radius: 999px;
+            border: 0.0625rem solid var(--line);
+            background: var(--panel);
+            color: var(--muted);
             white-space: nowrap;
-            font-family: 'Press Start 2P', monospace;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
         }
 
-        @media (max-width: 1024px) {
-            .ld-stats {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-
-            .ld-mid-row {
-                grid-template-columns: 1fr;
-            }
-
-            .ld-two-col {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .ld-stats {
-                grid-template-columns: 1fr;
-            }
-
-            .ld-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
-            }
-
-            .ld-actions {
-                width: 100%;
-            }
-
-            .ld-actions .btn {
-                flex: 1;
-                text-align: center;
-            }
+        .ld-empty-label {
+            font-size: 0.8rem;
+            color: var(--muted);
         }
     </style>
 </asp:Content>
 
 <asp:Content ID="MainBlock" ContentPlaceHolderID="LecturerMain" runat="server">
-
     <div class="ld-shell">
-        <!-- Header row -->
+        <!-- Header with profile card -->
         <div class="ld-header">
-            <h2 class="ld-title">Dashboard</h2>
-            <div class="ld-actions">
-                <a href="<%= ResolveUrl("~/Lecturer/LecturerCourses.aspx") %>" class="btn">
-                    View Courses
-                </a>
-                <a href="<%= ResolveUrl("~/Lecturer/LecturerAssessments.aspx") %>" class="btn">
-                    View Assessment
-                </a>
-                <a href="<%= ResolveUrl("~/Lecturer/LecturerExamBuilder.aspx") %>" class="btn primary">
-                    Build Assessment
-                </a>
-            </div>
-        </div>
-
-        <!-- Stat tiles -->
-        <div class="ld-stats">
-            <div class="ld-stat-card">
-                <div class="ld-stat-label">My Courses</div>
-                <div class="ld-stat-value">
-                    <asp:Literal ID="litCoursesCount" runat="server" />
+            <div class="ld-title-block">
+                <div class="ld-title">Lecturer Dashboard</div>
+                <div class="ld-subtitle">
+                    <asp:Literal ID="litDashboardSubtitle" runat="server" />
                 </div>
             </div>
 
-            <div class="ld-stat-card">
-                <div class="ld-stat-label">Assessments</div>
-                <div class="ld-stat-value">
-                    <asp:Literal ID="litAssessmentsCount" runat="server" />
-                </div>
-            </div>
-
-            <div class="ld-stat-card">
-                <div class="ld-stat-label">Exercises</div>
-                <div class="ld-stat-value">
-                    <asp:Literal ID="litExercisesCount" runat="server" />
-                </div>
-            </div>
-
-            <div class="ld-stat-card">
-                <div class="ld-stat-label">Questions</div>
-                <div class="ld-stat-value">
-                    <asp:Literal ID="litQuestionsCount" runat="server" />
-                </div>
-            </div>
-        </div>
-
-        <!-- Mid row: engagement + top course (fills more vertical space) -->
-        <div class="ld-mid-row">
-            <div class="ld-panel ld-panel--metrics">
-                <div class="ld-panel-header">
-                    <h3 class="ld-panel-title">Students & engagement</h3>
-                </div>
-                <div class="ld-metrics">
-                    <div class="ld-metric">
-                        <div class="ld-metric-label">Unique students</div>
-                        <div class="ld-metric-value">
-                            <asp:Literal ID="litStudentsCount" runat="server" />
+            <div class="ld-header-right">
+                <div class="ld-profile-card">
+                    <div class="ld-profile-main">
+                        <div class="ld-profile-name">
+                            <asp:Literal ID="litProfileName" runat="server" />
+                        </div>
+                        <div class="ld-profile-meta">
+                            <span class="ld-profile-role-pill">
+                                <asp:Literal ID="litProfileRole" runat="server" />
+                            </span>
+                            <asp:Literal ID="litProfileEmail" runat="server" />
                         </div>
                     </div>
-                    <div class="ld-metric">
-                        <div class="ld-metric-label">Total enrollments across my courses</div>
-                        <div class="ld-metric-value">
+                    <div class="ld-profile-actions">
+                        <asp:LinkButton ID="btnLogout" runat="server"
+                            CssClass="btn"
+                            OnClick="btnLogout_Click">
+                            Logout
+                        </asp:LinkButton>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top section: stats + engagement -->
+        <div class="ld-top-grid">
+            <!-- Quick stats -->
+            <div class="ld-card">
+                <div class="ld-card-header">
+                    <div class="ld-card-title">Your content</div>
+                </div>
+                <div class="ld-stats-grid">
+                    <div>
+                        <div class="ld-stat-label">Courses</div>
+                        <div class="ld-stat-value">
+                            <asp:Literal ID="litCoursesCount" runat="server" />
+                        </div>
+                    </div>
+                    <div>
+                        <div class="ld-stat-label">Assessments</div>
+                        <div class="ld-stat-value">
+                            <asp:Literal ID="litAssessmentsCount" runat="server" />
+                        </div>
+                    </div>
+                    <div>
+                        <div class="ld-stat-label">Exercises</div>
+                        <div class="ld-stat-value">
+                            <asp:Literal ID="litExercisesCount" runat="server" />
+                        </div>
+                    </div>
+                    <div>
+                        <div class="ld-stat-label">Questions</div>
+                        <div class="ld-stat-value">
+                            <asp:Literal ID="litQuestionsCount" runat="server" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Engagement -->
+            <div class="ld-card ld-card--accent-main">
+                <div class="ld-card-header">
+                    <div class="ld-card-title">Student engagement</div>
+                </div>
+                <div class="ld-engagement-body">
+                    <div>
+                        <div class="ld-eng-item-label">Unique students</div>
+                        <div class="ld-eng-item-value">
+                            <asp:Literal ID="litStudentsCount" runat="server" />
+                        </div>
+
+                        <div class="ld-eng-item-label" style="margin-top:0.35rem;">Total enrollments</div>
+                        <div class="ld-eng-item-value">
                             <asp:Literal ID="litEnrollmentsCount" runat="server" />
                         </div>
                     </div>
-                    <div class="ld-metric">
-                        <div class="ld-metric-label">Average progress</div>
-                        <div class="ld-metric-value">
+
+                    <div>
+                        <div class="ld-eng-item-label">Average progress</div>
+                        <div class="ld-eng-item-value">
                             <asp:Literal ID="litAvgProgress" runat="server" />
                         </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="ld-panel ld-panel--metrics">
-                <div class="ld-panel-header">
-                    <h3 class="ld-panel-title">Top course</h3>
-                </div>
-                <div class="ld-top-course">
-                    <div class="ld-top-course-title">
-                        <asp:Literal ID="litTopCourseTitle" runat="server" />
-                    </div>
-                    <div class="ld-top-course-meta">
-                        Enrollments:
-                        <asp:Literal ID="litTopCourseEnrollments" runat="server" />
+                        <div class="ld-eng-item-label" style="margin-top:0.35rem;">Top course</div>
+                        <div class="ld-eng-topcourse-title">
+                            <asp:Literal ID="litTopCourseTitle" runat="server" />
+                        </div>
+                        <div class="ld-eng-topcourse-meta">
+                            <asp:Literal ID="litTopCourseEnrollments" runat="server" /> enrollments
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Two-column lists -->
-        <div class="ld-two-col">
+        <!-- Bottom section: recent courses + assessments -->
+        <div class="ld-bottom-grid">
             <!-- Recent courses -->
-            <div class="ld-panel">
-                <div class="ld-panel-header">
-                    <h3 class="ld-panel-title">Recent Courses</h3>
+            <div class="ld-card">
+                <div class="ld-list-header">
+                    <div class="ld-card-title">Recent courses</div>
                 </div>
 
-                <asp:Label ID="lblCoursesEmpty" runat="server"
-                           CssClass="muted" Visible="false" />
+                <asp:Label ID="lblCoursesEmpty" runat="server" CssClass="ld-empty-label" Visible="false" />
 
-                <asp:Repeater ID="rptRecentCourses" runat="server">
-                    <HeaderTemplate>
-                        <div class="ld-list">
-                    </HeaderTemplate>
-
-                    <ItemTemplate>
-                        <a class="ld-list-item"
-                           href='<%# ResolveUrl("~/Lecturer/LecturerCourseDetails.aspx?courseId=" + Eval("CourseId")) %>'>
-                            <div class="ld-list-main">
-                                <div class="ld-list-title"><%# Eval("CourseTitle") %></div>
-                                <div class="ld-list-meta">
-                                    Lessons: <%# Eval("TotalLessons") %>
+                <div class="ld-list">
+                    <asp:Repeater ID="rptRecentCourses" runat="server">
+                        <ItemTemplate>
+                            <div class="ld-list-item">
+                                <div class="ld-list-main">
+                                    <div class="ld-list-title"><%# Eval("CourseTitle") %></div>
+                                    <div class="ld-list-meta">
+                                        Lessons: <%# Eval("TotalLessons") %> •
+                                        Created: <%# ((DateTime)Eval("CourseCreatedAt")).ToString("dd MMM yyyy") %>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="ld-list-extra">
-                                <%# string.Format("{0:dd MMM yyyy}", Eval("CourseCreatedAt")) %>
-                            </div>
-                        </a>
-                    </ItemTemplate>
-
-                    <FooterTemplate>
-                        </div>
-                    </FooterTemplate>
-                </asp:Repeater>
+                        </ItemTemplate>
+                    </asp:Repeater>
+                </div>
             </div>
 
             <!-- Recent assessments -->
-            <div class="ld-panel">
-                <div class="ld-panel-header">
-                    <h3 class="ld-panel-title">Recent Assessments</h3>
+            <div class="ld-card">
+                <div class="ld-list-header">
+                    <div class="ld-card-title">Recent assessments</div>
                 </div>
 
-                <asp:Label ID="lblAssessmentsEmpty" runat="server"
-                           CssClass="muted" Visible="false" />
+                <asp:Label ID="lblAssessmentsEmpty" runat="server" CssClass="ld-empty-label" Visible="false" />
 
-                <asp:Repeater ID="rptRecentAssessments" runat="server">
-                    <HeaderTemplate>
-                        <div class="ld-list">
-                    </HeaderTemplate>
-
-                    <ItemTemplate>
-                        <a class="ld-list-item"
-                           href='<%# ResolveUrl("~/Lecturer/LecturerAssessmentDetails.aspx?quizId=" + Eval("QuizId")) %>'>
-                            <div class="ld-list-main">
-                                <div class="ld-list-title"><%# Eval("QuizTitle") %></div>
-                                <div class="ld-list-meta">
-                                    Questions: <%# Eval("QuestionCount") %>
+                <div class="ld-list">
+                    <asp:Repeater ID="rptRecentAssessments" runat="server">
+                        <ItemTemplate>
+                            <div class="ld-list-item">
+                                <div class="ld-list-main">
+                                    <div class="ld-list-title"><%# Eval("QuizTitle") %></div>
+                                    <div class="ld-list-meta">
+                                        <%# Eval("QuestionCount") %> questions
+                                    </div>
                                 </div>
+                                <span class="ld-list-pill">
+                                    Assessment
+                                </span>
                             </div>
-                            <div class="ld-list-extra">
-                                ID: <%# Eval("QuizId") %>
-                            </div>
-                        </a>
-                    </ItemTemplate>
-
-                    <FooterTemplate>
-                        </div>
-                    </FooterTemplate>
-                </asp:Repeater>
+                        </ItemTemplate>
+                    </asp:Repeater>
+                </div>
             </div>
         </div>
     </div>
-
 </asp:Content>
