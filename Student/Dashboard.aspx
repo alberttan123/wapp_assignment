@@ -6,6 +6,47 @@
 </asp:Content>
 
 <asp:Content ContentPlaceHolderID="MainContent" runat="server">
+<%-- Edit Profile Modal START --%>
+<asp:Panel ID="EditProfileModal" runat="server" Visible="false">
+<!-- Click outside to close (server-side backdrop) -->
+<asp:LinkButton ID="lnkBackdrop1" runat="server" CssClass="backdrop"
+    OnClick="hide_edit_profile" CausesValidation="false" />
+
+<div id="loginModalDiv" class="pages-modal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+  <div class="sheet" id="dashboardSheet">
+        <div class="modal-header" id="modal-header">
+          <h3 class="modal-title" id="modal-title">Edit Profile</h3>
+        </div>
+
+        <!-- Profile Picture Section -->
+        <div class="field">
+          <label class="label">Profile Picture</label>
+          <asp:Panel ID="EditProfileImagePanel" runat="server" Visible="true" CssClass="profile-avatar"></asp:Panel>
+          <asp:FileUpload ID="pfp_upload" runat="server"></asp:FileUpload>
+        </div>
+
+        <!-- Full Name -->
+        <div class="field">
+          <label class="label">Full Name</label>
+          <asp:TextBox ID="editFullName" runat="server" CssClass="input" MaxLength="100" />
+        </div>
+
+        <asp:Label runat="server" ID="edit_profile_error_message"></asp:Label>
+
+        <div class="actions">
+          <!-- Cancel close -->
+          <asp:LinkButton ID="lnkCancelEdit" runat="server" CssClass="btn cancel"
+              OnClick="hide_edit_profile" CausesValidation="false">Cancel</asp:LinkButton>
+
+          <!-- Save -->
+          <asp:Button ID="btnLogin" runat="server" CssClass="btn primary" Text="Save"
+              OnClick="editProfile" ValidationGroup="Login" />
+        </div>
+    </div>
+</div>
+</asp:Panel>
+<%-- Edit Profile Modal END --%>
+
   <main class="dashboard-main">
     <div class="dashboard-container">
       <!-- Left Content Area -->
@@ -184,30 +225,29 @@
       <aside class="dashboard-sidebar">
         <!-- Profile Card -->
         <div class="profile-card">
-          <div class="profile-avatar">
-            <div class="avatar-placeholder">👤</div>
-          </div>
+            <asp:Panel ID="pfp_section" CssClass="profile-avatar" runat="server"></asp:Panel>
           <div class="profile-info">
-            <h3 class="profile-name"><%= StudentName %></h3>
-            <p class="profile-level">Level 1</p>
+            <asp:Label ID="UsernameLabel" runat="server" CssClass="profile-name"></asp:Label>
+            <br>
+            <asp:Label ID="FullNameLabel" runat="server" CssClass="profile-level"></asp:Label>
           </div>
           <div class="profile-stats">
             <div class="stat-item">
               <span class="stat-icon">⭐</span>
               <div class="stat-details">
-                <span class="stat-value">55</span>
+                <asp:Label ID="XPLabel" runat="server" CssClass="stat-value"></asp:Label>
                 <span class="stat-label">Total XP</span>
               </div>
             </div>
             <div class="stat-item">
-              <span class="stat-icon">🥉</span>
+                <asp:Label ID="RankIcon" CssClass="stat-icon" runat="server"></asp:Label>
               <div class="stat-details">
-                <span class="stat-value">Bronze</span>
+                <asp:Label ID="RankLabel" CssClass="stat-value" runat="server"></asp:Label>
                 <span class="stat-label">Rank</span>
               </div>
             </div>
           </div>
-          <button class="btn-view-profile" onclick="window.location.href='<%= ResolveUrl("~/Student/Profile.aspx") %>'">View profile</button>
+            <asp:LinkButton ID="edit_profile_button" CssClass="btn-view-profile" OnClick="show_edit_profile" runat="server">Edit Profile</asp:LinkButton>
           <asp:LinkButton ID="btnSidebarLogout" runat="server" OnClick="Logout" CssClass="btn-logout-sidebar" style="margin-top: 0.75rem;">Logout</asp:LinkButton>
         </div>
       </aside>

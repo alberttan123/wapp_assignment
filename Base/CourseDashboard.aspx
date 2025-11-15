@@ -306,6 +306,31 @@
 </asp:Content>
 
 <asp:Content ContentPlaceHolderID="MainContent" runat="server">
+    <!-- Enroll modal (follows your Panel-visible pattern) -->
+    <asp:Panel ID="EnrollModal" runat="server" CssClass="modal-overlay" Visible="false">
+        <div class="modal-card">
+            <h3>Enroll in this course?</h3>
+            <p>
+                You are not currently enrolled in this course. Would you like to enroll now?
+            </p>
+
+            <!-- Store selected course -->
+            <asp:HiddenField ID="SelectedCourseId" runat="server" />
+
+            <div class="modal-actions">
+                <asp:Button ID="btnConfirmEnroll" runat="server"
+                    Text="Enroll"
+                    CssClass="btn primary-btn"
+                    OnClick="btnConfirmEnroll_Click" />
+
+                <asp:Button ID="btnCancelEnroll" runat="server"
+                    Text="Cancel"
+                    CssClass="btn secondary-btn"
+                    OnClick="btnCancelEnroll_Click"
+                    CausesValidation="false" />
+            </div>
+        </div>
+    </asp:Panel>
   
   <header class="a">
     <div class="a-bg" role="img" aria-label="Pixel art world background"></div>
@@ -333,177 +358,11 @@
         </div>
       </div>
       
-      <div class="garden-grid">
-        
-        <!-- Course Card 1 with Wrapper -->
-        <div class="garden-card-wrapper">
-          <a href="#" class="garden-card">
-            <div class="garden-image">
-              <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800" alt="Course Image" />
-            </div>
-            <div class="garden-content">
-              <div>
-                <p class="garden-course-num">COURSE 1</p>
-                <h3 class="garden-title">Dolor Sit Amet</h3>
-                <p class="garden-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam quis nostrud.</p>
-              </div>
-              <div class="garden-stats">
-                <span class="garden-level">
-                  <span class="garden-level-icon">📊</span>
-                  BEGINNER
-                </span>
-                <span class="garden-progress-text">12 lessons</span>
-              </div>
-            </div>
-          </a>
+        <!-- Course grid container -->
+        <div class="garden-grid">
+            <asp:PlaceHolder ID="CourseGrid" runat="server" />
         </div>
-
-        <!-- Course Card 2 with Wrapper -->
-        <div class="garden-card-wrapper">
-          <a href="#" class="garden-card">
-            <div class="garden-image">
-              <img src="https://wallpapercave.com/wp/wp2831095.jpg" alt="Course Image" />
-            </div>
-            <div class="garden-content">
-              <div>
-                <p class="garden-course-num">COURSE 2</p>
-                <h3 class="garden-title">Consectetur Adipiscing</h3>
-                <p class="garden-desc">Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-              </div>
-              <div class="garden-stats">
-                <span class="garden-level">
-                  <span class="garden-level-icon">📊</span>
-                  INTERMEDIATE
-                </span>
-                <span class="garden-progress-text">18 lessons</span>
-              </div>
-            </div>
-            <div class="garden-progress-bar">
-              <div class="garden-progress-fill" style="width: 45%"></div>
-            </div>
-          </a>
-        </div>
-
-        <!-- Course Card 3 with Wrapper -->
-        <div class="garden-card-wrapper">
-          <a href="#" class="garden-card">
-            <div class="garden-new-badge">NEW!</div>
-            <div class="garden-image">
-              <img src="https://wallpapercave.com/wp/wp4676582.jpg" alt="Course Image" />
-            </div>
-            <div class="garden-content">
-              <div>
-                <p class="garden-course-num">COURSE 3</p>
-                <h3 class="garden-title">Tempor Incididunt</h3>
-                <p class="garden-desc">Ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida.</p>
-              </div>
-              <div class="garden-stats">
-                <span class="garden-level">
-                  <span class="garden-level-icon">📊</span>
-                  INTERMEDIATE
-                </span>
-                <span class="garden-progress-text">15 lessons</span>
-              </div>
-            </div>
-          </a>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- Second Course Category -->
-    <section class="course-trilogy">
-      <div class="trilogy-header">
-        <span class="trilogy-icon">🗺️</span>
-        <div>
-          <h2 class="trilogy-title">Ut Enim Ad Minim</h2>
-          <p class="trilogy-subtitle">Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit.</p>
-        </div>
-      </div>
-      
-      <div class="garden-grid">
-        
-        <!-- Course Card 1 with Wrapper -->
-        <div class="garden-card-wrapper">
-          <a href="#" class="garden-card">
-            <div class="garden-image">
-              <img src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=800" alt="Course Image" />
-            </div>
-            <div class="garden-content">
-              <div>
-                <p class="garden-course-num">COURSE 1</p>
-                <h3 class="garden-title">Veniam Quis</h3>
-                <p class="garden-desc">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt.</p>
-              </div>
-              <div class="garden-stats">
-                <span class="garden-level">
-                  <span class="garden-level-icon">📊</span>
-                  BEGINNER
-                </span>
-                <span class="garden-progress-text">20 lessons</span>
-              </div>
-            </div>
-            <div class="garden-progress-bar">
-              <div class="garden-progress-fill" style="width: 75%"></div>
-            </div>
-          </a>
-        </div>
-
-        <!-- Course Card 2 with Wrapper -->
-        <div class="garden-card-wrapper">
-          <a href="#" class="garden-card">
-            <div class="garden-new-badge">NEW!</div>
-            <div class="garden-image">
-              <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800" alt="Course Image" />
-            </div>
-            <div class="garden-content">
-              <div>
-                <p class="garden-course-num">COURSE 2</p>
-                <h3 class="garden-title">Nostrud Exercitation</h3>
-                <p class="garden-desc">Mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.</p>
-              </div>
-              <div class="garden-stats">
-                <span class="garden-level">
-                  <span class="garden-level-icon">📊</span>
-                  BEGINNER
-                </span>
-                <span class="garden-progress-text">16 lessons</span>
-              </div>
-            </div>
-          </a>
-        </div>
-
-        <!-- Course Card 3 with Wrapper -->
-        <div class="garden-card-wrapper">
-          <a href="#" class="garden-card">
-            <div class="garden-image">
-              <img src="https://images.unsplash.com/photo-1569163139394-de4798aa62b0?w=800" alt="Course Image" />
-            </div>
-            <div class="garden-content">
-              <div>
-                <p class="garden-course-num">COURSE 3</p>
-                <h3 class="garden-title">Ullamco Laboris</h3>
-                <p class="garden-desc">Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.</p>
-              </div>
-              <div class="garden-stats">
-                <span class="garden-level">
-                  <span class="garden-level-icon">📊</span>
-                  INTERMEDIATE
-                </span>
-                <span class="garden-progress-text">22 lessons</span>
-              </div>
-            </div>
-          </a>
-        </div>
-
-      </div>
     </section>
 
   </main>
-
-  <footer class="footer">
-    <div class="container">
-      <p>© Geography Pages</p>
-    </div>
-  </footer>
 </asp:Content>

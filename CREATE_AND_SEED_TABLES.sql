@@ -2,23 +2,52 @@
 -- CREATE_TABLES.sql
 -- MSSQL Server schema for .NET WebForms project
 ------------------------------------------------------------
--- Drop tables in correct dependency order (safe for re-run)
+-- DROP TABLES IN CORRECT FK ORDER
 ------------------------------------------------------------
 
+-- Drop lowest-level children first
+IF OBJECT_ID('dbo.QuizTry', 'U') IS NOT NULL DROP TABLE dbo.QuizTry;
+IF OBJECT_ID('dbo.UserAnswer', 'U') IS NOT NULL DROP TABLE dbo.UserAnswer;
+IF OBJECT_ID('dbo.Score', 'U') IS NOT NULL DROP TABLE dbo.Score;
+
+-- Forum
 IF OBJECT_ID('dbo.ForumComment', 'U') IS NOT NULL DROP TABLE dbo.ForumComment;
 IF OBJECT_ID('dbo.ForumPost', 'U') IS NOT NULL DROP TABLE dbo.ForumPost;
+
+-- Question-related (must drop in RIGHT order)
 IF OBJECT_ID('dbo.QuestionBank', 'U') IS NOT NULL DROP TABLE dbo.QuestionBank;
 IF OBJECT_ID('dbo.Questions', 'U') IS NOT NULL DROP TABLE dbo.Questions;
 IF OBJECT_ID('dbo.Quiz', 'U') IS NOT NULL DROP TABLE dbo.Quiz;
+
+-- Chapter content system
 IF OBJECT_ID('dbo.ChapterContents', 'U') IS NOT NULL DROP TABLE dbo.ChapterContents;
 IF OBJECT_ID('dbo.Chapters', 'U') IS NOT NULL DROP TABLE dbo.Chapters;
-IF OBJECT_ID('dbo.Files', 'U') IS NOT NULL DROP TABLE dbo.Files;
-IF OBJECT_ID('dbo.StaticPages', 'U') IS NOT NULL DROP TABLE dbo.StaticPages;
+
+-- Bookmarks + enrollment must go before Users/Courses
 IF OBJECT_ID('dbo.Bookmarks', 'U') IS NOT NULL DROP TABLE dbo.Bookmarks;
 IF OBJECT_ID('dbo.Enrollments', 'U') IS NOT NULL DROP TABLE dbo.Enrollments;
+
+-- Other standalone tables
+IF OBJECT_ID('dbo.StaticPages', 'U') IS NOT NULL DROP TABLE dbo.StaticPages;
+
+-- Courses references Users
 IF OBJECT_ID('dbo.Courses', 'U') IS NOT NULL DROP TABLE dbo.Courses;
+
+-- Users references Files
 IF OBJECT_ID('dbo.Users', 'U') IS NOT NULL DROP TABLE dbo.Users;
 
+-- Finally drop Files (parent)
+IF OBJECT_ID('dbo.Files', 'U') IS NOT NULL DROP TABLE dbo.Files;
+
+------------------------------------------------------------
+-- FILES
+------------------------------------------------------------
+
+CREATE TABLE dbo.Files (
+    FileId     INT IDENTITY(1,1) PRIMARY KEY,
+    FilePath   NVARCHAR(256) NOT NULL,
+    FileName   NVARCHAR(256) NOT NULL
+);
 
 ------------------------------------------------------------
 -- USERS
@@ -35,7 +64,8 @@ CREATE TABLE dbo.Users (
     CreatedAt       DATETIME2(7) NOT NULL DEFAULT SYSUTCDATETIME(),
     IsPasswordReset BIT DEFAULT 0 NOT NULL,
     LastLogin       DATETIME2(7) NULL,
-    XP              INT NOT NULL DEFAULT 0
+    XP              INT NOT NULL DEFAULT 0,
+    ProfilePictureFilePath NVARCHAR(256) NULL,
 );
 
 
@@ -182,17 +212,6 @@ CREATE TABLE dbo.QuestionBank (
 
 
 ------------------------------------------------------------
--- FILES
-------------------------------------------------------------
-
-CREATE TABLE dbo.Files (
-    FileId     INT IDENTITY(1,1) PRIMARY KEY,
-    FilePath   NVARCHAR(256) NOT NULL,
-    FileName   NVARCHAR(256) NOT NULL
-);
-
-
-------------------------------------------------------------
 -- STATIC PAGES
 ------------------------------------------------------------
 
@@ -290,12 +309,21 @@ CREATE TABLE dbo.QuizTry (
         FOREIGN KEY (UserAnswerId) REFERENCES dbo.UserAnswer(UserAnswerId)
 );
 
--------------------------------------------------------------------------------
+
 
 ------------------------------------------------------------
 -- SEED_DATA.sql (Updated for new schema)
 -- Geography learning platform seed data
 ------------------------------------------------------------
+
+------------------------------------------------------------
+-- FILES
+------------------------------------------------------------
+INSERT INTO dbo.Files (FilePath, FileName)
+VALUES
+('/pfps/defaultprofilepicture.jpg', 'defaultprofilepicture.jpg'),
+('/files/geo/intro_worksheet.pdf', 'Intro_worksheet.pdf'),
+('/files/geo/rock_cycle_diagram.png', 'Rock_Cycle_Diagram.png');
 
 ------------------------------------------------------------
 -- USERS
@@ -367,14 +395,6 @@ VALUES
 ('Introduction Overview', 'This page introduces the concept of geography.'),
 ('Earth Structure Summary', 'This page discusses Earth layers and plate tectonics.'),
 ('Rock Cycle Basics', 'This page explains the rock cycle in simple terms.');
-
-------------------------------------------------------------
--- FILES
-------------------------------------------------------------
-INSERT INTO dbo.Files (FilePath, FileName)
-VALUES
-('/files/geo/intro_worksheet.pdf', 'Intro_worksheet.pdf'),
-('/files/geo/rock_cycle_diagram.png', 'Rock_Cycle_Diagram.png');
 
 ------------------------------------------------------------
 -- QUIZ

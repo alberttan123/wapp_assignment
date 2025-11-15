@@ -7,56 +7,47 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WAPP_Assignment.Base
+namespace WAPP_Assignment.Student
 {
 
 
-    public partial class CourseDashboard
+    public partial class ViewCourse
     {
 
         /// <summary>
-        /// EnrollModal control.
+        /// courseTitle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel EnrollModal;
+        protected global::System.Web.UI.WebControls.Label courseTitle;
 
         /// <summary>
-        /// SelectedCourseId control.
+        /// courseInfo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField SelectedCourseId;
+        protected global::System.Web.UI.WebControls.Label courseInfo;
 
         /// <summary>
-        /// btnConfirmEnroll control.
+        /// courseDescription control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnConfirmEnroll;
+        protected global::System.Web.UI.WebControls.Label courseDescription;
 
         /// <summary>
-        /// btnCancelEnroll control.
+        /// course_content_container control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCancelEnroll;
-
-        /// <summary>
-        /// CourseGrid control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder CourseGrid;
+        protected global::System.Web.UI.WebControls.Panel course_content_container;
     }
 }

@@ -16,7 +16,7 @@ using static WAPP_Assignment.DataAccess;
 
 namespace WAPP_Assignment
 {
-    public partial class SiteMaster : MasterPage
+    public partial class SiteMaster : MasterPage, MasterPageInterface
     {
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -143,8 +143,8 @@ namespace WAPP_Assignment
             Response.Redirect("~/Base/Landing.aspx", true);
         }
 
-        protected void showLoginSignupModal(object sender, EventArgs e)
-        {
+        public void showLoginSignupModal(object sender, EventArgs e) 
+        { 
             loginModal.Visible = true;
         }
 
@@ -212,8 +212,14 @@ namespace WAPP_Assignment
                             return;
                         }
 
-                        // Extract values BEFORE closing reader
+                        // Success → issue auth cookie
+                        SignIn(rd);
+
                         int userId = rd.GetInt32(rd.GetOrdinal("UserId"));
+                        updateLastLogin(userId);
+                        //updates last login to current date time
+
+                        // Decide where to send them based on role
                         string userType = rd.GetString(rd.GetOrdinal("UserType"));
 
                         bool isResetRequired = false;
@@ -479,6 +485,22 @@ namespace WAPP_Assignment
                 byte[] bytes = Encoding.UTF8.GetBytes(input);
                 byte[] hash = sha.ComputeHash(bytes);
                 return Convert.ToBase64String(hash);
+            }
+        }
+
+        public void updateLastLogin(int userId)
+        {
+            DateTime currentDateTime = DateTime.Now;
+            string formattedDateTime = currentDateTime.ToString("yyyy-MM-dd HH:mm:ss.fffffff");
+            using (var conn = DataAccess.GetOpenConnection())
+            {
+                string sql = "UPDATE dbo.Users SET LastLogin = @dateTimeValue WHERE UserId = @UserId";
+                using (SqlCommand command = new SqlCommand(sql, conn))
+                {
+                    command.Parameters.AddWithValue("@dateTimeValue", currentDateTime);
+                    command.Parameters.AddWithValue("@UserId", userId);
+                    command.ExecuteNonQuery();
+                }
             }
         }
     }
