@@ -22,7 +22,7 @@ namespace WAPP_Assignment.Student
             if (!isAuthenticated || string.IsNullOrEmpty(userId))
             {
                 // Redirect to login if not authenticated
-                Response.Redirect("~/Default.aspx", true);
+                Response.Redirect("~/Base/Landing.aspx", true);
                 return;
             }
 
@@ -36,7 +36,6 @@ namespace WAPP_Assignment.Student
             {
                 StudentName = LoadStudentName();
                 BindEnrollmentData();
-                BindFlashcardsData(); // Still needed for Quick Actions badge
             }
         }
         
@@ -60,7 +59,7 @@ namespace WAPP_Assignment.Student
             }
 
             // If no user found, redirect to login
-            Response.Redirect("~/Default.aspx", true);
+            Response.Redirect("~/Base/Landing.aspx", true);
             return 0; // This won't be reached due to redirect
         }
         private void BindEnrollmentData()
@@ -88,30 +87,29 @@ namespace WAPP_Assignment.Student
                     rptCoursesDropdown.DataBind();
 
                     pnlCoursesDropdownEmpty.Visible = table.Rows.Count == 0;
-
-                    int total = table.Rows.Count;
-                    lblQuickEnrolled.Text = total.ToString();
                 }
             }
         }
 
-        private void BindFlashcardsData()
-        {
-            int userId = ResolveUserId();
+        //private void BindFlashcardsData()
+        //{
+        //    int userId = ResolveUserId();
 
-            using (var conn = DataAccess.GetOpenConnection())
-            using (var cmd = new SqlCommand(@"
-                SELECT COUNT(*) as TotalFlashcards
-                FROM dbo.Bookmarks
-                WHERE UserId = @UserId;", conn))
-            {
-                cmd.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+        //    using (var conn = DataAccess.GetOpenConnection())
+        //    using (var cmd = new SqlCommand(@"
+        //        SELECT COUNT(*) as TotalFlashcards
+        //        FROM dbo.Bookmarks
+        //        WHERE UserId = @UserId;", conn))
+        //    {
+        //        cmd.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
 
-                object result = cmd.ExecuteScalar();
-                int total = result != null && result != DBNull.Value ? Convert.ToInt32(result) : 0;
-                lblQuickFlashcards.Text = total.ToString();
-            }
-        }
+        //        object result = cmd.ExecuteScalar();
+        //        int total = result != null && result != DBNull.Value ? Convert.ToInt32(result) : 0;
+        //        lblQuickFlashcards.Text = total.ToString();
+        //    }
+        //}
+        // AHHHHHHHHHHHHHHHHHHHHH - this section contains the code for bookmarking/favoriting a question and turning it into a flashcard
+        // only implement when have time
 
         private string LoadStudentName()
         {
@@ -178,7 +176,7 @@ namespace WAPP_Assignment.Student
             Session.Abandon();
             
             // Redirect to home page
-            Response.Redirect("~/Default.aspx", true);
+            Response.Redirect("~/Base/Landing.aspx", true);
         }
     }
 } 

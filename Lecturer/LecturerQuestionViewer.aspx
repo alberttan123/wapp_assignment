@@ -15,12 +15,87 @@
       margin-bottom:.75rem;
     }
     .qv-left-actions{ display:flex; gap:.5rem; align-items:center; }
+
+    /* --- toggle container --- */
     .qv-toggle{
       display:flex;
       align-items:center;
-      gap:.35rem;
+      gap:.5rem;
       font-size:.9rem;
       color:var(--muted);
+    }
+    .qv-toggle-label{
+      white-space:nowrap;
+    }
+    .qv-toggle-switch{
+      position:relative;
+      display:inline-flex;
+      align-items:center;
+    }
+
+    /* WebForms: CssClass is applied to a SPAN wrapper around the real <input> */
+    .qv-toggle-input{
+      position:absolute;
+      inset:0;
+      display:inline-block;
+      cursor:pointer;
+    }
+    .qv-toggle-input input{
+      width:100%;
+      height:100%;
+      opacity:0;
+      cursor:pointer;
+    }
+
+    .qv-toggle-track{
+      position:relative;
+      width:3.5rem;
+      height:1.7rem;
+      border-radius:999px;
+      background:var(--panel-2);
+      border:1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 0.35rem;
+      box-sizing:border-box;
+      cursor:pointer;
+    }
+    .qv-toggle-thumb{
+      position:absolute;
+      top:2px;
+      left:2px;
+      width:1.5rem;
+      height:1.3rem;
+      border-radius:999px;
+      background:var(--brand);
+      transition:transform .18s ease;
+    }
+    .qv-toggle-icon{
+      position:relative;
+      z-index:1;
+      font-size:0.8rem;
+    }
+    .qv-toggle-icon-list{
+      color:var(--text);
+    }
+    .qv-toggle-icon-card{
+      color:var(--muted);
+    }
+
+    /*
+      IMPORTANT:
+      .qv-toggle-input is the <span> wrapper.
+      We use :has(input:checked) so the wrapper reacts when the inner <input> is checked.
+    */
+    .qv-toggle-input:has(input:checked) ~ .qv-toggle-track .qv-toggle-thumb{
+      transform:translateX(1.5rem);
+    }
+    .qv-toggle-input:has(input:checked) ~ .qv-toggle-track .qv-toggle-icon-list{
+      color:var(--muted);
+    }
+    .qv-toggle-input:has(input:checked) ~ .qv-toggle-track .qv-toggle-icon-card{
+      color:var(--text);
     }
 
     /* List mode */
@@ -189,10 +264,22 @@
       <div class="qv-left-actions">
         <a href="<%= ResolveUrl("~/Lecturer/LecturerQuestionAdd.aspx") %>" class="btn">Add Question</a>
       </div>
+
+      <!-- fancy slider toggle for expanded view -->
       <div class="qv-toggle">
-        <span>Expanded view</span>
-        <asp:CheckBox ID="chkExpanded" runat="server" AutoPostBack="true"
-                      OnCheckedChanged="ChkExpanded_CheckedChanged" />
+        <span class="qv-toggle-label">View mode</span>
+        <label class="qv-toggle-switch">
+          <!-- WebForms wraps this in a span.qv-toggle-input; that’s what we target in CSS -->
+          <asp:CheckBox ID="chkExpanded" runat="server"
+                        CssClass="qv-toggle-input"
+                        AutoPostBack="true"
+                        OnCheckedChanged="ChkExpanded_CheckedChanged" />
+          <span class="qv-toggle-track">
+            <span class="qv-toggle-icon qv-toggle-icon-list">&#9776;</span>
+            <span class="qv-toggle-icon qv-toggle-icon-card">&#9638;</span>
+            <span class="qv-toggle-thumb"></span>
+          </span>
+        </label>
       </div>
     </div>
 
@@ -221,7 +308,7 @@
       </asp:Repeater>
     </asp:Panel>
 
-    <!-- MODE 2: EXPANDED VIEW (unchanged) -->
+    <!-- MODE 2: EXPANDED VIEW -->
     <asp:Panel ID="pnlExpanded" runat="server" Visible="false">
       <div class="qv-stage">
         <div class="qv-arrow left">
@@ -326,21 +413,21 @@
   <script type="text/javascript">
     function qeditSelect(idx) {
       var hidden = document.getElementById('<%= hfEditCorrectAnswer.ClientID %>');
-          if (!hidden) return;
-          hidden.value = idx;
+      if (!hidden) return;
+      hidden.value = idx;
 
-          var cards = document.querySelectorAll('.edit-opt-row .edit-opt-card');
-          for (var i = 0; i < cards.length; i++) {
-              if (i === idx - 1) {
-                  cards[i].classList.add('is-correct');
-              } else {
-                  cards[i].classList.remove('is-correct');
-              }
-          }
+      var cards = document.querySelectorAll('.edit-opt-row .edit-opt-card');
+      for (var i = 0; i < cards.length; i++) {
+        if (i === idx - 1) {
+          cards[i].classList.add('is-correct');
+        } else {
+          cards[i].classList.remove('is-correct');
+        }
       }
+    }
 
-      (function () {
-          var hidden = document.getElementById('<%= hfEditCorrectAnswer.ClientID %>');
+    (function () {
+      var hidden = document.getElementById('<%= hfEditCorrectAnswer.ClientID %>');
           if (!hidden || !hidden.value) return;
           var idx = parseInt(hidden.value || "1", 10);
           if (!idx || idx < 1 || idx > 4) idx = 1;
