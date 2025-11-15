@@ -1,33 +1,74 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true"
+﻿<%@ Master Language="C#"
+    AutoEventWireup="true"
     CodeBehind="Lecturer.Master.cs"
-    Inherits="WAPP_Assignment.Lecturer.LecturerMaster"
-    MasterPageFile="~/Site.Master" %>
+    Inherits="WAPP_Assignment.Lecturer.LecturerMaster" %>
 
-<%-- Put lecturer CSS into Site.Master's <head> via its HeadContent placeholder --%>
-<asp:Content ID="LectHead" ContentPlaceHolderID="HeadContent" runat="server">
-  <link rel="stylesheet" href="<%= ResolveUrl("~/Content/LecturerPages.css") %>" />
-  <link rel="stylesheet" href="<%= ResolveUrl("~/Content/waplanding.css") %>" />
-  <%-- Per-page <head> items (optional) --%>
-  <asp:ContentPlaceHolder ID="HeadLecturer" runat="server" />
-</asp:Content>
+<!DOCTYPE html>
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <title>PAGES • Lecturer</title>
 
-<%-- Put the lecturer shell into Site.Master's MainContent --%>
-<asp:Content ID="LectBody" ContentPlaceHolderID="MainContent" runat="server">
-  <div class="lect-wrap">
-    <%-- Fixed sidebar (stays visible while scrolling) --%>
-    <nav class="lect-sb" aria-label="Lecturer sidebar">
-      <div class="lect-sb-title">Menu</div>
-      <div class="lect-links">
-        <a class="lect-link" href="<%= ResolveUrl("~/Lecturer/LecturerDashboard.aspx") %>">Dashboard</a>
-        <a class="lect-link" href="<%= ResolveUrl("~/Lecturer/LecturerCourses.aspx") %>">Courses</a>
-        <a class="lect-link" href="<%= ResolveUrl("~/Lecturer/LecturerQuestionViewer.aspx") %>">Questions</a>
-        <a class="lect-link" href="<%= ResolveUrl("~/Lecturer/LecturerAssessments.aspx") %>">Assessments</a>
-      </div>
-    </nav>
+    <!-- Base + lecturer styles -->
+    <link rel="stylesheet" href="<%= ResolveUrl("~/Content/Site.css") %>" />
+    <link rel="stylesheet" href="<%= ResolveUrl("~/Content/LecturerPages.css") %>" />
+    <link rel="stylesheet" href="<%= ResolveUrl("~/Content/waplanding.css") %>" />
 
-    <%-- Scrollable content to the right of the fixed sidebar --%>
-    <main class="lect-main">
-      <asp:ContentPlaceHolder ID="LecturerMain" runat="server" />
-    </main>
-  </div>
-</asp:Content>
+    <!-- Per-page extra head content -->
+    <asp:ContentPlaceHolder ID="HeadLecturer" runat="server" />
+</head>
+<body>
+    <form id="form1" runat="server">
+        <!-- Simple fixed top bar with logo only (no global header/nav) -->
+        <header class="lect-topbar">
+            <a href="<%= ResolveUrl("~/Base/Landing.aspx") %>" class="lect-logo">
+                <span>PAGES</span>
+            </a>
+        </header>
+
+        <!-- Lecturer layout shell, styled entirely via LecturerPages.css -->
+        <div class="lect-wrap">
+            <!-- Fixed sidebar -->
+            <nav class="lect-sb" aria-label="Lecturer sidebar">
+                <div class="lect-sb-title">Menu</div>
+
+                <div class="lect-links">
+                    <a class="lect-link"
+                       href="<%= ResolveUrl("~/Lecturer/LecturerDashboard.aspx") %>">
+                        Dashboard
+                    </a>
+
+                    <a class="lect-link"
+                       href="<%= ResolveUrl("~/Lecturer/LecturerCourses.aspx") %>">
+                        Courses
+                    </a>
+
+                    <a class="lect-link"
+                       href="<%= ResolveUrl("~/Lecturer/LecturerQuestionViewer.aspx") %>">
+                        Questions
+                    </a>
+
+                    <a class="lect-link"
+                       href="<%= ResolveUrl("~/Lecturer/LecturerAssessments.aspx") %>">
+                        Assessments
+                    </a>
+
+                    <a class="lect-link"
+                       href="<%= ResolveUrl("~/Lecturer/LecturerExamBuilder.aspx") %>">
+                        Exam Builder
+                    </a>
+                </div>
+            </nav>
+
+            <!-- Scrollable main content -->
+            <main class="lect-main">
+                <asp:ContentPlaceHolder ID="LecturerMain" runat="server" />
+            </main>
+        </div>
+
+        <div class="footer">
+            © PAGES LMS • Lecturer Console
+        </div>
+    </form>
+</body>
+</html>

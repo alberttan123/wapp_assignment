@@ -1,35 +1,63 @@
 ﻿using System;
-using System.Web;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace WAPP_Assignment.Admin
 {
-    public partial class AdminMaster : System.Web.UI.MasterPage
+    public partial class Admin : MasterPage
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Run on every request; if not an admin, kick back to landing
-            EnsureAdminAuthenticated();
+            if (!IsPostBack)
+            {
+                HighlightNav();
+            }
         }
 
-        private void EnsureAdminAuthenticated()
+        private void HighlightNav()
         {
-            // Read the auth cookie using the shared helper
-            // Tuple is declared in AuthCookieHelper as:
-            // (bool success, string UserId, string userType) ReadAuthCookie()
-            var info = AuthCookieHelper.ReadAuthCookie();
+            string path = (Request.AppRelativeCurrentExecutionFilePath ?? string.Empty)
+                .ToLowerInvariant();
 
-            bool isAuthenticated = info.success;
-            string userId = info.UserId;
-            string userType = info.userType;
+            ClearActive();
 
-            if (!isAuthenticated ||
-                string.IsNullOrEmpty(userId) ||
-                !string.Equals(userType, "Admin", StringComparison.OrdinalIgnoreCase))
+            if (path.Contains("/admindashboard.aspx"))
             {
-                // Not logged in or not an admin → go back to landing/login
-                Response.Redirect("~/Base/Landing.aspx", true);
+                AddActive(lnkDashboard);
             }
+            else if (path.Contains("/adminusermanage.aspx") ||
+                     path.Contains("/admincreateuser.aspx"))
+            {
+                AddActive(lnkUsers);
+            }
+            else if (path.Contains("/admincourses.aspx"))
+            {
+                AddActive(lnkCourses);
+            }
+        }
+
+        private void ClearActive()
+        {
+            RemoveActive(lnkDashboard);
+            RemoveActive(lnkUsers);
+            RemoveActive(lnkCourses);
+        }
+
+        private static void AddActive(HyperLink link)
+        {
+            if (link == null) return;
+            var cls = link.CssClass ?? string.Empty;
+            if (!cls.Contains("active"))
+            {
+                link.CssClass = (cls + " active").Trim();
+            }
+        }
+
+        private static void RemoveActive(HyperLink link)
+        {
+            if (link == null) return;
+            var cls = link.CssClass ?? string.Empty;
+            link.CssClass = cls.Replace("active", "").Trim();
         }
     }
 }

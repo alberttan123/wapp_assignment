@@ -9,27 +9,36 @@
 
 namespace WAPP_Assignment.Admin
 {
-
-
-    public partial class AdminMaster
+    public partial class Admin
     {
+        /// <summary>
+        /// adminForm control.
+        /// </summary>
+        protected global::System.Web.UI.HtmlControls.HtmlForm adminForm;
+
+        /// <summary>
+        /// lnkDashboard control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.HyperLink lnkDashboard;
+
+        /// <summary>
+        /// lnkUsers control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.HyperLink lnkUsers;
+
+        /// <summary>
+        /// lnkCourses control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.HyperLink lnkCourses;
 
         /// <summary>
         /// HeadAdmin control.
         /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
         protected global::System.Web.UI.WebControls.ContentPlaceHolder HeadAdmin;
 
         /// <summary>
         /// AdminMain control.
         /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
         protected global::System.Web.UI.WebControls.ContentPlaceHolder AdminMain;
     }
 }

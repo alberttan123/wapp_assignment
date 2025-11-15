@@ -14,12 +14,24 @@ namespace WAPP_Assignment.Lecturer
         {
             get
             {
+                // Prefer session if you already set it on login
                 if (Session["UserId"] != null &&
-                    int.TryParse(Session["UserId"].ToString(), out int uid))
+                    int.TryParse(Session["UserId"].ToString(), out int uidFromSession))
                 {
-                    return uid;
+                    return uidFromSession;
                 }
-                // fallback to the seeded educator (geo_teacher, UserId = 2)
+
+                // Fallback to auth cookie
+                var (success, userIdStr, userType) = AuthCookieHelper.ReadAuthCookie();
+                if (success &&
+                    !string.IsNullOrEmpty(userIdStr) &&
+                    string.Equals(userType, "Educator", StringComparison.OrdinalIgnoreCase) &&
+                    int.TryParse(userIdStr, out int uidFromCookie))
+                {
+                    return uidFromCookie;
+                }
+
+                // As a safety fallback (your seeded educator account)
                 return 2;
             }
         }
@@ -28,16 +40,61 @@ namespace WAPP_Assignment.Lecturer
         {
             if (!IsPostBack)
             {
+                litDashboardSubtitle.Text =
+                    "Overview of your courses, assessments, and student engagement.";
+
+                BindProfileHeader();
                 BindStatsAndEngagement();
                 BindRecentCourses();
                 BindRecentAssessments();
             }
         }
 
-        /* ---------- Stats + engagement ---------- */
+        private void BindProfileHeader()
+        {
+            string displayName = "Lecturer";
+            string email = string.Empty;
+            string role = "Educator";
+
+            var (success, userIdStr, userType) = AuthCookieHelper.ReadAuthCookie();
+            if (success && !string.IsNullOrEmpty(userIdStr) && int.TryParse(userIdStr, out int userId))
+            {
+                using (var con = new SqlConnection(ConnStr))
+                using (var cmd = new SqlCommand(@"
+                    SELECT 
+                        COALESCE(NULLIF(FullName, ''), Username) AS DisplayName,
+                        Email,
+                        UserType
+                    FROM dbo.Users
+                    WHERE UserId = @uid;", con))
+                {
+                    cmd.Parameters.AddWithValue("@uid", userId);
+                    con.Open();
+                    using (var rd = cmd.ExecuteReader())
+                    {
+                        if (rd.Read())
+                        {
+                            displayName = rd["DisplayName"].ToString();
+                            email = rd["Email"].ToString();
+                            role = rd["UserType"].ToString();
+                        }
+                    }
+                }
+            }
+
+            litProfileName.Text = displayName;
+            litProfileEmail.Text = email;
+            litProfileRole.Text = role;
+        }
+
+        // --------------------------------------------------------------------
+        // Stats + engagement
+        // --------------------------------------------------------------------
 
         private void BindStatsAndEngagement()
         {
+            int lecturerId = CurrentLecturerId;
+
             int courses = 0;
             int assessments = 0;
             int exercises = 0;
@@ -60,7 +117,7 @@ namespace WAPP_Assignment.Lecturer
                 using (var cmd = new SqlCommand(
                     "SELECT COUNT(*) FROM dbo.Courses WHERE LecturerId = @uid;", con))
                 {
-                    cmd.Parameters.AddWithValue("@uid", CurrentLecturerId);
+                    cmd.Parameters.AddWithValue("@uid", lecturerId);
                     courses = (int)cmd.ExecuteScalar();
                 }
 
@@ -72,7 +129,7 @@ namespace WAPP_Assignment.Lecturer
                 using (var cmd = new SqlCommand(assessSql, con))
                 {
                     if (hasCreatedBy)
-                        cmd.Parameters.AddWithValue("@uid", CurrentLecturerId);
+                        cmd.Parameters.AddWithValue("@uid", lecturerId);
                     assessments = (int)cmd.ExecuteScalar();
                 }
 
@@ -84,7 +141,7 @@ namespace WAPP_Assignment.Lecturer
                 using (var cmd = new SqlCommand(exSql, con))
                 {
                     if (hasCreatedBy)
-                        cmd.Parameters.AddWithValue("@uid", CurrentLecturerId);
+                        cmd.Parameters.AddWithValue("@uid", lecturerId);
                     exercises = (int)cmd.ExecuteScalar();
                 }
 
@@ -100,7 +157,7 @@ WHERE q.QuizType IN ('exercise','assessment')";
                 using (var cmd = new SqlCommand(qSql, con))
                 {
                     if (hasCreatedBy)
-                        cmd.Parameters.AddWithValue("@uid", CurrentLecturerId);
+                        cmd.Parameters.AddWithValue("@uid", lecturerId);
                     questions = (int)cmd.ExecuteScalar();
                 }
 
@@ -111,7 +168,7 @@ FROM dbo.Enrollments e
 JOIN dbo.Courses c ON c.CourseId = e.CourseId
 WHERE c.LecturerId = @uid;", con))
                 {
-                    cmd.Parameters.AddWithValue("@uid", CurrentLecturerId);
+                    cmd.Parameters.AddWithValue("@uid", lecturerId);
                     students = (int)cmd.ExecuteScalar();
                 }
 
@@ -122,7 +179,7 @@ FROM dbo.Enrollments e
 JOIN dbo.Courses c ON c.CourseId = e.CourseId
 WHERE c.LecturerId = @uid;", con))
                 {
-                    cmd.Parameters.AddWithValue("@uid", CurrentLecturerId);
+                    cmd.Parameters.AddWithValue("@uid", lecturerId);
                     enrollments = (int)cmd.ExecuteScalar();
                 }
 
@@ -133,7 +190,7 @@ FROM dbo.Enrollments e
 JOIN dbo.Courses c ON c.CourseId = e.CourseId
 WHERE c.LecturerId = @uid;", con))
                 {
-                    cmd.Parameters.AddWithValue("@uid", CurrentLecturerId);
+                    cmd.Parameters.AddWithValue("@uid", lecturerId);
                     object o = cmd.ExecuteScalar();
                     if (o != null && o != DBNull.Value)
                     {
@@ -152,7 +209,7 @@ WHERE c.LecturerId = @uid
 GROUP BY c.CourseTitle
 ORDER BY Enrollments DESC, c.CourseTitle;", con))
                 {
-                    cmd.Parameters.AddWithValue("@uid", CurrentLecturerId);
+                    cmd.Parameters.AddWithValue("@uid", lecturerId);
                     using (var reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
@@ -193,7 +250,9 @@ ORDER BY Enrollments DESC, c.CourseTitle;", con))
             }
         }
 
-        /* ---------- Recent Courses ---------- */
+        // --------------------------------------------------------------------
+        // Recent Courses
+        // --------------------------------------------------------------------
 
         private void BindRecentCourses()
         {
@@ -222,10 +281,13 @@ ORDER BY c.CourseCreatedAt DESC;", con))
             }
         }
 
-        /* ---------- Recent Assessments ---------- */
+        // --------------------------------------------------------------------
+        // Recent Assessments
+        // --------------------------------------------------------------------
 
         private void BindRecentAssessments()
         {
+            int lecturerId = CurrentLecturerId;
             bool hasCreatedBy = QuizHasCreatedBy();
 
             string sql = @"
@@ -245,7 +307,7 @@ ORDER BY q.QuizId DESC;";
             using (var da = new SqlDataAdapter(cmd))
             {
                 if (hasCreatedBy)
-                    cmd.Parameters.AddWithValue("@uid", CurrentLecturerId);
+                    cmd.Parameters.AddWithValue("@uid", lecturerId);
 
                 var dt = new DataTable();
                 da.Fill(dt);
@@ -257,6 +319,14 @@ ORDER BY q.QuizId DESC;";
                 rptRecentAssessments.DataSource = dt;
                 rptRecentAssessments.DataBind();
             }
+        }
+
+        protected void btnLogout_Click(object sender, EventArgs e)
+        {
+            AuthCookieHelper.RemoveAuthCookie();
+            Session.Clear();
+            Session.Abandon();
+            Response.Redirect("~/Base/Landing.aspx", true);
         }
     }
 }

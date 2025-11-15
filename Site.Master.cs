@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
@@ -123,11 +124,10 @@ namespace WAPP_Assignment
                             return;
                         }
 
-                        // Success → issue auth cookie
-                        SignIn(rd);
-
-                        // Decide where to send them based on role + reset flag
+                        // Extract values BEFORE closing reader
+                        int userId = rd.GetInt32(rd.GetOrdinal("UserId"));
                         string userType = rd.GetString(rd.GetOrdinal("UserType"));
+
                         bool isResetRequired = false;
                         int idxReset = rd.GetOrdinal("IsPasswordReset");
                         if (!rd.IsDBNull(idxReset))
@@ -135,6 +135,23 @@ namespace WAPP_Assignment
                             isResetRequired = rd.GetBoolean(idxReset);
                         }
 
+                        // Reader no longer needed
+                        rd.Close();
+
+                        // Update LastLogin (stored in UTC)
+                        using (var updateCmd = new SqlCommand(@"
+                            UPDATE dbo.Users
+                            SET LastLogin = SYSUTCDATETIME()
+                            WHERE UserId = @id;", conn))
+                        {
+                            updateCmd.Parameters.Add("@id", SqlDbType.Int).Value = userId;
+                            updateCmd.ExecuteNonQuery();
+                        }
+
+                        // Issue auth cookie
+                        SignIn(userId, userType);
+
+                        // Decide where to send them based on role + reset flag
                         if (string.Equals(userType, "Educator", StringComparison.OrdinalIgnoreCase))
                         {
                             // Lecturer: force password change if reset required
@@ -295,7 +312,6 @@ namespace WAPP_Assignment
             {
                 using (var conn = DataAccess.GetOpenConnection())
                 {
-                    // Try Students / Educators
                     using (var cmd = new SqlCommand(@"
                         INSERT INTO dbo.Users (Username, Email, UserType, PasswordHash) VALUES
                         (@u, @e, @t, @p)", conn))
@@ -336,11 +352,19 @@ namespace WAPP_Assignment
             return false;
         }
 
+        // Legacy helper (still here if anything calls it with a reader)
         private void SignIn(SqlDataReader rd)
         {
-            var UserId = rd.GetInt32(rd.GetOrdinal("UserId")).ToString();
-            var userType = rd.GetString(rd.GetOrdinal("UserType"));
-            HttpCookie cookie = AuthCookieHelper.BuildAuthCookie(UserId, userType);
+            int userId = rd.GetInt32(rd.GetOrdinal("UserId"));
+            string userType = rd.GetString(rd.GetOrdinal("UserType"));
+            SignIn(userId, userType);
+        }
+
+        // New helper: sign in from values (used by login after closing reader)
+        private void SignIn(int userId, string userType)
+        {
+            string userIdStr = userId.ToString();
+            HttpCookie cookie = AuthCookieHelper.BuildAuthCookie(userIdStr, userType);
             Response.Cookies.Add(cookie);
         }
 
