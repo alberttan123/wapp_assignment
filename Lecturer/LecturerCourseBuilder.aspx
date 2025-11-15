@@ -216,20 +216,26 @@
     }
 
     .cb-upload-area {
-      border: 2px dashed #23304a;
-      border-radius: 12px;
-      padding: 3rem 2rem;
+      border: 2px dashed #9fb0d1;
+      border-radius: 0;
+      padding: 4rem 2rem;
       text-align: center;
-      background: rgba(15, 20, 34, 0.4);
+      background: rgba(15, 20, 34, 0.2);
       transition: all 0.3s ease;
       cursor: pointer;
       position: relative;
       margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      min-height: 200px;
     }
 
     .cb-upload-area:hover {
       border-color: #ffd24a;
-      background: rgba(15, 20, 34, 0.6);
+      background: rgba(15, 20, 34, 0.4);
     }
 
     .cb-upload-area.dragover {
@@ -239,46 +245,65 @@
     }
 
     .cb-upload-icon {
-      font-size: 3rem;
-      margin-bottom: 1rem;
+      width: 120px;
+      height: 90px;
+      margin: 0 auto 1.5rem;
       display: block;
-      font-family: 'Press Start 2P', monospace;
+      position: relative;
+    }
+
+    .cb-upload-icon svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      image-rendering: pixelated;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: crisp-edges;
     }
 
     .cb-upload-text {
-      color: #e8eefc;
-      font-size: 1rem;
-      font-weight: 600;
+      color: #94a3b8;
+      font-size: 0.7rem;
+      font-weight: 400;
       margin-bottom: 1rem;
+      font-family: 'Press Start 2P', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      line-height: 1.5;
     }
 
     .cb-upload-button {
-      background: #ffd24a;
-      color: #0b0f1a;
-      border: none;
-      padding: 0.9rem 2rem;
-      font-weight: 900;
-      font-size: 0.95rem;
+      background: #1e293b;
+      color: #475569;
+      border: 2px solid #94a3b8;
+      padding: 1rem 2.5rem;
+      font-weight: 400;
       font-family: 'Press Start 2P', monospace;
-      font-size: 0.7rem;
+      font-size: 0.6rem;
       cursor: pointer;
       transition: all 0.2s ease;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      box-shadow: 0 4px 0 #b89200;
-      border-radius: 10px;
+      box-shadow: 4px 4px 0 rgba(148, 163, 184, 0.4);
+      border-radius: 0;
       display: inline-block;
+      position: relative;
+      image-rendering: pixelated;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: crisp-edges;
     }
 
     .cb-upload-button:hover {
-      background: #ffdc6a;
-      transform: translateY(2px);
-      box-shadow: 0 2px 0 #b89200;
+      background: #1e293b;
+      color: #64748b;
+      border-color: #94a3b8;
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 rgba(148, 163, 184, 0.4);
     }
 
     .cb-upload-button:active {
-      transform: translateY(4px);
-      box-shadow: 0 1px 0 #b89200;
+      transform: translate(4px, 4px);
+      box-shadow: 0 0 0 rgba(148, 163, 184, 0.4);
     }
 
     .cb-file-input-hidden {
@@ -594,7 +619,11 @@
           <label class="required">Cover Image</label>
           <span class="cb-hint">Add a thumbnail image for your course. This will appear when your course is displayed in the Course Showcase page and other areas of the site.</span>
           <div class="cb-upload-area" id="coverUploadArea">
-            <span class="cb-upload-icon">☁️</span>
+            <div class="cb-upload-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" style="image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges;">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M13.3333 5.33301H21.3333V7.99967H13.3333V5.33301ZM10.6667 10.6663V7.99967H13.3333V10.6663H10.6667ZM5.33333 13.333V10.6663H10.6667V13.333H5.33333ZM2.66667 15.9997V13.333H5.33333V15.9997H2.66667ZM2.66667 23.9997H0L0 15.9997H2.66667V23.9997ZM2.66667 23.9997H12V26.6663H2.66667V23.9997ZM24 10.6663H21.3333V7.99967H24V10.6663ZM29.3333 15.9997H26.6667H24V13.333V10.6663H26.6667V13.333H29.3333V15.9997ZM29.3333 23.9997V15.9997H32V23.9997H29.3333ZM29.3333 23.9997V26.6663H20V23.9997H29.3333ZM14.6667 11.9997H17.3333V14.6663H20V17.333L22.6667 17.333V19.9997H17.3333V26.6663H14.6667V19.9997H9.33333V17.333L12 17.333V14.6663H14.6667V11.9997Z" fill="#94A3B8"></path>
+              </svg>
+            </div>
             <div class="cb-upload-text">Drag and Drop or</div>
             <button type="button" class="cb-upload-button" onclick="document.getElementById('<%= fuCourseImg.ClientID %>').click(); return false;">Upload Media</button>
             <asp:FileUpload ID="fuCourseImg" runat="server" CssClass="cb-file-input-hidden" />
