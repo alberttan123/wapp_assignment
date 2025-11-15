@@ -409,9 +409,6 @@ namespace WAPP_Assignment.Forum
             }
 
             string Id = e.CommandArgument.ToString();
-            
-            // Debug: check if method is being called
-            System.Diagnostics.Debug.WriteLine($"deletePost called with ID: {Id}");
 
             var (isAuthenticated, userId, userType) = AuthCookieHelper.ReadAuthCookie();
             if (!isAuthenticated || string.IsNullOrEmpty(userId))

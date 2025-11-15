@@ -22,6 +22,8 @@
             margin: 0;
             padding: 0;
             background: #0b0f1a;
+            font-family: 'Press Start 2P', monospace;
+            overflow-x: hidden;
         }
 
         form#adminForm {
@@ -183,10 +185,15 @@
         }
 
         .sb-link.active {
-            background: rgba(255, 210, 74, 0.2);
-            color: #ffd24a;
-            border-color: #ffd24a;
-            box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3), 0 4px 0 rgba(27, 37, 58, 0.5), 0 0 25px rgba(255, 210, 74, 0.25);
+            background: linear-gradient(135deg, #ffd24a 0%, #ffbe0b 100%);
+            color: #0f1422;
+            border-color: #23304a;
+            box-shadow: 0 4px 0 rgba(27, 37, 58, 0.8), 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .sb-link span {
+            display: inline-block;
+            margin-right: 0.5rem;
         }
 
         .admin-footer {
@@ -216,7 +223,7 @@
 <body>
     <form id="adminForm" runat="server">
         <div class="admin-topbar">
-            <a href= # class="admin-logo">
+            <a href="<%= ResolveUrl("~/Base/Landing.aspx") %>" class="admin-logo">
                 <img src="<%= ResolveUrl("~/Media/pages.png") %>" alt="Geography Pages Logo" class="brand-img" />
             </a>
         </div>
@@ -227,29 +234,25 @@
                     <asp:HyperLink ID="lnkDashboard" runat="server"
                         NavigateUrl="~/Admin/AdminDashboard.aspx"
                         CssClass="sb-link">
-                        <span style="margin-right: 0.75rem; font-size: 1.3rem; display: inline-block;">📊</span>
-                        <span>Dashboard</span>
+                        <span>📊</span> Dashboard
                     </asp:HyperLink>
 
                     <asp:HyperLink ID="lnkUsers" runat="server"
                         NavigateUrl="~/Admin/AdminUserManage.aspx"
                         CssClass="sb-link">
-                        <span style="margin-right: 0.75rem; font-size: 1.3rem; display: inline-block;">👥</span>
-                        <span>Manage Users</span>
+                        <span>👥</span> Manage Users
                     </asp:HyperLink>
 
                     <asp:HyperLink ID="lnkCourses" runat="server"
                         NavigateUrl="~/Admin/AdminCourses.aspx"
                         CssClass="sb-link">
-                        <span style="margin-right: 0.75rem; font-size: 1.3rem; display: inline-block;">📚</span>
-                        <span>Courses</span>
+                        <span>📚</span> Courses
                     </asp:HyperLink>
 
                     <asp:HyperLink ID="lnkCommunity" runat="server"
                         NavigateUrl="~/Forum/AllPosts.aspx"
                         CssClass="sb-link">
-                        <span style="margin-right: 0.75rem; font-size: 1.3rem; display: inline-block;">💬</span>
-                        <span>Community</span>
+                        <span>💬</span> Community
                     </asp:HyperLink>
                 </nav>
             </aside>
