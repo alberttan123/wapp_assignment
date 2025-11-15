@@ -9,126 +9,96 @@
 
 namespace WAPP_Assignment.Lecturer
 {
-
-
     public partial class LecturerDashboard
     {
+        /// <summary>
+        /// litDashboardSubtitle control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Literal litDashboardSubtitle;
+
+        /// <summary>
+        /// litProfileName control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Literal litProfileName;
+
+        /// <summary>
+        /// litProfileRole control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Literal litProfileRole;
+
+        /// <summary>
+        /// litProfileEmail control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Literal litProfileEmail;
+
+        /// <summary>
+        /// btnLogout control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.LinkButton btnLogout;
 
         /// <summary>
         /// litCoursesCount control.
         /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litCoursesCount;
 
         /// <summary>
         /// litAssessmentsCount control.
         /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litAssessmentsCount;
 
         /// <summary>
         /// litExercisesCount control.
         /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litExercisesCount;
 
         /// <summary>
         /// litQuestionsCount control.
         /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litQuestionsCount;
 
         /// <summary>
         /// litStudentsCount control.
         /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litStudentsCount;
 
         /// <summary>
         /// litEnrollmentsCount control.
         /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litEnrollmentsCount;
 
         /// <summary>
         /// litAvgProgress control.
         /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litAvgProgress;
 
         /// <summary>
         /// litTopCourseTitle control.
         /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litTopCourseTitle;
 
         /// <summary>
         /// litTopCourseEnrollments control.
         /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litTopCourseEnrollments;
 
         /// <summary>
         /// lblCoursesEmpty control.
         /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblCoursesEmpty;
 
         /// <summary>
         /// rptRecentCourses control.
         /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater rptRecentCourses;
 
         /// <summary>
         /// lblAssessmentsEmpty control.
         /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblAssessmentsEmpty;
 
         /// <summary>
         /// rptRecentAssessments control.
         /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater rptRecentAssessments;
     }
 }

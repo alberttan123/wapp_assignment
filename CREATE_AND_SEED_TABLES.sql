@@ -345,16 +345,11 @@ INSERT INTO dbo.Courses (CourseTitle, CourseDescription, TotalLessons, CourseImg
 VALUES
 ('Introduction to Geography',
  'Learn the basics of physical and human geography.',
- 8,
- '~/Media/geography-banner.jpg',
- 2),
+ 8, '~/Media/geography-banner.jpg', 2),
 
 ('Rocks & Minerals 101',
  'Explore igneous, sedimentary, and metamorphic rocks.',
- 6,
- '~/Media/rock-banner.jpg',
- 2);
-
+ 6, '~/Media/rock-banner.jpg', 2);
 
 ------------------------------------------------------------
 -- ENROLLMENTS

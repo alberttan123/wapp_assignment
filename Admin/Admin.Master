@@ -1,0 +1,177 @@
+﻿<%@ Master Language="C#"
+    AutoEventWireup="true"
+    CodeBehind="Admin.Master.cs"
+    Inherits="WAPP_Assignment.Admin.Admin" %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <title>PAGES • Admin</title>
+
+    <!-- Base styles -->
+    <link rel="stylesheet" href="<%= ResolveUrl("~/Content/Site.css") %>" />
+    <link rel="stylesheet" href="<%= ResolveUrl("~/Content/LecturerPages.css") %>" />
+    <link rel="stylesheet" href="<%= ResolveUrl("~/Content/header.css") %>" />
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg);
+        }
+
+        form#adminForm {
+            margin: 0;
+        }
+
+        .admin-topbar {
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            background: #05060a;
+            border-bottom: 1px solid var(--line);
+            box-shadow: 0 0.125rem 0 0 #00000080;
+        }
+
+        .admin-logo {
+            font-size: 1.05rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            color: var(--brand);
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .admin-logo span {
+            padding: 0.1rem 0.4rem;
+            border-radius: 0.35rem;
+            background: rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 0 1px #00000070;
+        }
+
+        /* Sidebar + main layout */
+        .layout-shell {
+            display: grid;
+            grid-template-columns: 13rem minmax(0, 1fr);
+            min-height: calc(100vh - 3rem);
+        }
+
+        @media (max-width: 56.25rem) {
+            .layout-shell {
+                grid-template-columns: 11.5rem minmax(0, 1fr);
+            }
+        }
+
+        .admin-sidebar {
+            background: #05070e;
+            border-right: 1px solid var(--line);
+            padding: 1rem 0.75rem;
+        }
+
+        .admin-main {
+            background: var(--bg);
+            padding: 1.25rem 1.5rem;
+        }
+
+        @media (max-width: 48rem) {
+            .admin-main {
+                padding: 1rem 0.75rem;
+            }
+        }
+
+        .sb-section-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--muted);
+            letter-spacing: 0.08em;
+            margin-bottom: 0.75rem;
+        }
+
+        .sb-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .sb-link {
+            display: block;
+            padding: 0.35rem 0.5rem;
+            border-radius: 0.35rem;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.85rem;
+            border: 1px solid transparent;
+        }
+
+        .sb-link:hover {
+            background: var(--panel-2);
+            border-color: var(--line);
+        }
+
+        .sb-link.active {
+            background: linear-gradient(135deg, var(--brand), #f6d46a);
+            color: #101010;
+            border-color: #000000c0;
+            box-shadow:
+                0 0 0 1px #00000080,
+                0 0.2rem 0 0 #000000a0;
+        }
+
+        .admin-footer {
+            padding: 0.5rem 1.5rem 0.75rem;
+            font-size: 0.75rem;
+            color: var(--muted);
+            border-top: 1px solid var(--line);
+            background: #05060a;
+        }
+    </style>
+
+    <asp:ContentPlaceHolder ID="HeadAdmin" runat="server" />
+</head>
+<body>
+    <form id="adminForm" runat="server">
+        <div class="admin-topbar">
+            <a href="<%= ResolveUrl("~/Base/Landing.aspx") %>" class="admin-logo">
+                <img src="<%= ResolveUrl("~/Media/pages.png") %>" alt="Geography Pages Logo" class="brand-img" />
+            </a>
+        </div>
+
+        <div class="layout-shell">
+            <aside class="admin-sidebar">
+                <div class="sb-section-title">Admin</div>
+                <nav class="sb-nav">
+                    <asp:HyperLink ID="lnkDashboard" runat="server"
+                        NavigateUrl="~/Admin/AdminDashboard.aspx"
+                        CssClass="sb-link">
+                        Dashboard
+                    </asp:HyperLink>
+
+                    <asp:HyperLink ID="lnkUsers" runat="server"
+                        NavigateUrl="~/Admin/AdminUserManage.aspx"
+                        CssClass="sb-link">
+                        Manage Users
+                    </asp:HyperLink>
+
+                    <asp:HyperLink ID="lnkCourses" runat="server"
+                        NavigateUrl="~/Admin/AdminCourses.aspx"
+                        CssClass="sb-link">
+                        Courses
+                    </asp:HyperLink>
+                </nav>
+            </aside>
+
+            <main class="admin-main">
+                <asp:ContentPlaceHolder ID="AdminMain" runat="server" />
+            </main>
+        </div>
+
+        <div class="admin-footer">
+            © PAGES LMS • Admin Console
+        </div>
+    </form>
+</body>
+</html>

@@ -11,6 +11,90 @@
 }
 
 
+/* Lecturer top bar - back button left, Add Post button right */
+.lecturer-top-bar {
+    margin-top: 20px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.lecturer-top-bar .addPostButtonContainer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.lecturer-top-bar a,
+.lecturer-back-btn,
+a.lecturer-back-btn,
+.lecturer-top-bar a.lecturer-back-btn {
+    font-family: 'Press Start 2P', monospace !important;
+    font-size: 0.7rem !important;
+    padding: 0.85rem 1.5rem !important;
+    background: linear-gradient(135deg, #ffd24a 0%, #ffbe0b 100%) !important;
+    color: #0f1422 !important;
+    border: 2px solid #23304a !important;
+    border-radius: 10px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    text-decoration: none !important;
+    font-weight: 700 !important;
+    box-shadow: 0 4px 0 rgba(27, 37, 58, 0.8), 0 6px 12px rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.2s ease !important;
+    cursor: pointer !important;
+    display: inline-block !important;
+    white-space: nowrap !important;
+    position: relative !important;
+    line-height: 1.5 !important;
+}
+
+.lecturer-back-btn::before,
+a.lecturer-back-btn::before,
+.lecturer-top-bar a::before {
+    content: '← ' !important;
+    display: inline-block !important;
+    transition: transform 0.2s ease !important;
+    margin-right: 0.25rem !important;
+}
+
+.lecturer-back-btn:hover,
+a.lecturer-back-btn:hover,
+.lecturer-top-bar a:hover {
+    background: linear-gradient(135deg, #ffffff 0%, #ffdc6a 100%) !important;
+    color: #0f1422 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 0 rgba(27, 37, 58, 0.8), 0 8px 16px rgba(0, 0, 0, 0.4) !important;
+    text-decoration: none !important;
+}
+
+.lecturer-back-btn:hover::before,
+a.lecturer-back-btn:hover::before,
+.lecturer-top-bar a:hover::before {
+    transform: translateX(-3px) !important;
+}
+
+.lecturer-back-btn:active,
+a.lecturer-back-btn:active,
+.lecturer-top-bar a:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 2px 0 rgba(27, 37, 58, 0.8), 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+.lecturer-back-btn:visited,
+.lecturer-back-btn:link,
+a.lecturer-back-btn:visited,
+a.lecturer-back-btn:link,
+.lecturer-top-bar a:visited,
+.lecturer-top-bar a:link {
+    color: #0f1422 !important;
+    text-decoration: none !important;
+}
+
+
 
 .forum-header {
     margin-top: 80px;
@@ -253,6 +337,14 @@
     cursor: pointer;
 }
 
+.post-link .post-actions {
+    pointer-events: auto;
+}
+
+.post-link .post-actions * {
+    pointer-events: auto;
+}
+
 .post {
     display: flex;
     flex-direction: column;
@@ -430,7 +522,8 @@
     margin-top: 1rem;
     border-top: 2px solid #1b253a;
     position: relative;
-    z-index: 10;
+    z-index: 100;
+    pointer-events: auto;
 }
 
 .delete-button-post {
@@ -445,9 +538,10 @@
     text-transform: uppercase;
     letter-spacing: 0.08em;
     position: relative;
-    z-index: 10;
+    z-index: 101;
     box-shadow: 0 4px 0 #d9005f;
     border-radius: 8px;
+    pointer-events: auto;
 }
 
 .delete-button-post::before {
