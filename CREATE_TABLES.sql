@@ -25,14 +25,17 @@ IF OBJECT_ID('dbo.Users', 'U') IS NOT NULL DROP TABLE dbo.Users;
 ------------------------------------------------------------
 
 CREATE TABLE dbo.Users (
-    UserId         INT IDENTITY(1,1) PRIMARY KEY,
-    Username       NVARCHAR(50) NOT NULL UNIQUE,
-    Email          NVARCHAR(256) NOT NULL UNIQUE,
-    UserType       NVARCHAR(20) NOT NULL
+    UserId          INT IDENTITY(1,1) PRIMARY KEY,
+    Username        NVARCHAR(50) NOT NULL UNIQUE,
+    Email           NVARCHAR(256) NOT NULL UNIQUE,
+    UserType        NVARCHAR(20) NOT NULL
         CONSTRAINT CK_Users_UserType CHECK (UserType IN ('Admin','Educator','Student')),
-    FullName       NVARCHAR(256) NULL,
-    PasswordHash   NVARCHAR(256) NOT NULL,
-    CreatedAt      DATETIME2(7) NOT NULL DEFAULT SYSUTCDATETIME()
+    FullName        NVARCHAR(256) NULL,
+    PasswordHash    NVARCHAR(256) NOT NULL,
+    CreatedAt       DATETIME2(7) NOT NULL DEFAULT SYSUTCDATETIME(),
+    IsPasswordReset BIT DEFAULT 0 NOT NULL,
+    LastLogin       DATETIME2(7) NULL,
+    XP              INT NOT NULL DEFAULT 0
 );
 
 
@@ -155,7 +158,8 @@ CREATE TABLE dbo.Questions (
     Option2       NVARCHAR(256) NOT NULL,
     Option3       NVARCHAR(256) NULL,
     Option4       NVARCHAR(256) NULL,
-    CorrectAnswer INT NOT NULL
+    CorrectAnswer INT NOT NULL,
+    ImageUrl NVARCHAR(256) NULL
 );
 
 
@@ -233,3 +237,56 @@ CREATE TABLE dbo.ForumComment (
     CONSTRAINT FK_ForumComment_User
         FOREIGN KEY (UserId) REFERENCES dbo.Users(UserId)
 );
+
+------------------------------------------------------------
+-- Score
+------------------------------------------------------------
+
+CREATE TABLE dbo.Score (
+    ScoreId INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    QuizId INT NOT NULL,
+    UserId INT NOT NULL,
+    Score INT NOT NULL,
+
+    -- Foreign Keys
+    CONSTRAINT FK_Score_Quiz 
+        FOREIGN KEY (QuizId) REFERENCES dbo.Quiz(QuizId),
+
+    CONSTRAINT FK_Score_User 
+        FOREIGN KEY (UserId) REFERENCES dbo.Users(UserId)
+);
+
+------------------------------------------------------------
+-- UserAnswer
+------------------------------------------------------------
+
+CREATE TABLE dbo.UserAnswer (
+    UserAnswerId INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    QuestionId INT NOT NULL,
+    SelectedOption INT NOT NULL,
+
+    CONSTRAINT FK_UserAnswer_Question 
+        FOREIGN KEY (QuestionId) REFERENCES dbo.Questions(QuestionId)
+);
+
+------------------------------------------------------------
+-- QuizTry
+------------------------------------------------------------
+
+CREATE TABLE dbo.QuizTry (
+    UniqueId INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    QuizTry INT NOT NULL,      -- try count
+    QuizId INT NOT NULL,
+    UserId INT NOT NULL,
+    UserAnswerId INT NOT NULL,
+
+    CONSTRAINT FK_QuizTry_User 
+        FOREIGN KEY (UserId) REFERENCES dbo.Users(UserId),
+
+    CONSTRAINT FK_QuizTry_Quiz 
+        FOREIGN KEY (QuizId) REFERENCES dbo.Quiz(QuizId),
+
+    CONSTRAINT FK_QuizTry_UserAnswer 
+        FOREIGN KEY (UserAnswerId) REFERENCES dbo.UserAnswer(UserAnswerId)
+);
+

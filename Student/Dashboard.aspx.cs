@@ -22,7 +22,7 @@ namespace WAPP_Assignment.Student
             if (!isAuthenticated || string.IsNullOrEmpty(userId))
             {
                 // Redirect to login if not authenticated
-                Response.Redirect("~/Default.aspx", true);
+                Response.Redirect("~/Base/Landing.aspx", true);
                 return;
             }
 
@@ -60,7 +60,7 @@ namespace WAPP_Assignment.Student
             }
 
             // If no user found, redirect to login
-            Response.Redirect("~/Default.aspx", true);
+            Response.Redirect("~/Base/Landing.aspx", true);
             return 0; // This won't be reached due to redirect
         }
         private void BindEnrollmentData()
@@ -178,7 +178,7 @@ namespace WAPP_Assignment.Student
             Session.Abandon();
             
             // Redirect to home page
-            Response.Redirect("~/Default.aspx", true);
+            Response.Redirect("~/Base/Landing.aspx", true);
         }
     }
 } 
