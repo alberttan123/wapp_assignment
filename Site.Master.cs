@@ -137,8 +137,15 @@ namespace WAPP_Assignment
 
                         if (string.Equals(userType, "Educator", StringComparison.OrdinalIgnoreCase))
                         {
-                            // Lecturer area home
-                            Response.Redirect("~/Lecturer/LecturerDashboard.aspx", true);
+                            // Lecturer: force password change if reset required
+                            if (isResetRequired)
+                            {
+                                Response.Redirect("~/Lecturer/LecturerForcePasswordReset.aspx", true);
+                            }
+                            else
+                            {
+                                Response.Redirect("~/Lecturer/LecturerDashboard.aspx", true);
+                            }
                         }
                         else if (string.Equals(userType, "Student", StringComparison.OrdinalIgnoreCase))
                         {
@@ -154,7 +161,7 @@ namespace WAPP_Assignment
                             }
                             else
                             {
-                                Response.Redirect("~/Admin/AdminUserManage.aspx", true);
+                                Response.Redirect("~/Admin/AdminDashboard.aspx", true);
                             }
                         }
                         else

@@ -170,6 +170,7 @@
     <Content Include="Lecturer\LecturerCourses.aspx" />
     <Content Include="Lecturer\LecturerDashboard.aspx" />
     <Content Include="Lecturer\LecturerExamBuilder.aspx" />
+    <Content Include="Lecturer\LecturerForcePasswordReset.aspx" />
     <Content Include="Lecturer\LecturerQuestionAdd.aspx" />
     <Content Include="Lecturer\LecturerQuestionViewer.aspx" />
     <Content Include="Media\*" />
@@ -385,6 +386,13 @@
     </Compile>
     <Compile Include="Lecturer\LecturerExamBuilder.aspx.designer.cs">
       <DependentUpon>LecturerExamBuilder.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Lecturer\LecturerForcePasswordReset.aspx.cs">
+      <DependentUpon>LecturerForcePasswordReset.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Lecturer\LecturerForcePasswordReset.aspx.designer.cs">
+      <DependentUpon>LecturerForcePasswordReset.aspx</DependentUpon>
     </Compile>
     <Compile Include="Lecturer\LecturerQuestionAdd.aspx.cs">
       <DependentUpon>LecturerQuestionAdd.aspx</DependentUpon>
