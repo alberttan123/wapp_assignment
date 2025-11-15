@@ -141,6 +141,15 @@ namespace WAPP_Assignment.Forum
         protected global::System.Web.UI.WebControls.Panel pnlLecturerBack;
 
         /// <summary>
+        /// lnkBackToDashboard control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink lnkBackToDashboard;
+
+        /// <summary>
         /// pnlForumHeader control.
         /// </summary>
         /// <remarks>
@@ -148,5 +157,23 @@ namespace WAPP_Assignment.Forum
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel pnlForumHeader;
+
+        /// <summary>
+        /// pnlDeleteMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlDeleteMessage;
+
+        /// <summary>
+        /// lblDeleteMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblDeleteMessage;
     }
 }

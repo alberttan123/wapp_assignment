@@ -33,48 +33,51 @@ namespace WAPP_Assignment
         {
             try
             {
-                // Read cookie directly from Request - this works immediately even after redirects
-                string userType = null;
-                bool isAuthenticated = false;
+                // Use AuthCookieHelper first (most reliable method)
+                var (isAuthenticated, userId, userType) = AuthCookieHelper.ReadAuthCookie();
                 
-                HttpCookie authCookie = Request.Cookies["AuthCookie"];
-                if (authCookie != null && !string.IsNullOrEmpty(authCookie.Value))
+                // Fallback: Read cookie directly from Request if helper didn't work
+                if (!isAuthenticated || string.IsNullOrEmpty(userType))
                 {
-                    try
+                    HttpCookie authCookie = Request.Cookies["AuthCookie"];
+                    if (authCookie != null && !string.IsNullOrEmpty(authCookie.Value))
                     {
-                        var ticket = FormsAuthentication.Decrypt(authCookie.Value);
-                        if (ticket != null)
+                        try
                         {
-                            userType = ticket.UserData;
-                            isAuthenticated = !string.IsNullOrEmpty(ticket.Name);
+                            var ticket = FormsAuthentication.Decrypt(authCookie.Value);
+                            if (ticket != null)
+                            {
+                                userType = ticket.UserData;
+                                isAuthenticated = !string.IsNullOrEmpty(ticket.Name);
+                            }
                         }
-                    }
-                    catch { }
-                }
-                
-                // Fallback to helper if direct read didn't work
-                if (string.IsNullOrEmpty(userType))
-                {
-                    var (auth, userId, ut) = AuthCookieHelper.ReadAuthCookie();
-                    if (auth && !string.IsNullOrEmpty(ut))
-                    {
-                        userType = ut;
-                        isAuthenticated = auth;
+                        catch { }
                     }
                 }
                 
-                // Check if user is an educator
+                // Check if user is an educator or admin (case-insensitive)
                 bool isEducator = isAuthenticated && 
                                 !string.IsNullOrEmpty(userType) && 
-                                string.Equals(userType, "Educator", StringComparison.OrdinalIgnoreCase);
+                                (string.Equals(userType, "Educator", StringComparison.OrdinalIgnoreCase) ||
+                                 string.Equals(userType.Trim(), "Educator", StringComparison.OrdinalIgnoreCase));
+                bool isAdmin = isAuthenticated && 
+                              !string.IsNullOrEmpty(userType) && 
+                              (string.Equals(userType, "Admin", StringComparison.OrdinalIgnoreCase) ||
+                               string.Equals(userType.Trim(), "Admin", StringComparison.OrdinalIgnoreCase));
                 
-                // Check if we're on a forum page
+                // Check if we're on a forum page (more flexible path check)
                 string currentPath = Request.Url.AbsolutePath.ToLower();
-                bool isForumPage = currentPath.Contains("/forum/");
+                string rawUrl = Request.RawUrl.ToLower();
+                bool isForumPage = currentPath.Contains("/forum/") || 
+                                  currentPath.Contains("/allposts") ||
+                                  currentPath.Contains("/viewpost") ||
+                                  rawUrl.Contains("/forum/") ||
+                                  rawUrl.Contains("/allposts") ||
+                                  rawUrl.Contains("/viewpost");
                 
-                if (isEducator && isForumPage)
+                if ((isEducator || isAdmin) && isForumPage)
                 {
-                    // Hide navbar for educators on forum pages
+                    // Hide navbar for educators and admins on forum pages
                     if (pnlNavbar != null)
                     {
                         pnlNavbar.Visible = false;
@@ -98,7 +101,7 @@ namespace WAPP_Assignment
                 }
                 else
                 {
-                    // Not educator on forum page - clear the style and show navbar
+                    // Not educator/admin on forum page - clear the style and show navbar
                     if (litEducatorNavbarHide != null)
                     {
                         litEducatorNavbarHide.Text = "";
