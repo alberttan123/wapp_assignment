@@ -114,6 +114,8 @@
   </ItemGroup>
   <ItemGroup>
     <!-- Fixed App_Data entries -->
+    <Content Include="Admin\AdminCreateUser.aspx" />
+    <Content Include="Admin\AdminForcePasswordReset.aspx" />
     <Content Include="Admin\AdminUserManage.aspx" />
     <Content Include="App_Data\users.mdf" />
     <Content Include="App_Data\users_log.ldf">
@@ -243,6 +245,20 @@
     </Compile>
     <Compile Include="Admin\Admin.Master.designer.cs">
       <DependentUpon>Admin.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\AdminCreateUser.aspx.cs">
+      <DependentUpon>AdminCreateUser.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\AdminCreateUser.aspx.designer.cs">
+      <DependentUpon>AdminCreateUser.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\AdminForcePasswordReset.aspx.cs">
+      <DependentUpon>AdminForcePasswordReset.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\AdminForcePasswordReset.aspx.designer.cs">
+      <DependentUpon>AdminForcePasswordReset.aspx</DependentUpon>
     </Compile>
     <Compile Include="Admin\AdminUserManage.aspx.cs">
       <DependentUpon>AdminUserManage.aspx</DependentUpon>

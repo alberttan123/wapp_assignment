@@ -90,6 +90,7 @@ namespace WAPP_Assignment
             register_field_2.Visible = true;
             register_field_1.Visible = false;
         }
+
         protected void login(object sender, EventArgs e)
         {
             login_error_message.Text = "";
@@ -102,7 +103,7 @@ namespace WAPP_Assignment
             {
                 using (var conn = DataAccess.GetOpenConnection())
                 using (var cmd = new SqlCommand(@"
-                SELECT TOP 1 UserId, Username, PasswordHash, UserType
+                SELECT TOP 1 UserId, Username, PasswordHash, UserType, IsPasswordReset
                 FROM dbo.Users 
                 WHERE Username = @u", conn))
                 {
@@ -125,27 +126,40 @@ namespace WAPP_Assignment
                         // Success → issue auth cookie
                         SignIn(rd);
 
-                        // Decide where to send them based on role
+                        // Decide where to send them based on role + reset flag
                         string userType = rd.GetString(rd.GetOrdinal("UserType"));
-
-                        if (string.Equals(userType, "Admin", StringComparison.OrdinalIgnoreCase))
+                        bool isResetRequired = false;
+                        int idxReset = rd.GetOrdinal("IsPasswordReset");
+                        if (!rd.IsDBNull(idxReset))
                         {
-                            // Admin area home (to be built under Admin/)
-                            Response.Redirect("~/Admin/AdminUserManage.aspx", true);
+                            isResetRequired = rd.GetBoolean(idxReset);
                         }
-                        else if (string.Equals(userType, "Educator", StringComparison.OrdinalIgnoreCase))
+
+                        if (string.Equals(userType, "Educator", StringComparison.OrdinalIgnoreCase))
                         {
                             // Lecturer area home
                             Response.Redirect("~/Lecturer/LecturerDashboard.aspx", true);
                         }
                         else if (string.Equals(userType, "Student", StringComparison.OrdinalIgnoreCase))
                         {
-                            // Existing student dashboard
+                            // Student dashboard
                             Response.Redirect("~/Student/Dashboard.aspx", true);
+                        }
+                        else if (string.Equals(userType, "Admin", StringComparison.OrdinalIgnoreCase))
+                        {
+                            // Admin: force password change if reset required
+                            if (isResetRequired)
+                            {
+                                Response.Redirect("~/Admin/AdminForcePasswordReset.aspx", true);
+                            }
+                            else
+                            {
+                                Response.Redirect("~/Admin/AdminUserManage.aspx", true);
+                            }
                         }
                         else
                         {
-                            // Fallback for unknown roles
+                            // Fallback
                             Response.Redirect("~/Base/Landing.aspx", true);
                         }
 
@@ -274,6 +288,7 @@ namespace WAPP_Assignment
             {
                 using (var conn = DataAccess.GetOpenConnection())
                 {
+                    // Try Students / Educators
                     using (var cmd = new SqlCommand(@"
                         INSERT INTO dbo.Users (Username, Email, UserType, PasswordHash) VALUES
                         (@u, @e, @t, @p)", conn))

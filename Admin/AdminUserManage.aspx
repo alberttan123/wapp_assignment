@@ -19,13 +19,13 @@
             align-items: center;
             justify-content: space-between;
             gap: 0.75rem;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.5rem;
         }
 
         .aum-title {
             font-size: 1.5rem;
             font-weight: 700;
-            color: var(--brand); /* same yellow accent as lecturer pages */
+            color: var(--brand);
         }
 
         .aum-actions {
@@ -38,6 +38,20 @@
             font-size: 0.78rem;
             color: var(--muted);
             margin-top: 0.15rem;
+        }
+
+        .aum-global-msg {
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .aum-global-msg span {
+            display: inline-block;
+            padding: 0.35rem 0.6rem;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: var(--panel-2);
+            color: var(--text);
         }
 
         .aum-list {
@@ -152,19 +166,59 @@
             word-break: break-word;
         }
 
+        .aum-reset-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
         /* Password reset status styles */
         .aum-reset-badge {
             font-size: 0.75rem;
         }
 
         .aum-reset-ok {
-            color: #32c95a; /* green text */
+            color: #32c95a;
             font-weight: 500;
         }
 
         .aum-reset-warn {
-            color: #ff5c5c; /* red text */
+            color: #ff5c5c;
             font-weight: 500;
+        }
+
+        .aum-reset-tools {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .aum-reset-tools .input {
+            max-width: 220px;
+        }
+
+        /* Details footer (bottom) */
+        .aum-details-footer {
+            margin-top: 0.75rem;
+            display: flex;
+            justify-content: flex-end; /* bottom-right */
+        }
+
+        .aum-details-footer .btn {
+            font-size: 0.8rem;
+        }
+
+        /* Danger button override: red button, readable text */
+        .btn.danger {
+            background: #ff5c5c;
+            border-color: #ff5c5c;
+            color: #000; /* keep text dark so it is visible */
+        }
+
+        .btn.danger:hover {
+            filter: brightness(1.1);
         }
 
         /* Old pill styles kept in case reused elsewhere */
@@ -190,6 +244,44 @@
             color: var(--brand);
         }
     </style>
+
+    <script type="text/javascript">
+        function copyGeneratedPassword(btn) {
+            if (!btn) return false;
+
+            var username = btn.getAttribute('data-username') || '';
+            var fieldId = btn.getAttribute('data-passwordfieldid');
+            if (!fieldId) return false;
+
+            var tb = document.getElementById(fieldId);
+            if (!tb) return false;
+
+            var password = tb.value || '';
+            if (!password) return false;
+
+            var payload = "Username: " + username + "\nPassword: " + password;
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(payload);
+                return false;
+            }
+
+            var temp = document.createElement("textarea");
+            temp.style.position = "fixed";
+            temp.style.opacity = "0";
+            temp.value = payload;
+            document.body.appendChild(temp);
+            temp.focus();
+            temp.select();
+            try {
+                document.execCommand('copy');
+            } catch (e) {
+                // ignore
+            }
+            document.body.removeChild(temp);
+            return false;
+        }
+    </script>
 </asp:Content>
 
 <asp:Content ID="MainBlock" ContentPlaceHolderID="AdminMain" runat="server">
@@ -219,10 +311,17 @@
 
                 <asp:LinkButton ID="btnNewUser"
                     runat="server"
-                    CssClass="btn primary">
+                    CssClass="btn primary"
+                    PostBackUrl="~/Admin/AdminCreateUser.aspx">
                     + New User
                 </asp:LinkButton>
             </div>
+        </div>
+
+        <div class="aum-global-msg">
+            <span>
+                <asp:Literal ID="litGlobalMessage" runat="server" />
+            </span>
         </div>
 
         <asp:Repeater ID="rptUsers" runat="server"
@@ -289,10 +388,40 @@
                             </div>
                             <div>
                                 <div class="aum-details-label">Password reset</div>
-                                <div class="aum-details-value">
+                                <div class="aum-details-value aum-reset-row">
                                     <asp:Literal ID="litPasswordReset" runat="server" />
+                                    <asp:LinkButton ID="btnGeneratePassword"
+                                        runat="server"
+                                        CssClass="btn"
+                                        CommandName="regen_pw"
+                                        CommandArgument='<%# Eval("UserId") %>'>
+                                        Generate new password
+                                    </asp:LinkButton>
+                                    <asp:Panel ID="pnlGeneratedPassword" runat="server" CssClass="aum-reset-tools" Visible="false">
+                                        <asp:TextBox ID="txtGeneratedPassword"
+                                            runat="server"
+                                            CssClass="input"
+                                            ReadOnly="true" />
+                                        <asp:LinkButton ID="btnCopyGeneratedPassword"
+                                            runat="server"
+                                            CssClass="btn"
+                                            OnClientClick="return copyGeneratedPassword(this);">
+                                            Copy
+                                        </asp:LinkButton>
+                                    </asp:Panel>
+                                    <asp:HiddenField ID="hfUsername" runat="server" Value='<%# Eval("Username") %>' />
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="aum-details-footer">
+                            <asp:LinkButton ID="btnDeleteUser"
+                                runat="server"
+                                CssClass="btn danger"
+                                CommandName="delete"
+                                CommandArgument='<%# Eval("UserId") %>'>
+                                Delete user
+                            </asp:LinkButton>
                         </div>
                     </asp:Panel>
                 </div>
