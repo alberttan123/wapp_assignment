@@ -19,8 +19,32 @@ namespace WAPP_Assignment.Forum
         protected List<string[]> postData = new List<string[]>();
         protected void Page_Load(object sender, EventArgs e)
         {
-            postData = Sort("latest first", fetchAllPosts()); //fetch data and sort it to be latest first
-            renderPosts(postData);
+            // Check if user is a lecturer/educator
+            var (isAuthenticated, userId, userType) = AuthCookieHelper.ReadAuthCookie();
+            bool isLecturer = isAuthenticated && 
+                             !string.IsNullOrEmpty(userType) && 
+                             string.Equals(userType, "Educator", StringComparison.OrdinalIgnoreCase);
+
+            if (isLecturer)
+            {
+                // Hide forum header for lecturers
+                pnlForumHeader.Visible = false;
+                // Show back button for lecturers
+                pnlLecturerBack.Visible = true;
+            }
+            else
+            {
+                // Show forum header for non-lecturers
+                pnlForumHeader.Visible = true;
+                // Hide back button for non-lecturers
+                pnlLecturerBack.Visible = false;
+            }
+
+            if (!IsPostBack)
+            {
+                postData = Sort("latest first", fetchAllPosts()); //fetch data and sort it to be latest first
+                renderPosts(postData);
+            }
         }
 
         protected void handleSearchAndSort(object sender, EventArgs e) 
@@ -215,6 +239,7 @@ namespace WAPP_Assignment.Forum
                 deleteButton.Text = "Delete Post";
                 deleteButton.CssClass = "delete-button-post";
                 deleteButton.Command += deletePost;
+                deleteButton.OnClientClick = "event.stopPropagation(); event.preventDefault(); return true;";
                 postActions.Controls.Add(deleteButton);
 
                 Label errorMessage = new Label();
@@ -224,13 +249,16 @@ namespace WAPP_Assignment.Forum
                 errorMessage.CssClass = "post-delete-error";
                 postActions.Controls.Add(errorMessage);
 
+                // Add delete button panel to card (inside card, but will handle clicks separately)
                 card.Controls.Add(postActions);
             }
 
+            // Create anchor tag for post navigation
             HtmlAnchor anchorTag = new HtmlAnchor();
             anchorTag.HRef = $@"/Forum/ViewPost?postId={postId}";
             anchorTag.Attributes.Add("class", "post-link");
 
+            // Wrap card in anchor (delete button inside will still work due to event.stopPropagation)
             anchorTag.Controls.Add(card);
 
             Panel fullContainer = new Panel();
