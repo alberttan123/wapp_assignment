@@ -408,50 +408,6 @@
       margin: 0;
     }
 
-    /* Tags Input */
-    .cb-tags-input {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      padding: 1rem 1.25rem !important;
-      background: rgba(15, 20, 34, 0.8) !important;
-      border: 2px solid #23304a !important;
-      border-radius: 10px !important;
-      min-height: 60px;
-      width: 100% !important;
-      max-width: 100% !important;
-      box-sizing: border-box !important;
-      margin: 0 !important;
-      align-items: flex-start;
-    }
-
-    .cb-tag {
-      background: #ffd24a;
-      color: #0b0f1a;
-      padding: 0.4rem 0.75rem;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .cb-tag-remove {
-      cursor: pointer;
-      font-weight: 900;
-    }
-
-    .cb-tags-input input {
-      border: none;
-      background: transparent;
-      color: #e8eefc;
-      font-size: 1rem;
-      flex: 1;
-      min-width: 200px;
-      outline: none;
-      padding: 0;
-    }
 
     @media (max-width: 768px) {
       .cb-shell {
@@ -525,26 +481,6 @@
       });
     }
 
-    // Tags functionality
-    function addTag(inputId, containerId) {
-      const input = document.getElementById(inputId);
-      const container = document.getElementById(containerId);
-      const tagText = input.value.trim();
-
-      if (tagText && !container.querySelector(`[data-tag="${tagText}"]`)) {
-        const tag = document.createElement('span');
-        tag.className = 'cb-tag';
-        tag.setAttribute('data-tag', tagText);
-        tag.innerHTML = tagText + '<span class="cb-tag-remove" onclick="removeTag(this)">×</span>';
-        container.insertBefore(tag, input);
-        input.value = '';
-      }
-    }
-
-    function removeTag(element) {
-      element.parentElement.remove();
-    }
-
     window.onload = function() {
       setupDragDrop('coverUploadArea', '<%= fuCourseImg.ClientID %>');
     };
@@ -587,14 +523,6 @@
         <asp:TextBox ID="txtCourseDescription" runat="server" 
                      TextMode="MultiLine" Rows="6" 
                      placeholder="Summary about your wonderful project!" />
-      </div>
-
-      <div class="cb-field">
-        <label>Tags</label>
-        <div class="cb-tags-input" id="tagsContainer">
-          <input type="text" id="tagInput" placeholder="Type and press Enter to add tag" 
-                 onkeypress="if(event.key==='Enter') { event.preventDefault(); addTag('tagInput', 'tagsContainer'); }" />
-        </div>
       </div>
 
       <div class="cb-upload-section">
