@@ -15,11 +15,15 @@
     <link rel="stylesheet" href="<%= ResolveUrl("~/Content/header.css") %>" />
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
         html,
         body {
             margin: 0;
             padding: 0;
-            background: var(--bg);
+            background: #0b0f1a;
+            font-family: 'Press Start 2P', monospace;
+            overflow-x: hidden;
         }
 
         form#adminForm {
@@ -27,53 +31,95 @@
         }
 
         .admin-topbar {
-            height: 3rem;
+            height: 4.5rem;
             display: flex;
             align-items: center;
+            justify-content: space-between;
             padding: 0 1.5rem;
             background: #05060a;
-            border-bottom: 1px solid var(--line);
-            box-shadow: 0 0.125rem 0 0 #00000080;
+            border-bottom: 2px solid #23304a;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.4);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 60;
         }
 
         .admin-logo {
-            font-size: 1.05rem;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.9rem;
             font-weight: 700;
             letter-spacing: 0.06em;
-            color: var(--brand);
+            color: #ffd24a;
             text-decoration: none;
             text-transform: uppercase;
+            text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
         }
 
         .admin-logo span {
             padding: 0.1rem 0.4rem;
-            border-radius: 0.35rem;
+            border-radius: 0;
             background: rgba(0, 0, 0, 0.4);
-            box-shadow: 0 0 0 1px #00000070;
+            border: 1px solid #23304a;
+            box-shadow: 0 2px 0 rgba(27, 37, 58, 0.5);
+        }
+
+        .admin-logo img {
+            height: 2.2rem;
+            width: auto;
+            display: inline-block;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
         }
 
         /* Sidebar + main layout */
         .layout-shell {
-            display: grid;
-            grid-template-columns: 13rem minmax(0, 1fr);
-            min-height: calc(100vh - 3rem);
-        }
-
-        @media (max-width: 56.25rem) {
-            .layout-shell {
-                grid-template-columns: 11.5rem minmax(0, 1fr);
-            }
+            display: flex;
+            padding-top: 4.5rem;
+            min-height: calc(100vh - 4.5rem);
+            background: #0b0f1a;
         }
 
         .admin-sidebar {
-            background: #05070e;
-            border-right: 1px solid var(--line);
-            padding: 1rem 0.75rem;
+            position: fixed;
+            top: 4.5rem;
+            left: 0;
+            width: 16rem;
+            height: calc(100vh - 4.5rem);
+            background: #12161f;
+            border-right: 2px solid #1b253a;
+            overflow-y: auto;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            margin: 0;
         }
 
         .admin-main {
-            background: var(--bg);
+            margin-left: 16rem;
+            width: calc(100% - 16rem);
+            max-width: calc(100vw - 16rem);
+            min-height: calc(100vh - 4.5rem);
             padding: 1.25rem 1.5rem;
+            overflow-x: hidden;
+            overflow-y: auto;
+            background: #0b0f1a;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 56.25rem) {
+            .admin-sidebar {
+                width: 14rem;
+            }
+            .admin-main {
+                margin-left: 14rem;
+                width: calc(100% - 14rem);
+                max-width: calc(100vw - 14rem);
+            }
         }
 
         @media (max-width: 48rem) {
@@ -83,54 +129,96 @@
         }
 
         .sb-section-title {
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            color: var(--muted);
-            letter-spacing: 0.08em;
-            margin-bottom: 0.75rem;
+            display: none; /* Hide title to match lecturer sidebar */
         }
 
         .sb-nav {
             display: flex;
             flex-direction: column;
-            gap: 0.2rem;
+            gap: 1.5rem;
+            width: 100%;
+            padding: 2rem 1rem;
+            margin: 0;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            box-sizing: border-box;
         }
 
         .sb-link {
-            display: block;
-            padding: 0.35rem 0.5rem;
-            border-radius: 0.35rem;
-            color: var(--text);
+            color: #e8eefc;
             text-decoration: none;
-            font-size: 0.85rem;
-            border: 1px solid transparent;
+            padding: 1.5rem 2rem;
+            border-radius: 0;
+            border: 2px solid #23304a;
+            background: rgba(15, 20, 34, 0.8);
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.75rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            text-align: center;
+            width: calc(100% - 2rem);
+            max-width: 14rem;
+            min-height: 4.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3), 0 2px 0 rgba(27, 37, 58, 0.5);
+            box-sizing: border-box;
+            line-height: 1.8;
         }
 
         .sb-link:hover {
-            background: var(--panel-2);
-            border-color: var(--line);
+            background: rgba(15, 20, 34, 0.95);
+            border-color: #ffd24a;
+            color: #ffd24a;
+            transform: translateY(-2px);
+            box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3), 0 4px 0 rgba(27, 37, 58, 0.5), 0 0 25px rgba(255, 210, 74, 0.25);
+            text-decoration: none;
+        }
+
+        .sb-link:active {
+            transform: translateY(0);
+            box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.3), 0 1px 0 rgba(27, 37, 58, 0.5);
         }
 
         .sb-link.active {
-            background: linear-gradient(135deg, var(--brand), #f6d46a);
-            color: #101010;
-            border-color: #000000c0;
-            box-shadow:
-                0 0 0 1px #00000080,
-                0 0.2rem 0 0 #000000a0;
+            background: linear-gradient(135deg, #ffd24a 0%, #ffbe0b 100%);
+            color: #0f1422;
+            border-color: #23304a;
+            box-shadow: 0 4px 0 rgba(27, 37, 58, 0.8), 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .sb-link span {
+            display: inline-block;
+            margin-right: 0.5rem;
         }
 
         .admin-footer {
             padding: 0.5rem 1.5rem 0.75rem;
             font-size: 0.75rem;
-            color: var(--muted);
-            border-top: 1px solid var(--line);
+            color: #9fb0d1;
+            border-top: 2px solid #1b253a;
             background: #05060a;
+            margin-left: 16rem;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        @media (max-width: 56.25rem) {
+            .admin-footer {
+                margin-left: 14rem;
+            }
         }
     </style>
 
     <asp:ContentPlaceHolder ID="HeadAdmin" runat="server" />
+    <!-- Also support forum pages that use HeadContent -->
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
 </head>
 <body>
     <form id="adminForm" runat="server">
@@ -142,30 +230,37 @@
 
         <div class="layout-shell">
             <aside class="admin-sidebar">
-                <div class="sb-section-title">Admin</div>
                 <nav class="sb-nav">
                     <asp:HyperLink ID="lnkDashboard" runat="server"
                         NavigateUrl="~/Admin/AdminDashboard.aspx"
                         CssClass="sb-link">
-                        Dashboard
+                        <span>📊</span> Dashboard
                     </asp:HyperLink>
 
                     <asp:HyperLink ID="lnkUsers" runat="server"
                         NavigateUrl="~/Admin/AdminUserManage.aspx"
                         CssClass="sb-link">
-                        Manage Users
+                        <span>👥</span> Manage Users
                     </asp:HyperLink>
 
                     <asp:HyperLink ID="lnkCourses" runat="server"
                         NavigateUrl="~/Admin/AdminCourses.aspx"
                         CssClass="sb-link">
-                        Courses
+                        <span>📚</span> Courses
+                    </asp:HyperLink>
+
+                    <asp:HyperLink ID="lnkCommunity" runat="server"
+                        NavigateUrl="~/Forum/AllPosts.aspx"
+                        CssClass="sb-link">
+                        <span>💬</span> Community
                     </asp:HyperLink>
                 </nav>
             </aside>
 
             <main class="admin-main">
                 <asp:ContentPlaceHolder ID="AdminMain" runat="server" />
+                <!-- Also support forum pages that use MainContent -->
+                <asp:ContentPlaceHolder ID="MainContent" runat="server" />
             </main>
         </div>
 

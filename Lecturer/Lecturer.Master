@@ -16,6 +16,8 @@
 
     <!-- Per-page extra head content -->
     <asp:ContentPlaceHolder ID="HeadLecturer" runat="server" />
+    <!-- Also support forum pages that use HeadContent -->
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
 </head>
 <body>
     <form id="form1" runat="server">
@@ -61,6 +63,8 @@
             <!-- Scrollable main content -->
             <main class="lect-main">
                 <asp:ContentPlaceHolder ID="LecturerMain" runat="server" />
+                <!-- Also support forum pages that use MainContent -->
+                <asp:ContentPlaceHolder ID="MainContent" runat="server" />
             </main>
         </div>
 

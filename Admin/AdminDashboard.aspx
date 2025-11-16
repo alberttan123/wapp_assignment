@@ -7,36 +7,61 @@
 
 <asp:Content ID="HeadBlock" ContentPlaceHolderID="HeadAdmin" runat="server">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            overflow-x: hidden;
+        }
+        
         .ad-shell {
             width: 100%;
-            margin: 0;
-            padding: 0.5rem 0 1.25rem;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #121a2a;
+            min-height: 100vh;
+            overflow-x: hidden;
+            box-sizing: border-box;
         }
 
         .ad-header {
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
-            gap: 0.75rem;
-            margin-bottom: 0.75rem;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
         }
 
         .ad-title-block {
             display: flex;
             flex-direction: column;
-            gap: 0.2rem;
+            gap: 0.5rem;
         }
 
         .ad-title {
-            font-size: 1.6rem;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1.2rem;
             font-weight: 700;
-            color: var(--brand);
-            text-shadow: 0 0 0.0625rem #000;
+            color: #ffd24a;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
+            margin: 0;
         }
 
         .ad-subtitle {
-            font-size: 0.82rem;
-            color: var(--muted);
+            font-size: 0.85rem;
+            color: #9fb0d1;
+            font-weight: 500;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
         }
 
         .ad-header-right {
@@ -48,46 +73,73 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            padding: 0.4rem 0.75rem;
-            border-radius: 999px;
-            border: 0.0625rem solid var(--line);
-            background: var(--panel-2);
-            box-shadow:
-                0 0 0 0.0625rem #00000040,
-                0 0.1875rem 0 0 #00000060;
+            padding: 0.75rem 1rem;
+            border-radius: 0;
+            border: 2px solid #23304a;
+            background: #121a2a;
+            box-shadow: 0 4px 0 rgba(27, 37, 58, 0.8), 0 6px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .ad-profile-card:hover {
+            border-color: #ffd24a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 rgba(27, 37, 58, 0.8), 0 8px 16px rgba(0, 0, 0, 0.4);
         }
 
         .ad-profile-main {
             display: flex;
             flex-direction: column;
-            gap: 0.1rem;
+            gap: 0.25rem;
         }
 
         .ad-profile-name {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 600;
-            color: var(--text);
+            color: #e8eefc;
         }
 
         .ad-profile-meta {
             font-size: 0.75rem;
-            color: var(--muted);
+            color: #9fb0d1;
         }
 
         .ad-profile-role-pill {
             display: inline-block;
             margin-right: 0.3rem;
-            padding: 0.05rem 0.45rem;
-            border-radius: 999px;
-            border: 0.0625rem solid var(--line);
-            background: var(--panel);
+            padding: 0.2rem 0.5rem;
+            border-radius: 0;
+            border: 1px solid #23304a;
+            background: rgba(27, 37, 58, 0.6);
             font-size: 0.7rem;
-            color: var(--muted);
+            color: #9fb0d1;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
         }
 
         .ad-profile-actions .btn {
-            font-size: 0.75rem;
-            padding: 0.25rem 0.7rem;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.55rem;
+            padding: 0.5rem 0.75rem;
+            background: rgba(27, 37, 58, 0.8);
+            color: #e8eefc;
+            border: 2px solid #23304a;
+            border-radius: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            text-decoration: none;
+            font-weight: 700;
+            box-shadow: 0 3px 0 rgba(27, 37, 58, 0.8);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .ad-profile-actions .btn:hover {
+            background: rgba(35, 48, 74, 0.9);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 0 rgba(27, 37, 58, 0.8);
         }
 
         @media (max-width: 37.5rem) {
@@ -102,15 +154,17 @@
             }
 
             .ad-profile-card {
-                border-radius: 0.5rem;
+                width: 100%;
             }
         }
 
         .ad-grid {
             display: grid;
             grid-template-columns: minmax(0, 2fr) minmax(0, 1.5fr);
-            gap: 0.75rem;
-            margin-bottom: 0.75rem;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            width: 100%;
+            max-width: 100%;
         }
 
         @media (max-width: 56.25rem) {
@@ -122,7 +176,9 @@
         .ad-row {
             display: grid;
             grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.4fr);
-            gap: 0.75rem;
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 100%;
         }
 
         @media (max-width: 56.25rem) {
@@ -132,29 +188,39 @@
         }
 
         .ad-card {
-            background: var(--panel);
-            border-radius: 0.625rem;
-            border: 0.0625rem solid var(--line);
-            padding: 0.75rem 0.75rem;
-            box-shadow:
-                0 0 0 0.0625rem #00000040,
-                0 0.25rem 0 0 #00000050;
+            background: #121a2a;
+            border-radius: 0;
+            border: 2px solid #23304a;
+            padding: 1.5rem;
+            box-shadow: 0 8px 0 rgba(27, 37, 58, 0.8), 0 12px 24px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        .ad-card:hover {
+            border-color: #ffd24a;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 0 rgba(27, 37, 58, 0.8), 0 14px 28px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 210, 74, 0.2);
         }
 
         .ad-card--accent-reset {
-            background: linear-gradient(135deg, var(--panel) 0%, var(--panel-2) 60%, #2a2a2a 100%);
+            background: linear-gradient(135deg, rgba(15, 20, 34, 0.9) 0%, rgba(18, 26, 42, 0.9) 60%, rgba(30, 41, 59, 0.9) 100%);
         }
 
         .ad-card--accent-login {
-            background: linear-gradient(135deg, #212733, var(--panel) 40%, var(--panel-2) 100%);
+            background: linear-gradient(135deg, rgba(15, 20, 34, 0.9) 0%, rgba(18, 26, 42, 0.9) 60%, rgba(30, 41, 59, 0.9) 100%);
         }
 
         .ad-card--accent-signup {
-            background: linear-gradient(135deg, #252727, var(--panel) 40%, var(--panel-2) 100%);
+            background: linear-gradient(135deg, rgba(15, 20, 34, 0.9) 0%, rgba(18, 26, 42, 0.9) 60%, rgba(30, 41, 59, 0.9) 100%);
         }
 
         .ad-card--accent-snapshot {
-            background: linear-gradient(135deg, var(--panel) 0%, #252221 100%);
+            background: linear-gradient(135deg, rgba(15, 20, 34, 0.9) 0%, rgba(18, 26, 42, 0.9) 60%, rgba(30, 41, 59, 0.9) 100%);
         }
 
         .ad-card-header {
@@ -162,74 +228,109 @@
             justify-content: space-between;
             align-items: center;
             gap: 0.5rem;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
         }
 
         .ad-card-title-block {
             display: flex;
             flex-direction: column;
-            gap: 0.15rem;
+            gap: 0.5rem;
         }
 
         .ad-card-title {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--text);
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #ffd24a;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
         }
 
         .ad-card-subtitle {
-            font-size: 0.8rem;
-            color: var(--muted);
+            font-size: 0.75rem;
+            color: #9fb0d1;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            line-height: 1.5;
         }
 
         .ad-pill {
             font-size: 0.75rem;
-            padding: 0.15rem 0.5rem;
-            border-radius: 999px;
-            border: 0.0625rem solid var(--line);
-            background: var(--panel-2);
-            color: var(--muted);
+            padding: 0.3rem 0.6rem;
+            border-radius: 0;
+            border: 1px solid #23304a;
+            background: rgba(27, 37, 58, 0.6);
+            color: #9fb0d1;
             white-space: nowrap;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
         }
 
         /* Password reset list */
         .ad-pr-list {
             display: flex;
             flex-direction: column;
-            gap: 0.4rem;
+            gap: 0.75rem;
         }
 
         .ad-pr-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 0.5rem;
-            font-size: 0.85rem;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 0;
+            border: 2px solid #23304a;
+            background: rgba(27, 37, 58, 0.6);
+            box-shadow: 0 4px 0 rgba(27, 37, 58, 0.8);
+            transition: all 0.2s ease;
+        }
+
+        .ad-pr-row:hover {
+            background: rgba(35, 48, 74, 0.8);
+            border-color: #ffd24a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 rgba(27, 37, 58, 0.8);
         }
 
         .ad-pr-main {
             display: flex;
             flex-direction: column;
-            gap: 0.1rem;
+            gap: 0.25rem;
+            flex: 1;
         }
 
         .ad-pr-user {
-            color: var(--text);
-            font-weight: 500;
+            color: #e8eefc;
+            font-weight: 600;
+            font-size: 0.9rem;
         }
 
         .ad-pr-meta {
-            font-size: 0.78rem;
-            color: var(--muted);
+            font-size: 0.75rem;
+            color: #9fb0d1;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
         }
 
         .ad-pr-role {
-            font-size: 0.75rem;
-            padding: 0.1rem 0.45rem;
-            border-radius: 999px;
-            border: 0.0625rem solid var(--line);
-            color: var(--muted);
-            background: var(--panel-2);
+            font-size: 0.7rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 0;
+            border: 1px solid #23304a;
+            color: #9fb0d1;
+            background: rgba(15, 20, 34, 0.8);
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
         }
 
         .ad-pr-empty {
@@ -238,19 +339,23 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            gap: 0.35rem;
-            padding: 0.75rem 0.25rem;
+            gap: 0.75rem;
+            padding: 2rem 1rem;
         }
 
         .ad-ghost {
-            font-size: 2.1rem;
+            font-size: 3rem;
             line-height: 1;
         }
 
         .ad-ghost-caption {
             font-size: 0.85rem;
-            color: var(--muted);
+            color: #9fb0d1;
             white-space: pre-line;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
         }
 
         /* Login pie chart */
@@ -268,62 +373,72 @@
         }
 
         .ad-pie {
-            --ad-pie-admin: #f6d46a;     /* Admin segment */
+            --ad-pie-admin: #ffd24a;     /* Admin segment */
             --ad-pie-educator: #6bc2ff;  /* Educator segment */
             --ad-pie-student: #b48bff;   /* Student segment */
 
             width: 5rem;   /* 80px */
             height: 5rem;
             border-radius: 50%;
-            background: var(--panel-2);
+            background: rgba(27, 37, 58, 0.6);
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 0.0625rem solid #00000080;
-            box-shadow:
-                0 0 0 0.0625rem #00000060,
-                0 0.1875rem 0 0 #00000080;
+            border: 2px solid #23304a;
+            box-shadow: 0 4px 0 rgba(27, 37, 58, 0.8);
         }
 
         .ad-pie-inner {
             width: 3.375rem;
             height: 3.375rem;
             border-radius: 50%;
-            background: var(--panel);
+            background: #121a2a;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 0.75rem;
-            color: var(--text);
-            border: 0.0625rem solid var(--line);
+            color: #ffd24a;
+            border: 2px solid #23304a;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
         }
 
         .ad-login-legend {
             flex: 1;
             font-size: 0.8rem;
-            color: var(--text);
+            color: #e8eefc;
         }
 
         .ad-login-legend-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 0.25rem;
-            margin-bottom: 0.2rem;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
         }
 
         .ad-login-label-wrap {
             display: flex;
             align-items: center;
-            gap: 0.25rem;
+            gap: 0.5rem;
         }
 
         .ad-login-label {
-            color: var(--muted);
+            color: #9fb0d1;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
         }
 
         .ad-login-badge {
             font-size: 0.75rem;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
         }
 
         .ad-login-badge-ok {
@@ -335,16 +450,15 @@
         }
 
         .ad-dot {
-            width: 0.625rem;
-            height: 0.625rem;
-            border-radius: 50%;
-            box-shadow:
-                0 0 0 0.0625rem #00000060,
-                0 0.125rem 0 0 #00000060;
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 0;
+            box-shadow: 0 2px 0 rgba(27, 37, 58, 0.8);
+            border: 1px solid #23304a;
         }
 
         .ad-dot--admin {
-            background: #f6d46a;
+            background: #ffd24a;
         }
 
         .ad-dot--educator {
@@ -356,14 +470,14 @@
         }
 
         .ad-dot--notoday {
-            background: var(--panel-2);
+            background: rgba(27, 37, 58, 0.6);
         }
 
         /* Signups bar chart */
         .ad-signup-body {
             display: flex;
             align-items: flex-end;
-            gap: 0.75rem;
+            gap: 1rem;
         }
 
         .ad-bar-wrap {
@@ -371,7 +485,7 @@
             display: flex;
             align-items: flex-end;
             justify-content: space-between;
-            gap: 0.4rem;
+            gap: 0.75rem;
             min-height: 5rem;
         }
 
@@ -380,41 +494,62 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.25rem;
+            gap: 0.5rem;
         }
 
         .ad-bar {
-            width: 1rem;
-            border-radius: 0.5rem 0.5rem 0.125rem 0.125rem;
-            background: var(--panel-2);
-            border: 0.0625rem solid var(--line);
+            width: 100%;
+            max-width: 3rem;
+            border-radius: 0;
+            background: rgba(27, 37, 58, 0.6);
+            border: 2px solid #23304a;
             display: block;
-            box-shadow:
-                0 0 0 0.0625rem #00000040,
-                0 0.1875rem 0 0 #00000060;
+            box-shadow: 0 4px 0 rgba(27, 37, 58, 0.8);
+            transition: all 0.2s ease;
+        }
+
+        .ad-bar:hover {
+            border-color: #ffd24a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 rgba(27, 37, 58, 0.8);
         }
 
         .ad-bar-label {
             font-size: 0.75rem;
-            color: var(--muted);
+            color: #9fb0d1;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
         }
 
         .ad-bar-count {
             font-size: 0.75rem;
-            color: var(--text);
+            color: #e8eefc;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
         }
 
         .ad-signup-note {
             font-size: 0.78rem;
-            color: var(--muted);
+            color: #9fb0d1;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            line-height: 1.5;
         }
 
         /* Snapshot card */
         .ad-snapshot-grid {
             display: grid;
             grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 0.5rem;
+            gap: 0.75rem;
             font-size: 0.85rem;
+            width: 100%;
+            max-width: 100%;
         }
 
         @media (max-width: 56.25rem) {
@@ -430,57 +565,80 @@
         }
 
         .ad-snapshot-item {
-            padding: 0.45rem 0.5rem;
-            border-radius: 0.5rem;
-            border: 0.0625rem solid var(--line);
-            background: var(--panel-2);
-            box-shadow:
-                0 0 0 0.0625rem #00000040,
-                0 0.1875rem 0 0 #00000060;
+            padding: 1rem;
+            border-radius: 0;
+            border: 2px solid #23304a;
+            background: rgba(27, 37, 58, 0.6);
+            box-shadow: 0 4px 0 rgba(27, 37, 58, 0.8);
+            transition: all 0.2s ease;
         }
 
+        .ad-snapshot-item:hover {
+            background: rgba(35, 48, 74, 0.8);
+            border-color: #ffd24a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 rgba(27, 37, 58, 0.8);
+        }
+
+        /* Unified background for all snapshot items - subtle variations only */
         .ad-snapshot-item--primary {
-            background: linear-gradient(135deg, #3c3119, var(--panel-2));
+            background: rgba(27, 37, 58, 0.6);
         }
 
         .ad-snapshot-item--admin {
-            background: linear-gradient(135deg, #262b45, var(--panel-2));
+            background: rgba(27, 37, 58, 0.6);
         }
 
         .ad-snapshot-item--edu {
-            background: linear-gradient(135deg, #243b2f, var(--panel-2));
+            background: rgba(27, 37, 58, 0.6);
         }
 
         .ad-snapshot-item--stu {
-            background: linear-gradient(135deg, #293130, var(--panel-2));
+            background: rgba(27, 37, 58, 0.6);
         }
 
         .ad-snapshot-item--course {
-            background: linear-gradient(135deg, #38312f, var(--panel-2));
+            background: rgba(27, 37, 58, 0.6);
         }
 
         .ad-snapshot-item--quiz {
-            background: linear-gradient(135deg, #31363f, var(--panel-2));
+            background: rgba(27, 37, 58, 0.6);
         }
 
         .ad-snapshot-item--post {
-            background: linear-gradient(135deg, #303038, var(--panel-2));
+            background: rgba(27, 37, 58, 0.6);
         }
 
         .ad-snapshot-item--comment {
-            background: linear-gradient(135deg, #2f3532, var(--panel-2));
+            background: rgba(27, 37, 58, 0.6);
         }
 
         .ad-snapshot-label {
             font-size: 0.78rem;
-            color: var(--muted);
-            margin-bottom: 0.15rem;
+            color: #9fb0d1;
+            margin-bottom: 0.5rem;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
         }
 
         .ad-snapshot-value {
             font-size: 0.95rem;
-            color: var(--text);
-            font-weight: 500;
+            color: #ffd24a;
+            font-weight: 700;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .ad-login-label {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
         }
     </style>
 </asp:Content>

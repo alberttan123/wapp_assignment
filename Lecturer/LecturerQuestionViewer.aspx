@@ -298,6 +298,10 @@
       color: #e8eefc;
       box-shadow: 3px 3px 0 rgba(27, 37, 58, 0.8);
       transition: all 0.2s ease;
+      align-content: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     .qv-arrow .btn:hover {
       border-color: #ffd24a;

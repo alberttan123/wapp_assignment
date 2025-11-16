@@ -20,12 +20,64 @@
     justify-content: space-between;
     align-items: center;
     gap: 2rem;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .lecturer-top-bar .addPostButtonContainer {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
+    flex-shrink: 0;
+    height: 100%;
+}
+
+.lecturer-top-bar > a.lecturer-back-btn,
+.lecturer-top-bar > .lecturer-back-btn {
+    flex-shrink: 0;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    vertical-align: middle !important;
+}
+
+.lecturer-top-bar .addPostButton {
+    font-family: 'Press Start 2P', monospace !important;
+    font-size: 0.7rem !important;
+    padding: 0.85rem 1.5rem !important;
+    background: linear-gradient(135deg, #ffd24a 0%, #ffbe0b 100%) !important;
+    color: #0f1422 !important;
+    border: 2px solid #23304a !important;
+    border-radius: 0 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    font-weight: 700 !important;
+    box-shadow: 0 4px 0 rgba(27, 37, 58, 0.8), 0 6px 12px rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.2s ease !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    position: relative !important;
+    line-height: 1.5 !important;
+    height: auto !important;
+    min-height: 3rem !important;
+    vertical-align: middle !important;
+    margin: 0 !important;
+}
+
+.lecturer-top-bar .addPostButton:hover {
+    background: linear-gradient(135deg, #ffffff 0%, #ffdc6a 100%) !important;
+    color: #0f1422 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 0 rgba(27, 37, 58, 0.8), 0 8px 16px rgba(0, 0, 0, 0.4) !important;
+}
+
+.lecturer-top-bar .addPostButton:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 2px 0 rgba(27, 37, 58, 0.8), 0 4px 8px rgba(0, 0, 0, 0.3) !important;
 }
 
 .lecturer-top-bar a,
@@ -38,7 +90,7 @@ a.lecturer-back-btn,
     background: linear-gradient(135deg, #ffd24a 0%, #ffbe0b 100%) !important;
     color: #0f1422 !important;
     border: 2px solid #23304a !important;
-    border-radius: 10px !important;
+    border-radius: 0 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.05em !important;
     text-decoration: none !important;
@@ -46,10 +98,16 @@ a.lecturer-back-btn,
     box-shadow: 0 4px 0 rgba(27, 37, 58, 0.8), 0 6px 12px rgba(0, 0, 0, 0.3) !important;
     transition: all 0.2s ease !important;
     cursor: pointer !important;
-    display: inline-block !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     white-space: nowrap !important;
     position: relative !important;
     line-height: 1.5 !important;
+    height: auto !important;
+    min-height: 3rem !important;
+    vertical-align: middle !important;
+    margin: 0 !important;
 }
 
 .lecturer-back-btn::before,
@@ -324,6 +382,16 @@ a.lecturer-back-btn:link,
     z-index: 1;
 }
 
+.post-container > .post-actions {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 102;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
 .post-container:hover {
     transform: translateY(-4px);
 }
@@ -527,21 +595,24 @@ a.lecturer-back-btn:link,
 }
 
 .delete-button-post {
-    background: #ff6b6b;
-    border: none;
-    color: #ffffff;
-    padding: 0.6rem 1.25rem;
-    font-weight: 900;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    position: relative;
-    z-index: 101;
-    box-shadow: 0 4px 0 #d9005f;
-    border-radius: 8px;
-    pointer-events: auto;
+    background: #ff6b6b !important;
+    border: none !important;
+    color: #ffffff !important;
+    padding: 0.6rem 1.25rem !important;
+    font-weight: 900 !important;
+    font-size: 0.8rem !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    position: relative !important;
+    z-index: 101 !important;
+    box-shadow: 0 4px 0 #d9005f !important;
+    border-radius: 0 !important;
+    pointer-events: auto !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    font-family: 'Press Start 2P', monospace !important;
 }
 
 .delete-button-post::before {
@@ -571,6 +642,33 @@ a.lecturer-back-btn:link,
     color: #ff6b6b;
     font-weight: 700;
     font-size: 0.85rem;
+}
+
+.delete-message-panel {
+    margin: 1rem 2rem;
+    padding: 1rem 1.5rem;
+    background: #121a2a;
+    border: 2px solid #23304a;
+    border-radius: 0;
+    box-shadow: 0 4px 0 rgba(27, 37, 58, 0.8), 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.delete-message {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.7rem;
+    color: #e8eefc;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block;
+    text-align: center;
+}
+
+.delete-message.error {
+    color: #ff6b6b;
+}
+
+.delete-message.success {
+    color: #51cf66;
 }
 
 
@@ -622,9 +720,33 @@ a.lecturer-back-btn:link,
 }
 
 
+.addPostModalContainer {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 9999 !important;
+    display: block !important;
+    pointer-events: auto !important;
+}
+
 .addPostModalContainer .backdrop {
+    position: fixed;
+    inset: 0;
     background: rgba(11, 15, 26, 0.85);
     backdrop-filter: blur(4px);
+    z-index: 10000;
+}
+
+.addPostModalContainer .pages-modal {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    z-index: 10001;
+    pointer-events: none;
+}
+
+.addPostModalContainer .pages-modal .sheet {
+    pointer-events: auto;
 }
 
 .sheet-addPost {

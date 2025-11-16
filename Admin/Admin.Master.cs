@@ -10,6 +10,24 @@ namespace WAPP_Assignment.Admin
         {
             if (!IsPostBack)
             {
+                // Set URLs using ResolveUrl for proper path resolution
+                if (lnkDashboard != null)
+                {
+                    lnkDashboard.NavigateUrl = ResolveUrl("~/Admin/AdminDashboard.aspx");
+                }
+                if (lnkUsers != null)
+                {
+                    lnkUsers.NavigateUrl = ResolveUrl("~/Admin/AdminUserManage.aspx");
+                }
+                if (lnkCourses != null)
+                {
+                    lnkCourses.NavigateUrl = ResolveUrl("~/Admin/AdminCourses.aspx");
+                }
+                if (lnkCommunity != null)
+                {
+                    lnkCommunity.NavigateUrl = ResolveUrl("~/Forum/AllPosts.aspx");
+                }
+                
                 HighlightNav();
             }
         }
@@ -34,6 +52,11 @@ namespace WAPP_Assignment.Admin
             {
                 AddActive(lnkCourses);
             }
+            else if (path.Contains("/forum/allposts.aspx") ||
+                     path.Contains("/forum/viewpost.aspx"))
+            {
+                AddActive(lnkCommunity);
+            }
         }
 
         private void ClearActive()
@@ -41,6 +64,10 @@ namespace WAPP_Assignment.Admin
             RemoveActive(lnkDashboard);
             RemoveActive(lnkUsers);
             RemoveActive(lnkCourses);
+            if (lnkCommunity != null)
+            {
+                RemoveActive(lnkCommunity);
+            }
         }
 
         private static void AddActive(HyperLink link)
