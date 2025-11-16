@@ -13,5 +13,19 @@ namespace WAPP_Assignment
         {
 
         }
+
+        protected void showLoginSignupModal(object sender, EventArgs e) 
+        {
+            MasterPageInterface masterPageInterface = this.Master as MasterPageInterface;
+            if (masterPageInterface != null)
+            {
+                masterPageInterface.showLoginSignupModal(this, null);
+            }
+        }
+
+        protected void redirToCourses(object sender, EventArgs e) 
+        {
+            Response.Redirect("~/Base/CourseDashboard.aspx", true);
+        }
     }
 }

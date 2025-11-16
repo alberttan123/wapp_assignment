@@ -7,74 +7,65 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WAPP_Assignment.Base
+namespace WAPP_Assignment.Student
 {
 
 
-    public partial class CourseDashboard
+    public partial class ViewPage
     {
 
         /// <summary>
-        /// EnrollModal control.
+        /// pnlError control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel EnrollModal;
+        protected global::System.Web.UI.WebControls.Panel pnlError;
 
         /// <summary>
-        /// lnkEnrollBackdrop control.
+        /// pnlPage control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkEnrollBackdrop;
+        protected global::System.Web.UI.WebControls.Panel pnlPage;
 
         /// <summary>
-        /// lnkCloseEnroll control.
+        /// lblPageTitle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkCloseEnroll;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblPageTitle;
 
         /// <summary>
-        /// SelectedCourseId control.
+        /// litHtmlContent control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField SelectedCourseId;
+        protected global::System.Web.UI.WebControls.Literal litHtmlContent;
 
         /// <summary>
-        /// btnConfirmEnroll control.
+        /// litPlainContent control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnConfirmEnroll;
+        protected global::System.Web.UI.WebControls.Literal litPlainContent;
 
         /// <summary>
-        /// btnCancelEnroll control.
+        /// pnlEmpty control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnCancelEnroll;
-
-        /// <summary>
-        /// CourseGrid control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder CourseGrid;
+        protected global::System.Web.UI.WebControls.Panel pnlEmpty;
     }
 }

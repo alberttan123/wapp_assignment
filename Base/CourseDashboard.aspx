@@ -302,44 +302,81 @@
         font-size: 0.85rem;
     }
 
+ .sheet.enroll-sheet {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 400px;
+    padding: 1rem;
+}
+
+      .modal-title {
+        font-weight: bold;
+        font-size: 1.4rem;
+      }
   </style>
 </asp:Content>
 
 <asp:Content ContentPlaceHolderID="MainContent" runat="server">
-    <!-- Enroll modal (follows your Panel-visible pattern) -->
-    <asp:Panel ID="EnrollModal" runat="server" CssClass="modal-overlay" Visible="false">
-        <div class="modal-card">
-            <h3>Enroll in this course?</h3>
+<asp:Panel ID="EnrollModal" runat="server" Visible="false">
+
+    <!-- Backdrop (click to close) -->
+    <asp:LinkButton ID="lnkEnrollBackdrop" runat="server"
+        CssClass="backdrop"
+        OnClick="hideEnrollModal"
+        CausesValidation="false" />
+
+    <!-- Modal container -->
+    <div id="enrollModalDiv" class="pages-modal" role="dialog" aria-modal="true">
+
+        <div class="sheet enroll-sheet">
+
+            <div class="modal-header">
+                <h3 class="modal-title">Enroll in this course?</h3>
+
+                <!-- X close button -->
+                <asp:LinkButton ID="lnkCloseEnroll" runat="server"
+                    CssClass="close"
+                    OnClick="hideEnrollModal"
+                    CausesValidation="false">×</asp:LinkButton>
+            </div>
+
             <p>
-                You are not currently enrolled in this course. Would you like to enroll now?
+                You are not currently enrolled in this course.<br />
+                Would you like to enroll now?
             </p>
 
-            <!-- Store selected course -->
+            <!-- Selected course -->
             <asp:HiddenField ID="SelectedCourseId" runat="server" />
 
-            <div class="modal-actions">
+            <div class="actions">
+
                 <asp:Button ID="btnConfirmEnroll" runat="server"
                     Text="Enroll"
-                    CssClass="btn primary-btn"
+                    CssClass="btn primary"
                     OnClick="btnConfirmEnroll_Click" />
 
-                <asp:Button ID="btnCancelEnroll" runat="server"
-                    Text="Cancel"
-                    CssClass="btn secondary-btn"
-                    OnClick="btnCancelEnroll_Click"
-                    CausesValidation="false" />
+                <asp:LinkButton ID="btnCancelEnroll" runat="server"
+                    CssClass="btn cancel"
+                    OnClick="hideEnrollModal"
+                    CausesValidation="false">Cancel</asp:LinkButton>
+
             </div>
+
         </div>
-    </asp:Panel>
+
+    </div>
+</asp:Panel>
+
   
   <header class="a">
     <div class="a-bg" role="img" aria-label="Pixel art world background"></div>
     <div class="a-scrim"></div>
     <div class="a-fade"></div>
     <div class="a-content">
-      <p class="eyebrow">LOREM IPSUM DOLOR</p>
-      <h1 class="a-title">Sit Amet Consectetur</h1>
-      <p class="a-sub">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+      <p class="eyebrow">CHOOSE YOUR PATH</p>
+      <h1 class="a-title">Courses</h1>
+      <p class="a-sub">Peruse through our selection of Courses made by lecturers all around the world. You are sure to find something that catches your attention!</p>
       <div class="a-cta">
         <a href="#courses" class="cta-btn">Explore for free!</a>
       </div>
@@ -353,8 +390,8 @@
       <div class="trilogy-header">
         <span class="trilogy-icon">🌍</span>
         <div>
-          <h2 class="trilogy-title">Lorem Ipsum Dolor</h2>
-          <p class="trilogy-subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <h2 class="trilogy-title">Our Courses</h2>
+          <p class="trilogy-subtitle">Ever wondered if Dwayne the Rock Johnson is a Rock?</p>
         </div>
       </div>
       

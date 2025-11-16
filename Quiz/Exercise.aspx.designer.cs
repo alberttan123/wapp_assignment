@@ -7,236 +7,191 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WAPP_Assignment.Student
+namespace WAPP_Assignment.Quiz
 {
 
 
-    public partial class Dashboard
+    public partial class Exercise
     {
 
         /// <summary>
-        /// EditProfileModal control.
+        /// dbgLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel EditProfileModal;
+        protected global::System.Web.UI.WebControls.Label dbgLabel;
 
         /// <summary>
-        /// lnkBackdrop1 control.
+        /// pnlNoQuiz control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkBackdrop1;
+        protected global::System.Web.UI.WebControls.Panel pnlNoQuiz;
 
         /// <summary>
-        /// EditProfileImagePanel control.
+        /// btnNoQuizBack control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel EditProfileImagePanel;
+        protected global::System.Web.UI.WebControls.Button btnNoQuizBack;
 
         /// <summary>
-        /// pfp_upload control.
+        /// pnlQuiz control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.FileUpload pfp_upload;
+        protected global::System.Web.UI.WebControls.Panel pnlQuiz;
 
         /// <summary>
-        /// editFullName control.
+        /// lblProgress control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox editFullName;
+        protected global::System.Web.UI.WebControls.Label lblProgress;
 
         /// <summary>
-        /// edit_profile_error_message control.
+        /// lblQuestionText control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label edit_profile_error_message;
+        protected global::System.Web.UI.WebControls.Label lblQuestionText;
 
         /// <summary>
-        /// lnkCancelEdit control.
+        /// imgQuestion control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkCancelEdit;
+        protected global::System.Web.UI.WebControls.Image imgQuestion;
 
         /// <summary>
-        /// btnLogin control.
+        /// btnOption1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnLogin;
+        protected global::System.Web.UI.WebControls.Button btnOption1;
 
         /// <summary>
-        /// progress_fill_modern control.
+        /// btnOption2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel progress_fill_modern;
+        protected global::System.Web.UI.WebControls.Button btnOption2;
 
         /// <summary>
-        /// progress_percent_modern control.
+        /// btnOption3 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label progress_percent_modern;
+        protected global::System.Web.UI.WebControls.Button btnOption3;
 
         /// <summary>
-        /// course_name_modern control.
+        /// btnOption4 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label course_name_modern;
+        protected global::System.Web.UI.WebControls.Button btnOption4;
 
         /// <summary>
-        /// next_lesson_modern control.
+        /// lblFeedback control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label next_lesson_modern;
+        protected global::System.Web.UI.WebControls.Label lblFeedback;
 
         /// <summary>
-        /// btn_continue_modern control.
+        /// btnNext control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btn_continue_modern;
+        protected global::System.Web.UI.WebControls.Button btnNext;
 
         /// <summary>
-        /// pnlCoursesDropdownEmpty control.
+        /// pnlLoading control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlCoursesDropdownEmpty;
+        protected global::System.Web.UI.WebControls.Panel pnlLoading;
 
         /// <summary>
-        /// rptCoursesDropdown control.
+        /// pnlResult control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptCoursesDropdown;
+        protected global::System.Web.UI.WebControls.Panel pnlResult;
 
         /// <summary>
-        /// activityList control.
+        /// lblScore control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel activityList;
+        protected global::System.Web.UI.WebControls.Label lblScore;
 
         /// <summary>
-        /// pfp_section control.
+        /// btnTryAgain control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pfp_section;
+        protected global::System.Web.UI.WebControls.Button btnTryAgain;
 
         /// <summary>
-        /// UsernameLabel control.
+        /// btnBackToCourses control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label UsernameLabel;
+        protected global::System.Web.UI.WebControls.Button btnBackToCourses;
 
         /// <summary>
-        /// FullNameLabel control.
+        /// rptResults control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label FullNameLabel;
+        protected global::System.Web.UI.WebControls.Repeater rptResults;
 
         /// <summary>
-        /// XPLabel control.
+        /// lblAiExplanation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label XPLabel;
-
-        /// <summary>
-        /// RankIcon control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label RankIcon;
-
-        /// <summary>
-        /// RankLabel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label RankLabel;
-
-        /// <summary>
-        /// view_results_button control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton view_results_button;
-
-        /// <summary>
-        /// edit_profile_button control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton edit_profile_button;
-
-        /// <summary>
-        /// btnSidebarLogout control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnSidebarLogout;
+        protected global::System.Web.UI.WebControls.Label lblAiExplanation;
     }
 }

@@ -17,6 +17,7 @@ namespace WAPP_Assignment.Student
     {
         protected string StudentName { get; set; }
         string UserId;
+        string continueCourseId = "0";
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -47,8 +48,10 @@ namespace WAPP_Assignment.Student
 
             RankLabel.Text = fetchRank();
             RankIcon.Text = fetchRankIcon();
+            RenderContinueCourse();
+            RenderRecentActivity();
         }
-        
+
         private int ResolveUserId()
         {
             // First try to get from query string (for admin viewing)
@@ -231,6 +234,11 @@ namespace WAPP_Assignment.Student
                 }
             }
 
+        }
+
+        protected void redirectToViewResults(object sender, EventArgs e)
+        {
+            Response.Redirect("~/Student/AllResults.aspx", true);
         }
 
         protected void show_edit_profile(object sender, EventArgs e)
@@ -489,6 +497,212 @@ namespace WAPP_Assignment.Student
             return icon;
 
         }
+
+        public void ContinueCourse(object sender, EventArgs e)
+        {
+            Response.Redirect($@"~/Student/ViewCourse?CourseId={continueCourseId}", true);
+        }
+
+        public void RenderContinueCourse()
+        {
+            int userId = ResolveUserId();
+
+            using (var conn = DataAccess.GetOpenConnection())
+            using (var cmd = new SqlCommand(@"
+        SELECT TOP 1 
+            c.CourseTitle,
+            e.ProgressPercent,
+            e.LastAccessedAt,
+            c.CourseId
+        FROM dbo.Enrollments e
+        JOIN dbo.Courses c ON c.CourseId = e.CourseId
+        WHERE e.UserId = @UserId
+        ORDER BY ISNULL(e.LastAccessedAt, e.StartedAt) DESC, e.EnrollmentId DESC;
+    ", conn))
+            {
+                cmd.Parameters.AddWithValue("@UserId", userId);
+
+                using (var rd = cmd.ExecuteReader())
+                {
+                    if (rd.Read())
+                    {
+                        string courseTitle = rd["CourseTitle"].ToString();
+                        string completionPercent = Convert.ToInt32(rd["ProgressPercent"]).ToString();
+
+                        string lastAccessedText;
+                        if (rd["LastAccessedAt"] == DBNull.Value)
+                        {
+                            lastAccessedText = "Never";
+                        }
+                        else
+                        {
+                            DateTime dt = Convert.ToDateTime(rd["LastAccessedAt"]);
+                            lastAccessedText = dt.ToString("yyyy-MM-dd HH:mm");
+                        }
+
+                        // assign to UI
+                        course_name_modern.Text = courseTitle;
+                        next_lesson_modern.Text = "Last Accessed: " + lastAccessedText;
+                        progress_fill_modern.Attributes.Add("style", $"width: {completionPercent}%");
+                        progress_percent_modern.Text = completionPercent + "%";
+
+                        //assign to class attribute
+                        continueCourseId = rd["CourseId"].ToString();
+                    }
+                    else
+                    {
+                        // No courses — show placeholder
+                        course_name_modern.Text = "No Courses Yet";
+                        next_lesson_modern.Text = "Last Accessed: --";
+                        progress_fill_modern.Attributes.Add("style", "width: 0%");
+                        progress_percent_modern.Text = "0%";
+                    }
+                }
+            }
+        }
+
+        public void RenderRecentActivity()
+        {
+            int userId = ResolveUserId();
+
+            using (var conn = DataAccess.GetOpenConnection())
+            using (var cmd = new SqlCommand(@"
+        SELECT TOP 4
+            qt.UniqueId AS QuizTryId,
+            qt.CreatedAt,
+            q.QuizTitle,
+            q.QuizType,
+            c.CourseTitle
+        FROM dbo.QuizTry qt
+        JOIN dbo.Quiz q 
+            ON q.QuizId = qt.QuizId
+        JOIN dbo.ChapterContents cc
+            ON cc.ContentType = 'Quiz' AND cc.LinkId = q.QuizId
+        JOIN dbo.Chapters ch
+            ON ch.ChapterId = cc.ChapterId
+        JOIN dbo.Courses c
+            ON c.CourseId = ch.CourseId
+        WHERE qt.UserId = @UserId
+        ORDER BY qt.CreatedAt DESC;", conn))
+            {
+                cmd.Parameters.AddWithValue("@UserId", userId);
+
+                using (var rd = cmd.ExecuteReader())
+                {
+                    while (rd.Read())
+                    {
+                        int quizTryId = Convert.ToInt32(rd["QuizTryId"]);
+                        string quizTitle = rd["QuizTitle"].ToString();
+                        string quizType = rd["QuizType"].ToString();
+                        string courseTitle = rd["CourseTitle"].ToString();
+                        DateTime createdAt = Convert.ToDateTime(rd["CreatedAt"]);
+                        string createdText = createdAt.ToString("yyyy-MM-dd HH:mm");
+
+                        // ---------------------------------------------------------
+                        // DYNAMIC CALCULATION OF SCORE + XP
+                        // ---------------------------------------------------------
+                        int totalQuestions = 0;
+                        int correctCount = 0;
+
+                        using (var conn2 = DataAccess.GetOpenConnection())
+                        using (var cmd2 = new SqlCommand(@"
+                    SELECT ua.SelectedOption, q.CorrectAnswer
+                    FROM dbo.UserAnswer ua
+                    JOIN dbo.Questions q ON q.QuestionId = ua.QuestionId
+                    WHERE ua.QuizTryId = @QuizTryId;
+                ", conn2))
+                        {
+                            cmd2.Parameters.AddWithValue("@QuizTryId", quizTryId);
+
+                            using (var rd2 = cmd2.ExecuteReader())
+                            {
+                                while (rd2.Read())
+                                {
+                                    totalQuestions++;
+
+                                    int selected = rd2.GetInt32(0);
+                                    int correct = rd2.GetInt32(1);
+
+                                    if (selected == correct && selected != 0)
+                                        correctCount++;
+                                }
+                            }
+                        }
+
+                        int scorePercent = 0;
+                        if (totalQuestions > 0)
+                        {
+                            scorePercent = (int)Math.Round(correctCount * 100.0 / totalQuestions);
+                        }
+
+                        // ---------------------------------------------------------
+                        // XP AWARD SYSTEM (MATCHING Exercise & Assessment Logic)
+                        // ---------------------------------------------------------
+                        int xpEarned =
+                            quizType.Equals("exercise", StringComparison.OrdinalIgnoreCase)
+                                ? 10
+                                : (int)Math.Round(scorePercent / 2.0);
+
+                        // ---------------------------------------------------------
+                        //  Build UI Card
+                        // ---------------------------------------------------------
+                        Panel card = new Panel();
+                        card.CssClass = "activity-item";
+
+                        Label icon = new Label();
+                        icon.CssClass = "activity-icon completed";
+                        icon.Text = "✓";
+                        card.Controls.Add(icon);
+
+                        Panel content = new Panel();
+                        content.CssClass = "activity-content";
+
+                        Label title = new Label();
+                        title.CssClass = "activity-title";
+                        title.Text = $"Completed {quizType}: {quizTitle}";
+                        content.Controls.Add(title);
+
+                        content.Controls.Add(new LiteralControl("<br />"));
+
+                        Label meta = new Label();
+                        meta.CssClass = "activity-meta";
+                        meta.Text = $"{courseTitle} • {xpEarned} XP • {createdText}";
+                        content.Controls.Add(meta);
+
+                        card.Controls.Add(content);
+
+                        // Score badge
+                        Panel badge = new Panel();
+                        badge.CssClass = "activity-badge";
+
+                        Label scoreBadge = new Label();
+                        scoreBadge.CssClass = scorePercent >= 50 ? "score-badge success" : "score-badge fail";
+                        scoreBadge.Text = scorePercent + "%";
+                        badge.Controls.Add(scoreBadge);
+
+                        card.Controls.Add(badge);
+
+                        activityList.Controls.Add(card);
+                    }
+                }
+            }
+        }
+
+
+        private int CalculateXPEarned(int score, string quizType)
+        {
+            if (quizType.Equals("Assessment", StringComparison.OrdinalIgnoreCase))
+            {
+                if (score >= 100) return 50;
+                if (score >= 80) return 40;
+                if (score >= 60) return 30;
+                return 20;
+            }
+
+            // Exercises give flat XP
+            return 10;
+        }
+
     }
 
 

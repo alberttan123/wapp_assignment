@@ -19,6 +19,15 @@ IF OBJECT_ID('dbo.Enrollments', 'U') IS NOT NULL DROP TABLE dbo.Enrollments;
 IF OBJECT_ID('dbo.Courses', 'U') IS NOT NULL DROP TABLE dbo.Courses;
 IF OBJECT_ID('dbo.Users', 'U') IS NOT NULL DROP TABLE dbo.Users;
 
+------------------------------------------------------------
+-- FILES
+------------------------------------------------------------
+
+CREATE TABLE dbo.Files (
+    FileId     INT IDENTITY(1,1) PRIMARY KEY,
+    FilePath   NVARCHAR(256) NOT NULL,
+    FileName   NVARCHAR(256) NOT NULL
+);
 
 ------------------------------------------------------------
 -- USERS
@@ -35,7 +44,8 @@ CREATE TABLE dbo.Users (
     CreatedAt       DATETIME2(7) NOT NULL DEFAULT SYSUTCDATETIME(),
     IsPasswordReset BIT DEFAULT 0 NOT NULL,
     LastLogin       DATETIME2(7) NULL,
-    XP              INT NOT NULL DEFAULT 0
+    XP              INT NOT NULL DEFAULT 0,
+    ProfilePictureFilePath NVARCHAR(256) NULL,
 );
 
 
@@ -178,17 +188,6 @@ CREATE TABLE dbo.QuestionBank (
 
     CONSTRAINT FK_QuestionBank_Question
         FOREIGN KEY (QuestionId) REFERENCES dbo.Questions(QuestionId)
-);
-
-
-------------------------------------------------------------
--- FILES
-------------------------------------------------------------
-
-CREATE TABLE dbo.Files (
-    FileId     INT IDENTITY(1,1) PRIMARY KEY,
-    FilePath   NVARCHAR(256) NOT NULL,
-    FileName   NVARCHAR(256) NOT NULL
 );
 
 

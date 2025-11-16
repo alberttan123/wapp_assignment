@@ -68,46 +68,22 @@
                     </a>
                 </div>
 
-                <div class="nav-links">
-                    <div class="nav-item-dropdown">
-                    <a class="nav-link" href="<%= ResolveUrl("~/Base/CourseDashboard.aspx") %>">Learn <span class="chevron"></span></a>
-                    <div class="dropdown-menu">
-                        <div class="dropdown-grid">
-                        <div class="dropdown-column">
-                            <h4 class="dropdown-heading">Recommended</h4>
-                            <a href="#" class="dropdown-link">World Geography</a>
-                            <a href="#" class="dropdown-link">Climate & Weather</a>
-                        </div>
-                        <div class="dropdown-column">
-                            <h4 class="dropdown-heading">Physical Geography</h4>
-                            <a href="#" class="dropdown-link">Geology & Landforms</a>
-                            <a href="#" class="dropdown-link">Oceans & Tides</a>
-                            <a href="#" class="dropdown-link">Ecosystems</a>
-                        </div>
-                        <div class="dropdown-column">
-                            <h4 class="dropdown-heading">Human Geography</h4>
-                            <a href="#" class="dropdown-link">Cultural Geography</a>
-                            <a href="#" class="dropdown-link">Population Studies</a>
-                            <a href="#" class="dropdown-link">Political Geography</a>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
-                    <a class="nav-link" href="<%= ResolveUrl("~/Student/praticeDashboard.aspx") %>">Practice</a>               
-                    <a class="nav-link" href="<%= ResolveUrl("~/Forum/AllPosts.aspx") %>">Community</a>
-                </div>
+            <div class="nav-links">
+                <a class="nav-link" href="<%= ResolveUrl("~/Base/CourseDashboard.aspx") %>">Learn</a>             
+                <a class="nav-link" href="<%= ResolveUrl("~/Forum/AllPosts.aspx") %>">Community</a>
+                <a class="nav-link" href="<%= ResolveUrl("~/Base/Leaderboard.aspx") %>">Leaderboard</a>
+            </div>
 
-                <div class="nav-actions">
-                    <asp:Panel ID="pnlNotAuthenticated" runat="server">
-                        <asp:LinkButton runat="server" CssClass="primary-btn" OnClick="showLoginSignupModal">Login/Register</asp:LinkButton>
-                    </asp:Panel>
-                    <asp:Panel ID="pnlAuthenticated" runat="server" Visible="false">
-                        <a href="<%= ResolveUrl("~/Student/Dashboard.aspx") %>" class="primary-btn" style="text-decoration: none; display: inline-block;">Profile</a>
-                    </asp:Panel>
-                </div>
-                </div>
-            </nav>
-        </asp:Panel>
+            <div class="nav-actions">
+                <asp:Panel ID="pnlNotAuthenticated" runat="server">
+                    <asp:LinkButton runat="server" CssClass="primary-btn" OnClick="showLoginSignupModal">Login/Register</asp:LinkButton>
+                </asp:Panel>
+                <asp:Panel ID="pnlAuthenticated" runat="server" Visible="false">
+                    <a href="<%= ResolveUrl("~/Student/Dashboard.aspx") %>" class="primary-btn" style="text-decoration: none; display: inline-block;">Profile</a>
+                </asp:Panel>
+            </div>
+            </div>
+        </nav>
         <%-- Navigation Bar END --%>
 
         <asp:Label ID="bruh" runat="server" Visible="true"></asp:Label>

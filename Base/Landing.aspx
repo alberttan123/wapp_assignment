@@ -18,7 +18,7 @@
       <h1 class="a-title">Adventure</h1>
       <p class="a-sub">The most fun and beginner-friendly way to learn our geography. ✨</p>
       <div class="a-cta">
-        <button class="cta-btn">Get started</button>
+        <asp:LinkButton ID="get_started_button" CssClass="cta-btn" runat="server" OnClick="showLoginSignupModal" Text="Get Started"></asp:LinkButton>
       </div>
     </div>
   </header>
@@ -27,83 +27,8 @@
     <div class="container">
       <h2 class="section-title">Journey through the world of geography</h2>
       <p class="section-sub">Explore our planet with fun, interactive lessons crafted by educators.</p>
-
-      <div class="pill-row">
-        <button class="pill active">Popular</button>
-        <button class="pill">Physical Geography</button>
-        <button class="pill">Human Geography</button>
-        <button class="pill">Maps & Navigation</button>
-      </div>
-
-      <div class="grid">
-        <article class="card">
-          <div class="card-media"></div>
-          <div class="card-body">
-            <span class="badge">COURSE</span>
-            <h3 class="card-title">World Geography</h3>
-            <p class="card-text">Explore continents, countries, capitals, and physical features.</p>
-            <div class="meta">
-              <span class="dot"></span>
-              <span class="level">Beginner</span>
-            </div>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-media"></div>
-          <div class="card-body">
-            <span class="badge">COURSE</span>
-            <h3 class="card-title">Climate & Weather</h3>
-            <p class="card-text">Understand weather patterns, climate zones, and atmospheric processes.</p>
-            <div class="meta">
-              <span class="dot"></span>
-              <span class="level">Beginner</span>
-            </div>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-media"></div>
-          <div class="card-body">
-            <span class="badge">COURSE</span>
-            <h3 class="card-title">Geology & Landforms</h3>
-            <p class="card-text">Discover mountains, rivers, volcanoes, and Earth's geological processes.</p>
-            <div class="meta">
-              <span class="dot"></span>
-              <span class="level">Beginner</span>
-            </div>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-media"></div>
-          <div class="card-body">
-            <span class="badge">COURSE</span>
-            <h3 class="card-title">Cultural Geography</h3>
-            <p class="card-text">Explore human cultures, languages, religions, and social patterns.</p>
-            <div class="meta">
-              <span class="dot"></span>
-              <span class="level">Beginner</span>
-            </div>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-media"></div>
-          <div class="card-body">
-            <span class="badge">COURSE</span>
-            <h3 class="card-title">Cartography</h3>
-            <p class="card-text">Learn map reading, GPS navigation, and geographic information systems.</p>
-            <div class="meta">
-              <span class="dot"></span>
-              <span class="level">Beginner</span>
-            </div>
-          </div>
-        </article>
-      </div>
-
       <div class="center">
-        <button class="outline-btn">Explore All Courses →</button>
+          <asp:Button ID="bruh" CssClass="outline-btn" Text="Explore All Courses →" runat="server" OnClick="redirToCourses"></asp:Button>
       </div>
     </div>
   </section>
