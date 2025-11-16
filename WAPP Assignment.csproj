@@ -242,6 +242,8 @@
     <Content Include="Site.Master" />
     <Content Include="Student\AllResults.aspx" />
     <Content Include="Student\Dashboard.aspx" />
+    <Content Include="Student\DownloadFile.aspx" />
+    <Content Include="Student\ForcePasswordReset.aspx" />
     <Content Include="Student\ViewCourse.aspx" />
     <Content Include="Student\ViewPage.aspx" />
     <Content Include="Student\ViewResult.aspx" />
@@ -376,6 +378,20 @@
     </Compile>
     <Compile Include="Student\AllResults.aspx.designer.cs">
       <DependentUpon>AllResults.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Student\DownloadFile.aspx.cs">
+      <DependentUpon>DownloadFile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Student\DownloadFile.aspx.designer.cs">
+      <DependentUpon>DownloadFile.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Student\ForcePasswordReset.aspx.cs">
+      <DependentUpon>ForcePasswordReset.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Student\ForcePasswordReset.aspx.designer.cs">
+      <DependentUpon>ForcePasswordReset.aspx</DependentUpon>
     </Compile>
     <Compile Include="Student\ViewCourse.aspx.cs">
       <DependentUpon>ViewCourse.aspx</DependentUpon>

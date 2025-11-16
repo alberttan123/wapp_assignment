@@ -84,9 +84,8 @@
             </div>
             </div>
         </nav>
+        </asp:Panel>
         <%-- Navigation Bar END --%>
-
-        <asp:Label ID="bruh" runat="server" Visible="true"></asp:Label>
 
         <%-- Login Modal START --%>
         <asp:Panel ID="loginModal" runat="server" Visible="false">
@@ -137,6 +136,8 @@
 
                 <div class="loginModal--register-container">
                     <asp:LinkButton CssClass="loginModal--register-link" runat="server" OnClick="swapToRegister">Don't have an account?</asp:LinkButton>
+                    <asp:LinkButton CssClass="loginModal--register-link" ID="btnResetPassword" runat="server" Text="Forgot your password?" OnClick="showResetPassword" />
+
                 </div>
             </div>
 
@@ -144,6 +145,52 @@
         </div>
         </asp:Panel>
         <%-- Login Modal END --%>
+
+    <%-- Login Modal START --%>
+    <asp:Panel ID="ForgotPasswordModal" runat="server" Visible="false">
+    <!-- Click outside to close (server-side backdrop) -->
+    <asp:LinkButton ID="LinkButton5" runat="server" CssClass="backdrop"
+        OnClick="hideModals" CausesValidation="false" />
+
+    <div id="loginModalDiv" class="pages-modal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+      <div class="sheet">
+        <div class="loginModal--left">
+            <img src="https://storage.ko-fi.com/cdn/useruploads/display/e62ec1f1-eb2a-48e0-be8a-fcf3bf015a4c_forestfamilybyshaperka.gif" id="loginModal--img">
+        </div>
+
+        <div class="loginModal--right">
+            <div class="modal-header">
+              <h3 id="loginTitle" class="modal-title">Reset Password</h3>
+              <!-- “X” close -->
+              <asp:LinkButton ID="LinkButton6" runat="server" CssClass="close"
+                  OnClick="hideModals" CausesValidation="false">×</asp:LinkButton>
+            </div>
+
+            <!-- fields -->
+            <div class="field">
+              <label class="label">Username</label>
+              <asp:TextBox ID="passwordResetUsername" runat="server" CssClass="input" MaxLength="50" />
+              <asp:RequiredFieldValidator runat="server" ControlToValidate="passwordResetUsername"
+                  ErrorMessage="Username is required." ValidationGroup="reset" CssClass="field-error" />
+            </div>
+
+            <asp:Label runat="server" ID="passwordResetError"></asp:Label>
+
+            <div class="actions">
+              <!-- Cancel close -->
+              <asp:LinkButton ID="LinkButton7" runat="server" CssClass="btn cancel"
+                  OnClick="hideModals" CausesValidation="false">Cancel</asp:LinkButton>
+
+              <!-- Login -->
+              <asp:Button ID="Button2" runat="server" CssClass="btn primary" Text="Reset"
+                  OnClick="btnResetPassword_Clicked" ValidationGroup="Login" />
+            </div>
+        </div>
+
+      </div>
+    </div>
+    </asp:Panel>
+    <%-- Login Modal END --%>
 
         <%-- Register Modal START --%>
         <asp:Panel ID="registerModal" runat="server" Visible="false">

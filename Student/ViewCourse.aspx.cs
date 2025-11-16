@@ -223,7 +223,7 @@ namespace WAPP_Assignment.Student
                         break;
                     }
                 case "file":
-                    redirectUrl = ResolveUrl("~/Student/ViewFile.aspx?FileId=" + linkId);
+                    redirectUrl = ResolveUrl("~/Student/DownloadFile.aspx?FileId=" + linkId);
                     break;
 
                 default:
