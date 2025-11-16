@@ -155,6 +155,7 @@ namespace WAPP_Assignment
         {
             loginModal.Visible = false;
             registerModal.Visible = false;
+            ForgotPasswordModal.Visible = false;
         }
 
         protected void swapToRegister(object sender, EventArgs e)
@@ -163,12 +164,14 @@ namespace WAPP_Assignment
             register_field_1.Visible = true;
             loginModal.Visible = false;
             register_field_2.Visible = false;
+            ForgotPasswordModal.Visible = false;
         }
 
         protected void swapToLogin(object sender, EventArgs e)
         {
             loginModal.Visible = true;
             registerModal.Visible = false;
+            ForgotPasswordModal.Visible = false;
         }
 
         protected void showPrevRegisterPanel(object sender, EventArgs e)
@@ -263,8 +266,15 @@ namespace WAPP_Assignment
                         }
                         else if (string.Equals(userType, "Student", StringComparison.OrdinalIgnoreCase))
                         {
-                            // Student dashboard
-                            Response.Redirect("~/Student/Dashboard.aspx", true);
+                            if (isResetRequired)
+                            {
+                                Response.Redirect("~/Student/ForcePasswordReset.aspx", true);
+                            }
+                            else
+                            {
+                                // Student dashboard
+                                Response.Redirect("~/Student/Dashboard.aspx", true);
+                            }
                         }
                         else if (string.Equals(userType, "Admin", StringComparison.OrdinalIgnoreCase))
                         {
@@ -506,5 +516,52 @@ namespace WAPP_Assignment
                 }
             }
         }
+
+        protected void btnResetPassword_Clicked(object sender, EventArgs e)
+        {
+            string username = passwordResetUsername.Text.Trim();
+
+            if (string.IsNullOrEmpty(username))
+            {
+                passwordResetError.Text = "Please enter a username.";
+                return;
+            }
+
+            bool userExists = false;
+
+            using (var conn = DataAccess.GetOpenConnection())
+            {
+                // 1. Check if username exists
+                using (var checkCmd = new SqlCommand(
+                    "SELECT 1 FROM dbo.Users WHERE Username = @Username;", conn))
+                {
+                    checkCmd.Parameters.AddWithValue("@Username", username);
+                    var result = checkCmd.ExecuteScalar();
+                    userExists = (result != null);
+                }
+
+                // 2. If exists, update IsPasswordReset
+                if (userExists)
+                {
+                    using (var updateCmd = new SqlCommand(
+                        "UPDATE dbo.Users SET IsPasswordReset = 1 WHERE Username = @Username;", conn))
+                    {
+                        updateCmd.Parameters.AddWithValue("@Username", username);
+                        updateCmd.ExecuteNonQuery();
+                    }
+                }
+            }
+
+            // 3. Always show same success message to avoid username enumeration
+            passwordResetError.Text = "If this account exists, a password reset has been requested.";
+        }
+
+        protected void showResetPassword(object sender, EventArgs e) 
+        {
+            loginModal.Visible = false;
+            registerModal.Visible = false;
+            ForgotPasswordModal.Visible = true;
+        }
+
     }
 }
