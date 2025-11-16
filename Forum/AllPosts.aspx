@@ -28,7 +28,15 @@
         </div>
     </asp:Panel> 
     
-    <div class="forum-header">
+    <!-- Back button and Add Post button for lecturers -->
+    <asp:Panel ID="pnlLecturerBack" runat="server" Visible="false" CssClass="lecturer-top-bar">
+        <a href="<%= ResolveUrl("~/Lecturer/LecturerDashboard.aspx") %>" class="lecturer-back-btn">Back to Dashboard</a>
+        <div class="addPostButtonContainer">
+            <asp:Button ID="addPostButtonLecturer" OnClick="showAddPostModal" CssClass="addPostButton" Text="Add Post" runat="server"></asp:Button>
+        </div>
+    </asp:Panel>
+    
+    <asp:Panel ID="pnlForumHeader" runat="server" CssClass="forum-header">
         <div class="forum-header-content">
             <h1 class="forum-page-title">Forum</h1>
             <p class="forum-page-subtitle">Share your thoughts and connect with the community</p>
@@ -36,7 +44,7 @@
         <div class="addPostButtonContainer">
             <asp:Button ID="addPostButton" OnClick="showAddPostModal" CssClass="addPostButton" Text="Add Post" runat="server"></asp:Button>
         </div>
-    </div>
+    </asp:Panel>
     <div class="forum-controls">
         <div class="forum-search-container">
             <label>Search:</label>

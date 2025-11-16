@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="<%= ResolveUrl("~/Content/loginSignupModal.css") %>">
     <link rel="stylesheet" href="<%= ResolveUrl("~/Content/header.css") %>">
     <asp:ContentPlaceHolder ID="HeadContent" runat="server"></asp:ContentPlaceHolder>
+    <asp:Literal ID="litEducatorNavbarHide" runat="server"></asp:Literal>
 
     <style>
         .register--radio-button-container {
@@ -58,13 +59,14 @@
         </asp:ScriptManager>
 
         <%-- Navigation Bar START --%>
-        <nav class="navbar">
-            <div class="nav-container">
-            <div class="brand">
-                <a href="<%= ResolveUrl("~/Base/Landing.aspx") %>">
-                <img src="<%= ResolveUrl("~/Media/pages.png") %>" alt="Geography Pages Logo" class="brand-img" />
-                </a>
-            </div>
+        <asp:Panel ID="pnlNavbar" runat="server" Visible="true">
+            <nav class="navbar" id="mainNavbar" runat="server">
+                <div class="nav-container">
+                <div class="brand">
+                    <a href="<%= ResolveUrl("~/Base/Landing.aspx") %>">
+                    <img src="<%= ResolveUrl("~/Media/pages.png") %>" alt="Geography Pages Logo" class="brand-img" />
+                    </a>
+                </div>
 
             <div class="nav-links">
                 <a class="nav-link" href="<%= ResolveUrl("~/Base/CourseDashboard.aspx") %>">Learn</a>             

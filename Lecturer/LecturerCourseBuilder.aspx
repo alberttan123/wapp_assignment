@@ -241,8 +241,16 @@
     .cb-upload-icon {
       font-size: 3rem;
       margin-bottom: 1rem;
-      display: block;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       font-family: 'Press Start 2P', monospace;
+    }
+
+    .cb-upload-icon svg {
+      width: 64px;
+      height: 64px;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
     }
 
     .cb-upload-text {
@@ -594,7 +602,11 @@
           <label class="required">Cover Image</label>
           <span class="cb-hint">Add a thumbnail image for your course. This will appear when your course is displayed in the Course Showcase page and other areas of the site.</span>
           <div class="cb-upload-area" id="coverUploadArea">
-            <span class="cb-upload-icon">☁️</span>
+            <span class="cb-upload-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" style="image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges;">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M13.3333 5.33301H21.3333V7.99967H13.3333V5.33301ZM10.6667 10.6663V7.99967H13.3333V10.6663H10.6667ZM5.33333 13.333V10.6663H10.6667V13.333H5.33333ZM2.66667 15.9997V13.333H5.33333V15.9997H2.66667ZM2.66667 23.9997H0L0 15.9997H2.66667V23.9997ZM2.66667 23.9997H12V26.6663H2.66667V23.9997ZM24 10.6663H21.3333V7.99967H24V10.6663ZM29.3333 15.9997H26.6667H24V13.333V10.6663H26.6667V13.333H29.3333V15.9997ZM29.3333 23.9997V15.9997H32V23.9997H29.3333ZM29.3333 23.9997V26.6663H20V23.9997H29.3333ZM14.6667 11.9997H17.3333V14.6663H20V17.333L22.6667 17.333V19.9997H17.3333V26.6663H14.6667V19.9997H9.33333V17.333L12 17.333V14.6663H14.6667V11.9997Z" fill="#94A3B8"></path>
+              </svg>
+            </span>
             <div class="cb-upload-text">Drag and Drop or</div>
             <button type="button" class="cb-upload-button" onclick="document.getElementById('<%= fuCourseImg.ClientID %>').click(); return false;">Upload Media</button>
             <asp:FileUpload ID="fuCourseImg" runat="server" CssClass="cb-file-input-hidden" />

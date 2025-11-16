@@ -114,6 +114,11 @@
   </ItemGroup>
   <ItemGroup>
     <!-- Fixed App_Data entries -->
+    <Content Include="Admin\AdminCourses.aspx" />
+    <Content Include="Admin\AdminCreateUser.aspx" />
+    <Content Include="Admin\AdminDashboard.aspx" />
+    <Content Include="Admin\AdminForcePasswordReset.aspx" />
+    <Content Include="Admin\AdminUserManage.aspx" />
     <Content Include="App_Data\users.mdf" />
     <Content Include="App_Data\users_log.ldf">
       <DependentUpon>users.mdf</DependentUpon>
@@ -171,12 +176,12 @@
     <Content Include="Lecturer\LecturerCourses.aspx" />
     <Content Include="Lecturer\LecturerDashboard.aspx" />
     <Content Include="Lecturer\LecturerExamBuilder.aspx" />
+    <Content Include="Lecturer\LecturerForcePasswordReset.aspx" />
     <Content Include="Lecturer\LecturerQuestionAdd.aspx" />
     <Content Include="Lecturer\LecturerQuestionViewer.aspx" />
-    <Content Include="Media\pages.png" />
-    <Content Include="Media\pages-default-banner.jpg" />
     <Content Include="Quiz\Assessment.aspx" />
     <Content Include="Quiz\Exercise.aspx" />
+    <Content Include="Media\*" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -206,6 +211,7 @@
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
     <Content Include="Lecturer\Lecturer.Master" />
+    <Content Include="Admin\Admin.Master" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -245,6 +251,48 @@
     <Content Include="Site.Mobile.Master" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Admin\Admin.Master.cs">
+      <DependentUpon>Admin.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\Admin.Master.designer.cs">
+      <DependentUpon>Admin.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\AdminCourses.aspx.cs">
+      <DependentUpon>AdminCourses.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\AdminCourses.aspx.designer.cs">
+      <DependentUpon>AdminCourses.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\AdminCreateUser.aspx.cs">
+      <DependentUpon>AdminCreateUser.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\AdminCreateUser.aspx.designer.cs">
+      <DependentUpon>AdminCreateUser.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\AdminDashboard.aspx.cs">
+      <DependentUpon>AdminDashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\AdminDashboard.aspx.designer.cs">
+      <DependentUpon>AdminDashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\AdminForcePasswordReset.aspx.cs">
+      <DependentUpon>AdminForcePasswordReset.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\AdminForcePasswordReset.aspx.designer.cs">
+      <DependentUpon>AdminForcePasswordReset.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\AdminUserManage.aspx.cs">
+      <DependentUpon>AdminUserManage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\AdminUserManage.aspx.designer.cs">
+      <DependentUpon>AdminUserManage.aspx</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="About.aspx.cs">
       <DependentUpon>About.aspx</DependentUpon>
@@ -413,6 +461,13 @@
     </Compile>
     <Compile Include="Lecturer\LecturerExamBuilder.aspx.designer.cs">
       <DependentUpon>LecturerExamBuilder.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Lecturer\LecturerForcePasswordReset.aspx.cs">
+      <DependentUpon>LecturerForcePasswordReset.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Lecturer\LecturerForcePasswordReset.aspx.designer.cs">
+      <DependentUpon>LecturerForcePasswordReset.aspx</DependentUpon>
     </Compile>
     <Compile Include="Lecturer\LecturerQuestionAdd.aspx.cs">
       <DependentUpon>LecturerQuestionAdd.aspx</DependentUpon>
