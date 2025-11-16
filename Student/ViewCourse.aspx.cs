@@ -23,6 +23,7 @@ namespace WAPP_Assignment.Student
                 CourseId = Request.QueryString["CourseId"].ToString();
                 if (checkUserInCourse(userId)) //returns bool true
                 {
+                    UpdateLastAccessed(userId, CourseId);
                     initialLoad();
                 }
                 else 
@@ -203,9 +204,24 @@ namespace WAPP_Assignment.Student
                     break;
 
                 case "quiz":
-                    redirectUrl = ResolveUrl("~/Student/ViewQuiz.aspx?QuizId=" + linkId);
-                    break;
+                    {
+                        string quizType = GetQuizType(linkId); // linkId = QuizId
 
+                        if (quizType == "exercise")
+                        {
+                            redirectUrl = ResolveUrl("~/Quiz/Exercise.aspx?QuizId=" + linkId);
+                            contentTitle += " Exercise";
+                        }
+                        else if (quizType == "assessment") 
+                        {
+                            redirectUrl = ResolveUrl("~/Quiz/Assessment.aspx?QuizId=" + linkId);
+                            contentTitle += " Assessment";
+                        }
+                        else
+                            redirectUrl = "#"; // fallback if somehow no type found
+
+                        break;
+                    }
                 case "file":
                     redirectUrl = ResolveUrl("~/Student/ViewFile.aspx?FileId=" + linkId);
                     break;
@@ -278,6 +294,44 @@ namespace WAPP_Assignment.Student
                 return true;
             }
         }
+
+        private string GetQuizType(string quizId)
+        {
+            using (var conn = DataAccess.GetOpenConnection())
+            using (var cmd = new SqlCommand("SELECT QuizType FROM dbo.Quiz WHERE QuizId=@q", conn))
+            {
+                cmd.Parameters.AddWithValue("@q", quizId);
+
+                object result = cmd.ExecuteScalar();
+                return (result == null) ? "" : result.ToString().ToLower();
+            }
+        }
+
+        private void UpdateLastAccessed(string userId, string courseId)
+        {
+            try
+            {
+                using (var conn = DataAccess.GetOpenConnection())
+                using (var cmd = new SqlCommand(@"
+            UPDATE dbo.Enrollments
+            SET LastAccessedAt = SYSUTCDATETIME()
+            WHERE UserId = @UserId
+              AND CourseId = @CourseId;
+        ", conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    cmd.Parameters.AddWithValue("@CourseId", courseId);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                // dbgLabel.Text = "LastAccessed update failed: " + ex.Message;
+            }
+        }
+
+
 
     }
 }

@@ -3,6 +3,12 @@
 <asp:Content ContentPlaceHolderID="HeadContent" runat="server">
   <link href="<%= ResolveUrl("~/Content/waplanding.css") %>" rel="stylesheet" />
   <link href="<%= ResolveUrl("~/Content/dashboard.css") %>" rel="stylesheet" />
+<style>
+    .score-badge.fail {
+    background: rgba(255, 204, 102, 0.2); /* amber/yellow */
+    color: #ffcc66;
+}
+</style>
 </asp:Content>
 
 <asp:Content ContentPlaceHolderID="MainContent" runat="server">
@@ -54,36 +60,26 @@
        <section class="jump-back">
   <h2 class="section-heading">Jump back in</h2>
 
-  <div class="continue-card-new"
-       role="link"
-       tabindex="0"
-       onclick='window.location.href="<%= ResolveUrl("~/Base/CourseDashboard.aspx") %>"'
-       onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); this.click();}">
+  <div class="continue-card-new" tabindex="0">
     
     <div class="card-bg-image"></div>
 
     <div class="card-content-overlay">
       <div class="progress-section">
         <div class="progress-bar-modern">
-          <div class="progress-fill-modern" style="width: 35%"></div>
+          <asp:Panel ID="progress_fill_modern" CssClass="progress-fill-modern" runat="server"></asp:Panel>
         </div>
-        <span class="progress-percent-modern">35%</span>
+          <asp:Label ID="progress_percent_modern" CssClass="progress-percent-modern" runat="server"></asp:Label>
       </div>
 
       <div class="course-info-modern">
         <span class="course-badge-modern">COURSE</span>
-        <h3 class="course-name-modern">World Geography</h3>
-        <p class="next-lesson-modern">Next exercise: Continents and Oceans</p>
+          <asp:Label ID="course_name_modern" CssClass="course-name-modern" runat="server"></asp:Label>
+        <asp:Label ID="next_lesson_modern" CssClass="next-lesson-modern" runat="server"></asp:Label>
       </div>
 
       <div class="course-actions-modern">
-        <a class="btn-continue-modern"
-           href="<%= ResolveUrl("~/Base/CourseDashboard.aspx") %>"
-           onclick="event.stopPropagation();">Continue Learning</a>
-
-        <a class="link-view-modern"
-           href="<%= ResolveUrl("~/Base/CourseDashboard.aspx") %>"
-           onclick="event.stopPropagation();">View course</a>
+          <asp:LinkButton ID="btn_continue_modern" CssClass="btn-continue-modern" OnClientClick="event.stopPropagation()" runat="server" OnClick="ContinueCourse" Text="Continue Learning"></asp:LinkButton>
       </div>
     </div>
   </div>
@@ -107,7 +103,7 @@
                          role="link"
                          tabindex="0"
                          data-course-id="<%# Eval("CourseId") %>"
-                         onclick="window.location.href='<%= ResolveUrl("~/Base/CourseDashboard.aspx") %>?courseId=' + this.getAttribute('data-course-id');"
+                         onclick="window.location.href='<%= ResolveUrl("~/Student/ViewCourse.aspx") %>?courseId=' + this.getAttribute('data-course-id');"
                          onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); this.click();}">
                       
                       <div class="card-bg-image" <%# Eval("CourseImgUrl") != null && !string.IsNullOrEmpty(Eval("CourseImgUrl").ToString()) ? "style=\"background-image: url('" + Eval("CourseImgUrl").ToString().Replace("'", "\\'") + "');\"" : "" %>></div>
@@ -128,12 +124,8 @@
 
                         <div class="course-actions-modern">
                           <a class="btn-continue-modern"
-                             href="<%= ResolveUrl("~/Base/CourseDashboard.aspx") %>?courseId=<%# Eval("CourseId") %>"
-                             onclick="event.stopPropagation();">Continue Learning</a>
-
-                          <a class="link-view-modern"
-                             href="<%= ResolveUrl("~/Base/CourseDashboard.aspx") %>?courseId=<%# Eval("CourseId") %>"
-                             onclick="event.stopPropagation();">View course</a>
+                             href="<%= ResolveUrl("~/Student/ViewCourse.aspx") %>?courseId=<%# Eval("CourseId") %>"
+                             onclick="event.stopPropagation();">View Course</a>
                         </div>
                       </div>
                     </div>
@@ -144,80 +136,10 @@
           </div>
         </section>
 
-        <!-- Progress Overview Section -->
-        <section class="progress-overview">
-          <h2 class="section-heading">Progress Overview</h2>
-            <div class="progress-stat-card">
-              <div class="progress-stat-header">
-                <span class="progress-stat-label">Course Completion</span>
-                <span class="progress-stat-value">2/5</span>
-              </div>
-              <div class="course-completion-list">
-                <div class="completion-item">
-                  <span class="completion-name">World Geography</span>
-                  <div class="completion-bar">
-                    <div class="completion-fill" style="width: 35%"></div>
-                  </div>
-                  <span class="completion-percent">35%</span>
-                </div>
-                <div class="completion-item">
-                  <span class="completion-name">Climate & Weather</span>
-                  <div class="completion-bar">
-                    <div class="completion-fill" style="width: 60%"></div>
-                  </div>
-                  <span class="completion-percent">60%</span>
-                </div>
-                <div class="completion-item">
-                  <span class="completion-name">Geology</span>
-                  <div class="completion-bar">
-                    <div class="completion-fill" style="width: 15%"></div>
-                  </div>
-                  <span class="completion-percent">15%</span>
-                </div>
-              </div>
-            </div>
-
-        </section>
-
         <!-- Recent Activity Section -->
         <section class="recent-activity">
           <h2 class="section-heading">Recent Activity</h2>
-          <div class="activity-list">
-            <div class="activity-item">
-              <div class="activity-icon completed">✓</div>
-              <div class="activity-content">
-                <h4 class="activity-title">Completed: Oceans and Seas Quiz</h4>
-                <p class="activity-meta">World Geography • 15 XP earned • 2 hours ago</p>
-              </div>
-              <div class="activity-badge">
-                <span class="score-badge success">95%</span>
-              </div>
-            </div>
-
-            <div class="activity-item">
-              <div class="activity-icon unlocked">🏆</div>
-              <div class="activity-content">
-                <h4 class="activity-title">Achievement Unlocked: Fast Learner</h4>
-                <p class="activity-meta">Completed 3 lessons in one day • 3 hours ago</p>
-              </div>
-            </div>
-
-            <div class="activity-item">
-              <div class="activity-icon completed">✓</div>
-              <div class="activity-content">
-                <h4 class="activity-title">Completed: Mountain Ranges Lesson</h4>
-                <p class="activity-meta">Geology & Landforms • 10 XP earned • Yesterday</p>
-              </div>
-            </div>
-
-            <div class="activity-item">
-              <div class="activity-icon time">⏱️</div>
-              <div class="activity-content">
-                <h4 class="activity-title">Study Session</h4>
-                <p class="activity-meta">45 minutes • Climate Zones • 2 days ago</p>
-              </div>
-            </div>
-          </div>
+        <asp:Panel ID="activityList" runat="server" visble="true"></asp:Panel>
         </section>
       </div>
 
@@ -247,8 +169,9 @@
               </div>
             </div>
           </div>
-            <asp:LinkButton ID="edit_profile_button" CssClass="btn-view-profile" OnClick="show_edit_profile" runat="server">Edit Profile</asp:LinkButton>
-          <asp:LinkButton ID="btnSidebarLogout" runat="server" OnClick="Logout" CssClass="btn-logout-sidebar" style="margin-top: 0.75rem;">Logout</asp:LinkButton>
+            <asp:LinkButton ID="view_results_button" runat="server" OnClick="redirectToViewResults" CssClass="btn-view-profile">View Results</asp:LinkButton>
+            <asp:LinkButton ID="edit_profile_button" CssClass="btn-view-profile" OnClick="show_edit_profile" runat="server" style="margin-top: 0.75rem;">Edit Profile</asp:LinkButton>
+            <asp:LinkButton ID="btnSidebarLogout" runat="server" OnClick="Logout" CssClass="btn-logout-sidebar" style="margin-top: 0.75rem;">Logout</asp:LinkButton>
         </div>
       </aside>
     </div>

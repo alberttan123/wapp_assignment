@@ -184,7 +184,7 @@ namespace WAPP_Assignment.Base
             if (!isAuthenticated || string.IsNullOrEmpty(userIdStr))
             {
                 Response.Redirect(
-                    $"~/Quiz/TryOut.aspx?CourseId={courseId}",
+                    $"~/Quiz/Exercise.aspx?CourseId={courseId}",
                     true);
                 return;
             }
@@ -228,6 +228,11 @@ namespace WAPP_Assignment.Base
         {
             SelectedCourseId.Value = courseId.ToString();
             EnrollModal.Visible = true;
+        }
+
+        protected void hideEnrollModal(object sender, EventArgs e)
+        {
+            EnrollModal.Visible = false;
         }
 
         // ---------------------------------------------------------

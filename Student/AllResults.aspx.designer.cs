@@ -7,29 +7,38 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WAPP_Assignment
+namespace WAPP_Assignment.Student
 {
 
 
-    public partial class Landing
+    public partial class AllResults
     {
 
         /// <summary>
-        /// get_started_button control.
+        /// pnlNoResults control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton get_started_button;
+        protected global::System.Web.UI.WebControls.Panel pnlNoResults;
 
         /// <summary>
-        /// bruh control.
+        /// pnlResults control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button bruh;
+        protected global::System.Web.UI.WebControls.Panel pnlResults;
+
+        /// <summary>
+        /// rptResults control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater rptResults;
     }
 }

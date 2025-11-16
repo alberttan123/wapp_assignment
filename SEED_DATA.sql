@@ -4,6 +4,15 @@
 ------------------------------------------------------------
 
 ------------------------------------------------------------
+-- FILES
+------------------------------------------------------------
+INSERT INTO dbo.Files (FilePath, FileName)
+VALUES
+('/pfps/defaultprofilepicture.jpg', 'defaultprofilepicture.jpg'),
+('/files/geo/intro_worksheet.pdf', 'Intro_worksheet.pdf'),
+('/files/geo/rock_cycle_diagram.png', 'Rock_Cycle_Diagram.png');
+
+------------------------------------------------------------
 -- USERS
 ------------------------------------------------------------
 INSERT INTO dbo.Users (Username, Email, UserType, FullName, PasswordHash)
@@ -78,14 +87,6 @@ VALUES
 ('Introduction Overview', 'This page introduces the concept of geography.'),
 ('Earth Structure Summary', 'This page discusses Earth layers and plate tectonics.'),
 ('Rock Cycle Basics', 'This page explains the rock cycle in simple terms.');
-
-------------------------------------------------------------
--- FILES
-------------------------------------------------------------
-INSERT INTO dbo.Files (FilePath, FileName)
-VALUES
-('/files/geo/intro_worksheet.pdf', 'Intro_worksheet.pdf'),
-('/files/geo/rock_cycle_diagram.png', 'Rock_Cycle_Diagram.png');
 
 ------------------------------------------------------------
 -- QUIZ
