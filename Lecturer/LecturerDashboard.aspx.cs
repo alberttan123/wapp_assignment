@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Web.UI;
 
 namespace WAPP_Assignment.Lecturer
 {
@@ -14,24 +15,12 @@ namespace WAPP_Assignment.Lecturer
         {
             get
             {
-                // Prefer session if you already set it on login
                 if (Session["UserId"] != null &&
-                    int.TryParse(Session["UserId"].ToString(), out int uidFromSession))
+                    int.TryParse(Session["UserId"].ToString(), out int uid))
                 {
-                    return uidFromSession;
+                    return uid;
                 }
-
-                // Fallback to auth cookie
-                var (success, userIdStr, userType) = AuthCookieHelper.ReadAuthCookie();
-                if (success &&
-                    !string.IsNullOrEmpty(userIdStr) &&
-                    string.Equals(userType, "Educator", StringComparison.OrdinalIgnoreCase) &&
-                    int.TryParse(userIdStr, out int uidFromCookie))
-                {
-                    return uidFromCookie;
-                }
-
-                // As a safety fallback (your seeded educator account)
+                // Fallback to the seeded educator (geo_teacher, UserId = 2)
                 return 2;
             }
         }
@@ -40,44 +29,43 @@ namespace WAPP_Assignment.Lecturer
         {
             if (!IsPostBack)
             {
-                litDashboardSubtitle.Text =
-                    "Overview of your courses, assessments, and student engagement.";
-
-                BindProfileHeader();
+                BindLecturerProfile();
                 BindStatsAndEngagement();
                 BindRecentCourses();
                 BindRecentAssessments();
             }
         }
 
-        private void BindProfileHeader()
+        /* ---------- Profile + header ---------- */
+
+        private void BindLecturerProfile()
         {
             string displayName = "Lecturer";
             string email = string.Empty;
             string role = "Educator";
 
-            var (success, userIdStr, userType) = AuthCookieHelper.ReadAuthCookie();
-            if (success && !string.IsNullOrEmpty(userIdStr) && int.TryParse(userIdStr, out int userId))
+            using (var con = new SqlConnection(ConnStr))
+            using (var cmd = new SqlCommand(@"
+SELECT Username, FullName, Email, UserType
+FROM dbo.Users
+WHERE UserId = @uid;", con))
             {
-                using (var con = new SqlConnection(ConnStr))
-                using (var cmd = new SqlCommand(@"
-                    SELECT 
-                        COALESCE(NULLIF(FullName, ''), Username) AS DisplayName,
-                        Email,
-                        UserType
-                    FROM dbo.Users
-                    WHERE UserId = @uid;", con))
+                cmd.Parameters.AddWithValue("@uid", CurrentLecturerId);
+                con.Open();
+
+                using (var rd = cmd.ExecuteReader())
                 {
-                    cmd.Parameters.AddWithValue("@uid", userId);
-                    con.Open();
-                    using (var rd = cmd.ExecuteReader())
+                    if (rd.Read())
                     {
-                        if (rd.Read())
-                        {
-                            displayName = rd["DisplayName"].ToString();
-                            email = rd["Email"].ToString();
-                            role = rd["UserType"].ToString();
-                        }
+                        string username = rd["Username"].ToString();
+                        string fullName = rd["FullName"] as string;
+
+                        displayName = string.IsNullOrWhiteSpace(fullName)
+                            ? username
+                            : fullName;
+
+                        email = rd["Email"].ToString();
+                        role = rd["UserType"].ToString();
                     }
                 }
             }
@@ -85,16 +73,22 @@ namespace WAPP_Assignment.Lecturer
             litProfileName.Text = displayName;
             litProfileEmail.Text = email;
             litProfileRole.Text = role;
+            litDashboardSubtitle.Text = $"Welcome back, {displayName}.";
         }
 
-        // --------------------------------------------------------------------
-        // Stats + engagement
-        // --------------------------------------------------------------------
+        protected void btnLogout_Click(object sender, EventArgs e)
+        {
+            // Use the same logout flow as the rest of the site
+            AuthCookieHelper.RemoveAuthCookie();
+            Session.Clear();
+            Session.Abandon();
+            Response.Redirect("~/Base/Landing.aspx", true);
+        }
+
+        /* ---------- Stats + engagement ---------- */
 
         private void BindStatsAndEngagement()
         {
-            int lecturerId = CurrentLecturerId;
-
             int courses = 0;
             int assessments = 0;
             int exercises = 0;
@@ -117,7 +111,7 @@ namespace WAPP_Assignment.Lecturer
                 using (var cmd = new SqlCommand(
                     "SELECT COUNT(*) FROM dbo.Courses WHERE LecturerId = @uid;", con))
                 {
-                    cmd.Parameters.AddWithValue("@uid", lecturerId);
+                    cmd.Parameters.AddWithValue("@uid", CurrentLecturerId);
                     courses = (int)cmd.ExecuteScalar();
                 }
 
@@ -129,7 +123,7 @@ namespace WAPP_Assignment.Lecturer
                 using (var cmd = new SqlCommand(assessSql, con))
                 {
                     if (hasCreatedBy)
-                        cmd.Parameters.AddWithValue("@uid", lecturerId);
+                        cmd.Parameters.AddWithValue("@uid", CurrentLecturerId);
                     assessments = (int)cmd.ExecuteScalar();
                 }
 
@@ -141,7 +135,7 @@ namespace WAPP_Assignment.Lecturer
                 using (var cmd = new SqlCommand(exSql, con))
                 {
                     if (hasCreatedBy)
-                        cmd.Parameters.AddWithValue("@uid", lecturerId);
+                        cmd.Parameters.AddWithValue("@uid", CurrentLecturerId);
                     exercises = (int)cmd.ExecuteScalar();
                 }
 
@@ -157,7 +151,7 @@ WHERE q.QuizType IN ('exercise','assessment')";
                 using (var cmd = new SqlCommand(qSql, con))
                 {
                     if (hasCreatedBy)
-                        cmd.Parameters.AddWithValue("@uid", lecturerId);
+                        cmd.Parameters.AddWithValue("@uid", CurrentLecturerId);
                     questions = (int)cmd.ExecuteScalar();
                 }
 
@@ -168,37 +162,37 @@ FROM dbo.Enrollments e
 JOIN dbo.Courses c ON c.CourseId = e.CourseId
 WHERE c.LecturerId = @uid;", con))
                 {
-                    cmd.Parameters.AddWithValue("@uid", lecturerId);
+                    cmd.Parameters.AddWithValue("@uid", CurrentLecturerId);
                     students = (int)cmd.ExecuteScalar();
                 }
 
-                // Total enrollments across this lecturer's courses
+                // Total enrollments for this lecturer's courses
                 using (var cmd = new SqlCommand(@"
 SELECT COUNT(*)
 FROM dbo.Enrollments e
 JOIN dbo.Courses c ON c.CourseId = e.CourseId
 WHERE c.LecturerId = @uid;", con))
                 {
-                    cmd.Parameters.AddWithValue("@uid", lecturerId);
+                    cmd.Parameters.AddWithValue("@uid", CurrentLecturerId);
                     enrollments = (int)cmd.ExecuteScalar();
                 }
 
-                // Average progress across enrollments on this lecturer's courses
+                // Average progress across enrollments
                 using (var cmd = new SqlCommand(@"
-SELECT AVG(e.ProgressPercent)
+SELECT AVG(CAST(e.ProgressPercent AS DECIMAL(10,2)))
 FROM dbo.Enrollments e
 JOIN dbo.Courses c ON c.CourseId = e.CourseId
 WHERE c.LecturerId = @uid;", con))
                 {
-                    cmd.Parameters.AddWithValue("@uid", lecturerId);
-                    object o = cmd.ExecuteScalar();
-                    if (o != null && o != DBNull.Value)
+                    cmd.Parameters.AddWithValue("@uid", CurrentLecturerId);
+                    object res = cmd.ExecuteScalar();
+                    if (res != DBNull.Value && res != null)
                     {
-                        avgProgress = Convert.ToDecimal(o);
+                        avgProgress = (decimal)res;
                     }
                 }
 
-                // Top course by enrollments for this lecturer
+                // Top course by enrollments
                 using (var cmd = new SqlCommand(@"
 SELECT TOP 1
     c.CourseTitle,
@@ -209,7 +203,7 @@ WHERE c.LecturerId = @uid
 GROUP BY c.CourseTitle
 ORDER BY Enrollments DESC, c.CourseTitle;", con))
                 {
-                    cmd.Parameters.AddWithValue("@uid", lecturerId);
+                    cmd.Parameters.AddWithValue("@uid", CurrentLecturerId);
                     using (var reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
@@ -221,11 +215,54 @@ ORDER BY Enrollments DESC, c.CourseTitle;", con))
                 }
             }
 
-            // Primary stats
+            // Primary stats (legend values)
             litCoursesCount.Text = courses.ToString();
             litAssessmentsCount.Text = assessments.ToString();
             litExercisesCount.Text = exercises.ToString();
             litQuestionsCount.Text = questions.ToString();
+
+            // Content pie (breakdown by type)
+            int totalContent = courses + assessments + exercises + questions;
+            if (totalContent <= 0)
+            {
+                litContentPercent.Text = "--";
+                litContentPieCaption.Text = "No content yet";
+                divContentPie.Style["background"] =
+                    "conic-gradient(from -90deg, rgba(27, 37, 58, 0.6) 0 100%)";
+            }
+            else
+            {
+                double pCourses = (double)courses * 100.0 / totalContent;
+                double pAssess = (double)assessments * 100.0 / totalContent;
+                double pEx = (double)exercises * 100.0 / totalContent;
+                double pQ = (double)questions * 100.0 / totalContent;
+
+                // cumulative stops, clipped to [0,100]
+                double cEnd = Math.Round(pCourses, 2);
+                if (cEnd < 0) cEnd = 0;
+                if (cEnd > 100) cEnd = 100;
+
+                double aEnd = cEnd + Math.Round(pAssess, 2);
+                if (aEnd < 0) aEnd = 0;
+                if (aEnd > 100) aEnd = 100;
+
+                double eEnd = aEnd + Math.Round(pEx, 2);
+                if (eEnd < 0) eEnd = 0;
+                if (eEnd > 100) eEnd = 100;
+
+                // Last segment runs to 100%
+                string pieBg =
+                    $"conic-gradient(from -90deg," +
+                    $" var(--ld-pie-courses) 0 {cEnd:0.##}%," +
+                    $" var(--ld-pie-assessments) {cEnd:0.##}% {aEnd:0.##}%," +
+                    $" var(--ld-pie-exercises) {aEnd:0.##}% {eEnd:0.##}%," +
+                    $" var(--ld-pie-questions) {eEnd:0.##}% 100%)";
+
+                divContentPie.Style["background"] = pieBg;
+
+                litContentPercent.Text = totalContent.ToString();
+                litContentPieCaption.Text = "Content items by type";
+            }
 
             // Engagement row
             litStudentsCount.Text = students.ToString();
@@ -250,9 +287,7 @@ ORDER BY Enrollments DESC, c.CourseTitle;", con))
             }
         }
 
-        // --------------------------------------------------------------------
-        // Recent Courses
-        // --------------------------------------------------------------------
+        /* ---------- Recent Courses ---------- */
 
         private void BindRecentCourses()
         {
@@ -281,13 +316,10 @@ ORDER BY c.CourseCreatedAt DESC;", con))
             }
         }
 
-        // --------------------------------------------------------------------
-        // Recent Assessments
-        // --------------------------------------------------------------------
+        /* ---------- Recent Assessments ---------- */
 
         private void BindRecentAssessments()
         {
-            int lecturerId = CurrentLecturerId;
             bool hasCreatedBy = QuizHasCreatedBy();
 
             string sql = @"
@@ -307,7 +339,7 @@ ORDER BY q.QuizId DESC;";
             using (var da = new SqlDataAdapter(cmd))
             {
                 if (hasCreatedBy)
-                    cmd.Parameters.AddWithValue("@uid", lecturerId);
+                    cmd.Parameters.AddWithValue("@uid", CurrentLecturerId);
 
                 var dt = new DataTable();
                 da.Fill(dt);
@@ -319,14 +351,6 @@ ORDER BY q.QuizId DESC;";
                 rptRecentAssessments.DataSource = dt;
                 rptRecentAssessments.DataBind();
             }
-        }
-
-        protected void btnLogout_Click(object sender, EventArgs e)
-        {
-            AuthCookieHelper.RemoveAuthCookie();
-            Session.Clear();
-            Session.Abandon();
-            Response.Redirect("~/Base/Landing.aspx", true);
         }
     }
 }

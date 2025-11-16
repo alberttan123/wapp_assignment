@@ -420,6 +420,123 @@
             text-align: center;
             padding: 2rem;
         }
+
+        /* ---------- Your content pie chart ---------- */
+
+        .ld-content-body {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        @media (max-width: 48rem) {
+            .ld-content-body {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        .ld-pie-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .ld-pie {
+            --ld-pie-courses: #ffd24a;
+            --ld-pie-assessments: #6bc2ff;
+            --ld-pie-exercises: #ff9f6b;
+            --ld-pie-questions: #b48bff;
+
+            width: 5rem;
+            height: 5rem;
+            border-radius: 50%;
+            background: rgba(27, 37, 58, 0.6);
+            border: 2px solid #23304a;
+            box-shadow: 0 4px 0 rgba(27, 37, 58, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ld-pie-inner {
+            width: 3.375rem;
+            height: 3.375rem;
+            border-radius: 50%;
+            background: #121a2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #23304a;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: #ffd24a;
+            text-align: center;
+        }
+
+        .ld-content-label {
+            font-size: 0.7rem;
+            color: #9fb0d1;
+            text-align: center;
+        }
+
+        .ld-content-legend {
+            flex: 1;
+            font-size: 0.8rem;
+            color: #e8eefc;
+        }
+
+        .ld-content-legend-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .ld-content-label-wrap {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .ld-dot {
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 0;
+            box-shadow: 0 2px 0 rgba(27, 37, 58, 0.8);
+            border: 1px solid #23304a;
+        }
+
+        .ld-dot--courses {
+            background: #ffd24a;
+        }
+
+        .ld-dot--assessments {
+            background: #6bc2ff;
+        }
+
+        .ld-dot--exercises {
+            background: #ff9f6b;
+        }
+
+        .ld-dot--questions {
+            background: #b48bff;
+        }
+
+        .ld-content-badge {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.55rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 0;
+            border: 1px solid #23304a;
+            background: rgba(15, 20, 34, 0.9);
+            color: #e8eefc;
+            box-shadow: 0 2px 0 rgba(27, 37, 58, 0.8);
+        }
     </style>
 </asp:Content>
 
@@ -461,36 +578,65 @@
             </div>
         </div>
 
-        <!-- Top section: stats + engagement -->
+        <!-- Top section: content pie + engagement -->
         <div class="ld-top-grid">
-            <!-- Quick stats -->
+            <!-- Your content (now with pie chart) -->
             <div class="ld-panel">
                 <div class="ld-panel-header">
                     <div class="ld-panel-title">Your content</div>
                 </div>
-                <div class="ld-stats">
-                    <div class="ld-stat-card">
-                        <div class="ld-stat-label">Courses</div>
-                        <div class="ld-stat-value">
-                            <asp:Literal ID="litCoursesCount" runat="server" />
+
+                <div class="ld-content-body">
+                    <div class="ld-pie-wrap">
+                        <div id="divContentPie" runat="server" class="ld-pie">
+                            <div class="ld-pie-inner">
+                                <asp:Literal ID="litContentPercent" runat="server" />
+                            </div>
+                        </div>
+                        <div class="ld-content-label">
+                            <asp:Literal ID="litContentPieCaption" runat="server" />
                         </div>
                     </div>
-                    <div class="ld-stat-card">
-                        <div class="ld-stat-label">Assessments</div>
-                        <div class="ld-stat-value">
-                            <asp:Literal ID="litAssessmentsCount" runat="server" />
+
+                    <div class="ld-content-legend">
+                        <div class="ld-content-legend-row">
+                            <div class="ld-content-label-wrap">
+                                <span class="ld-dot ld-dot--courses"></span>
+                                <span class="ld-content-label">Courses</span>
+                            </div>
+                            <span class="ld-content-badge">
+                                <asp:Literal ID="litCoursesCount" runat="server" />
+                            </span>
                         </div>
-                    </div>
-                    <div class="ld-stat-card">
-                        <div class="ld-stat-label">Exercises</div>
-                        <div class="ld-stat-value">
-                            <asp:Literal ID="litExercisesCount" runat="server" />
+
+                        <div class="ld-content-legend-row">
+                            <div class="ld-content-label-wrap">
+                                <span class="ld-dot ld-dot--assessments"></span>
+                                <span class="ld-content-label">Assessments</span>
+                            </div>
+                            <span class="ld-content-badge">
+                                <asp:Literal ID="litAssessmentsCount" runat="server" />
+                            </span>
                         </div>
-                    </div>
-                    <div class="ld-stat-card">
-                        <div class="ld-stat-label">Questions</div>
-                        <div class="ld-stat-value">
-                            <asp:Literal ID="litQuestionsCount" runat="server" />
+
+                        <div class="ld-content-legend-row">
+                            <div class="ld-content-label-wrap">
+                                <span class="ld-dot ld-dot--exercises"></span>
+                                <span class="ld-content-label">Exercises</span>
+                            </div>
+                            <span class="ld-content-badge">
+                                <asp:Literal ID="litExercisesCount" runat="server" />
+                            </span>
+                        </div>
+
+                        <div class="ld-content-legend-row">
+                            <div class="ld-content-label-wrap">
+                                <span class="ld-dot ld-dot--questions"></span>
+                                <span class="ld-content-label">Questions</span>
+                            </div>
+                            <span class="ld-content-badge">
+                                <asp:Literal ID="litQuestionsCount" runat="server" />
+                            </span>
                         </div>
                     </div>
                 </div>

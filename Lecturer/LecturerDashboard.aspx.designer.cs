@@ -9,8 +9,11 @@
 
 namespace WAPP_Assignment.Lecturer
 {
+
+
     public partial class LecturerDashboard
     {
+
         /// <summary>
         /// litDashboardSubtitle control.
         /// </summary>
@@ -35,6 +38,21 @@ namespace WAPP_Assignment.Lecturer
         /// btnLogout control.
         /// </summary>
         protected global::System.Web.UI.WebControls.LinkButton btnLogout;
+
+        /// <summary>
+        /// divContentPie control.
+        /// </summary>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divContentPie;
+
+        /// <summary>
+        /// litContentPercent control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Literal litContentPercent;
+
+        /// <summary>
+        /// litContentPieCaption control.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Literal litContentPieCaption;
 
         /// <summary>
         /// litCoursesCount control.
